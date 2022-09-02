@@ -6,14 +6,21 @@
 package com.mycompany.keyboard.model.dao;
 
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import java.sql.Connection;
 import java.util.List;
 
 /**
  *
  * @author Tiago
  */
-public class CartaoDAO implements IDAO{
-
+public class CartaoDAO extends AbstractDAO{
+    
+    private Connection conn;
+    
+    public CartaoDAO (Connection conn){
+        this.conn = conn;
+    }
+    
     @Override
     public EntidadeDominio salvar(EntidadeDominio entidade) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

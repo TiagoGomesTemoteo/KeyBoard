@@ -73,10 +73,10 @@ public class Facade implements IFacade {
 
     @Override
     public String deletar(EntidadeDominio entidade) {
-               String error_message = processStrategys("ALTERAR", entidade);
+        String error_message = processStrategys("DELETAR", entidade);
         if (error_message == null) {
             IDAO dao = daos.get(entidade.getClass().getName());
-            dao.(entidade.getId());
+            dao.deletar(entidade.getId());
             return null;
         } else {
             return error_message;
@@ -85,7 +85,17 @@ public class Facade implements IFacade {
 
     @Override
     public Object consultar(EntidadeDominio entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String error_message = processStrategys("CONSULTAR", entidade);
+        if (error_message == null) {
+            IDAO dao = daos.get(entidade.getClass().getName());
+            if (entidade.getId() != 0) {
+                return dao.consultar(entidade);
+            } else {
+                return dao.consultar();
+            }
+        } else {
+            return error_message;
+        }
     }
 
 }

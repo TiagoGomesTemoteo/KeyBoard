@@ -11,7 +11,6 @@ import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Tiago
  */
-@WebServlet(name = "Controller",
-        urlPatterns = {"/cliente", "/endereco", "cartao"})
+@WebServlet(name="Controller", 
+        urlPatterns = {"/cliente", "/endereco", "/cartao"})
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

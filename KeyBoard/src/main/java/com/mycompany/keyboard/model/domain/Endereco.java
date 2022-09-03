@@ -13,6 +13,7 @@ import java.util.Date;
  */
 public class Endereco extends EntidadeDominio {
 
+    private int cep;
     private String tipoResidencia;
     private String tipoLogradouro;
     private String logradouro;
@@ -24,11 +25,12 @@ public class Endereco extends EntidadeDominio {
     private boolean EnderecoResidencial;
     private Cliente cliente;
 
-    public Endereco(String tipoResidencia, String tipoLogradouro, String logradouro, String numero,
+    public Endereco(int cep, String tipoResidencia, String tipoLogradouro, String logradouro, String numero,
             String observacoes, String identificacao, boolean EnderecoCobranca,
             boolean EnderecoEntrega, boolean EnderecoResidencial, int id, Date dt_cadastro,
             Cliente cliente) {
         super(id, dt_cadastro);
+        this.cep = cep;
         this.tipoResidencia = tipoResidencia;
         this.tipoLogradouro = tipoLogradouro;
         this.logradouro = logradouro;
@@ -42,6 +44,7 @@ public class Endereco extends EntidadeDominio {
     }
 
     public Endereco() {
+        this.cep = 0;
         this.tipoResidencia = "";
         this.tipoLogradouro = "";
         this.logradouro = "";
@@ -52,6 +55,14 @@ public class Endereco extends EntidadeDominio {
         this.EnderecoEntrega = false;
         this.EnderecoResidencial = false;
         this.cliente = new Cliente();
+    }
+
+    public int getCep() {
+        return cep;
+    }
+
+    public void setCep(int cep) {
+        this.cep = cep;
     }
 
     public String getTipoResidencia() {

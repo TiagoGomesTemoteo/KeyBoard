@@ -34,7 +34,7 @@ public class ClienteDAO extends AbstractDAO {
 
         this.conn = ConnectionFactory.getConnection();
 
-        String sql = "INSER INTO CLIENTES (cli_id, cli_dt_cadastro, cli_nome, cli_genero,"
+        String sql = "INSERT INTO CLIENTES (cli_id, cli_dt_cadastro, cli_nome, cli_genero,"
                 + " cli_email, cli_senha, cli_rank, cli_dt_nascimento, cli_cpf, cli_ativo, cli_telefone)"
                 + " VALUES(cli_id, now(), ?,?,?,?,?,?,?,?,?)";
 

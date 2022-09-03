@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Meus dados</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        Endereço:
+        <form action="endereco" method="post">
+            <input type="number" name="cep" placeholder="CEP*">
+            Tipo de Residência: <select name="tipoResidencia">
+                <option value="">Selecione...           </option>
+                <option value="casa">Casa               </option>
+                <option value="escritorio">Escritório   </option>
+            </select>
+            <input type="text" name="numero" placeholder="Número*">
+            <input type="text" name="observacoes" placeholder="Observações">
+            Tipo de Logradouro: <select name="tipoLogradouro">
+                <option value="">Selecione...           </option>
+                <option value="rua">Rua                 </option>
+                <option value="avenida">Avenida         </option>
+            </select>
+            <input type="text" name="logradouro" placeholder="Logradouro*">
+            <input type="text" name="identificacao" placeholder="Identificação*">
+
+            <button type="submit" name="operacao" value="SALVAR">Cadastrar</button>    
+        </form>
+        <br>
+        Cartões:
+        <form action="cartao" method="post">
+            <input type="number" name="numero" placeholder="Número*">
+            <input type="text" name="nomeImpressoNoCartao" placeholder="Nome Impresso no cartão*">
+            <input type="number" name="codSeguranca" placeholder="Código de Segurança">
+            Bandeira: <select name="bandeira">
+                <option value="">Selecione...           </option>
+                <option value="Visa">Visa               </option>
+                <option value="Mastercard">Mastercard   </option>
+            </select>
+            <input type="checkbox" name="preferencial"> Preferencial
+
+            <button type="submit" name="operacao" value="SALVAR">Cadastrar</button>    
+        </form>
+        <br>
+        Dados Básicos:
+        <form action="cliente" method="post">
+            <input type="text" name="nome" placeholder="Nome*">
+            Data de nascimento: <input type="date" name="dtNascimento">
+            <input type="text" name="telefone" placeholder="Telefone*">
+            Gênero: <select name="genero">
+                <option value="">Selecione...       </option>
+                <option value="masculino">Masculino </option>
+                <option value="feminino">Feminino   </option>
+            </select>
+            <input type="number" name="cpf" placeholder="CPF*">
+            <input type="email" name="email" placeholder="E-mail*">
+            <button type="submit" name="operacao" value="SALVAR">Cadastrar</button>    
+        </form>    
+    </body>
+</html>

@@ -11,4 +11,5 @@ package com.mycompany.keyboard.model.dao;
  */
 public abstract class AbstractDAO implements IDAO {
     protected boolean ctrlTransacao;
+    
 }

@@ -14,9 +14,9 @@ import java.util.List;
  */
 public interface IDAO {
     
-    public EntidadeDominio salvar(EntidadeDominio entidade);
-    public boolean alterar(EntidadeDominio entidade);
-    public boolean deletar(int id);
-    public List consultar();
-    public EntidadeDominio consultar(EntidadeDominio entidade);
+    public void salvar (EntidadeDominio entidade);
+    public void alterar (EntidadeDominio entidade);
+    public void deletar (EntidadeDominio entidade);
+    public List consultar(EntidadeDominio entidade);
+    public EntidadeDominio consultar(int id);
 }

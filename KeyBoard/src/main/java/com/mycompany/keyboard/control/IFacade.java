@@ -6,15 +6,23 @@
 package com.mycompany.keyboard.control;
 
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.util.Resultado;
 
 /**
  *
  * @author Tiago
  */
 public interface IFacade {
-    
-    public Object salvar(EntidadeDominio entidade);
-    public String alterar(EntidadeDominio entidade);
-    public String deletar(EntidadeDominio entidade);
-    public Object consultar(EntidadeDominio entidade);
+
+    public Resultado salvar(EntidadeDominio entidade);
+
+    public Resultado alterar(EntidadeDominio entidade);
+
+    public Resultado deletar(EntidadeDominio entidade);
+
+    public Resultado consultar(EntidadeDominio entidade);
+
+    public Resultado visualizar(EntidadeDominio entidade);
+
+    public Resultado acessar(EntidadeDominio entidade);
 }

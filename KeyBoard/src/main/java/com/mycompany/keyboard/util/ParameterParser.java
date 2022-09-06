@@ -5,6 +5,9 @@
  */
 package com.mycompany.keyboard.util;
 
+import com.mycompany.keyboard.model.domain.Telefone;
+import com.mycompany.keyboard.model.domain.enums.Genero;
+import com.mycompany.keyboard.model.domain.enums.TelefoneENUM;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +24,7 @@ public class ParameterParser {
     public static int toInt(String texto){
         return texto == null || texto.equals("") ? 0 : Integer.parseInt(texto);
     }
-    
+
     public static int toInt(Object texto){
         return texto == null ? 0 : Integer.parseInt(texto.toString());
     }
@@ -37,5 +40,26 @@ public class ParameterParser {
         } catch (ParseException ex) {
             return null;
         }
+    }
+    
+    public static Telefone toPhone (String texto){
+        
+        Telefone tel = new Telefone();
+        
+        if(texto.trim().length() == 10){
+            tel.setTipo(TelefoneENUM.FIXO);
+        
+        }else{
+            tel.setTipo(TelefoneENUM.CELULAR);
+        }
+        
+        tel.setDdd(texto.trim().substring(0, 2));
+        tel.setNumero(texto.trim().substring(2));
+        
+        return tel;
+    }
+    
+    public static Genero getGenSelected(String texto){
+        return texto.equals("masculino") ? Genero.MASCULINO : Genero.FEMININO;
     }
 }

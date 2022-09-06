@@ -19,13 +19,14 @@ public class ConnectionFactory {
     
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost:3306/DB_KEYBOARD";
+    private static final String CONFIG = "?useTimezone=true&serverTimezone=UTC";
     private static final String USER = "root";
     private static final String PASS = "1234";
     
     public static Connection getConnection(){
         try {
             Class.forName(DRIVER);
-            return DriverManager.getConnection(URL, USER, PASS);
+            return DriverManager.getConnection(URL + CONFIG, USER, PASS);
             
         } catch (ClassNotFoundException ex){
             System.out.println("Não foi possível acessar a classe de conexão. \n Erro: " + ex.getMessage());

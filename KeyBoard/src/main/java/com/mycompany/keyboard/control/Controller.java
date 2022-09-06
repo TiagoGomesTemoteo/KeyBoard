@@ -8,7 +8,9 @@ package com.mycompany.keyboard.control;
 import com.mycompany.keyboard.control.command.*;
 import com.mycompany.keyboard.control.viewhelper.*;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -21,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Tiago
  */
-@WebServlet(name="Controller", 
+@WebServlet(name = "Controller",
         urlPatterns = {"/cliente", "/endereco", "/cartao"})
 public class Controller extends HttpServlet {
 
@@ -36,6 +38,7 @@ public class Controller extends HttpServlet {
         cmds.put("ALTERAR", new AlterarCommand());
         cmds.put("DELETAR", new DeletarCommand());
         cmds.put("CONSULTAR", new ConsultarCommand());
+        cmds.put("VISUALIZAR", new VisualizarCommand());
 
         vhs = new HashMap<>();
         vhs.put("/KeyBoard/cliente", new ClienteVH());
@@ -47,14 +50,19 @@ public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+        }
+
         operacao = request.getParameter("operacao");
 
         String uri = request.getRequestURI();
         IViewHelper viewHelper = vhs.get(uri);
         EntidadeDominio entidade = viewHelper.getEntidade(request);
         ICommand command = cmds.get(operacao);
-        Object message = command.execute(entidade);
-        viewHelper.setView(message, request, response);
+        Resultado resultado = command.execute(entidade);
+        viewHelper.setView(resultado, request, response);
     }
 
     @Override

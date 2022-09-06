@@ -5,6 +5,7 @@
  */
 package com.mycompany.keyboard.model.domain;
 
+import com.mycompany.keyboard.model.domain.enums.TelefoneENUM;
 import java.util.Date;
 
 /**
@@ -13,34 +14,34 @@ import java.util.Date;
  */
 public class Telefone extends EntidadeDominio {
 
-    private String tipo;
+    private TelefoneENUM tipo;
     private String ddd;
     private String numero;
 
-    public Telefone(String tipo, String ddd, String numero, int id, Date dt_cadastro) {
+    public Telefone(TelefoneENUM tipo, String ddd, String numero, int id, Date dt_cadastro) {
         super(id, dt_cadastro);
         this.tipo = tipo;
         this.ddd = ddd;
         this.numero = numero;
     }
 
-    public Telefone(String tipo, String ddd, String numero) {
+    public Telefone(TelefoneENUM tipo, String ddd, String numero) {
         this.tipo = tipo;
         this.ddd = ddd;
         this.numero = numero;
     }
 
     public Telefone() {
-        this.tipo = "";
+        this.tipo = TelefoneENUM.CELULAR;
         this.ddd = "";
         this.numero = "";
     }
 
-    public String getTipo() {
+    public TelefoneENUM getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TelefoneENUM tipo) {
         this.tipo = tipo;
     }
 

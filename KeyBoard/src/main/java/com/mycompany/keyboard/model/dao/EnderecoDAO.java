@@ -13,8 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
-
 /**
  *
  * @author Tiago
@@ -28,14 +28,14 @@ public class EnderecoDAO extends AbstractDAO {
     }
 
     @Override
-    public EntidadeDominio salvar(EntidadeDominio entidade) {
+    public void salvar(EntidadeDominio entidade) {
         Endereco endereco = (Endereco) entidade;
         int id = 0;
 
         String sql = "INSERT INTO ENDERECOS (end_id, end_tp_residencia, end_tp_logradouro, end_logradouro, "
                 + "end_numero, end_observacoes, end_identificacao, end_endereco_cobranca, "
                 + "end_endereco_entrega, end_endereco_residencial, end_cli_id, end_cep)"
-                + " VALUES(car_id, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + " VALUES(end_id, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -84,7 +84,7 @@ public class EnderecoDAO extends AbstractDAO {
                 System.out.println("Error: " + e1.getMessage());
             }
 
-            System.out.println("Não foi possível salvar os dados no banco de dados.\nErro: " + ex.getMessage());
+            System.out.println("Não foi possível salvar o endereço no banco de dados.\nErro: " + ex.getMessage());
 
         } finally {
             if (ctrlTransacao) {
@@ -92,26 +92,167 @@ public class EnderecoDAO extends AbstractDAO {
             }
         }
 
-        return endereco;
     }
 
     @Override
-    public boolean alterar(EntidadeDominio entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void alterar(EntidadeDominio entidade) {
+        Endereco endereco = (Endereco) entidade;
+
+        String sql = "UPDATE ENDERECOS SET end_tp_residencia=?, end_tp_logradouro=?, end_logradouro=?, "
+                + "end_numero=?, end_observacoes=?, end_identificacao=?, end_endereco_cobranca=?, "
+                + "end_endereco_entrega=?, end_endereco_residencial=?, end_cep=? "
+                + "WHERE end_id = ?";
+
+        PreparedStatement stmt = null;
+
+        try {
+            if (conn == null) {
+                this.conn = ConnectionFactory.getConnection();
+                this.ctrlTransacao = true;
+
+            } else {
+                this.ctrlTransacao = false;
+            }
+
+            conn.setAutoCommit(false);
+
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, endereco.getTipoResidencia());
+            stmt.setString(2, endereco.getTipoLogradouro());
+            stmt.setString(3, endereco.getLogradouro());
+            stmt.setString(4, endereco.getNumero());
+            stmt.setString(5, endereco.getObservacoes());
+            stmt.setString(6, endereco.getIdentificacao());
+            stmt.setBoolean(7, endereco.isEnderecoCobranca());
+            stmt.setBoolean(8, endereco.isEnderecoEntrega());
+            stmt.setBoolean(9, endereco.isEnderecoResidencial());
+            stmt.setInt(10, endereco.getCep());
+            stmt.setInt(11, endereco.getId());
+
+            stmt.executeUpdate();
+
+            if (ctrlTransacao) {
+                conn.commit();
+            }
+
+        } catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Error: " + e1.getMessage());
+            }
+
+            System.out.println("Não foi possível salvar o endereço no banco de dados.\nErro: " + ex.getMessage());
+
+        } finally {
+            if (ctrlTransacao) {
+                ConnectionFactory.closeConnection(conn, stmt);
+            }
+        }
     }
 
     @Override
-    public boolean deletar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deletar(EntidadeDominio entidade) {
+        Endereco endereco = (Endereco) entidade;
+        String sql = "DELETE FROM ENDERECOS WHERE end_id = ?;";
+        
+        PreparedStatement stmt = null;
+        
+        try{
+            if(conn == null || this.conn.isClosed()){
+                this.conn = ConnectionFactory.getConnection();
+                ctrlTransacao = true; 
+            }else{
+                ctrlTransacao = false;
+            }
+            
+            conn.setAutoCommit(false);
+
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, endereco.getId());
+            
+            stmt.executeUpdate();
+            
+            if(ctrlTransacao) conn.commit();
+            
+        }catch(Exception ex){
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Error: " + e1.getMessage());
+            }
+            
+            System.out.println("Não foi possível excluir o endereço do banco de dados" + ex.getMessage());
+        
+        }finally{
+            if(ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt);
+        }      
     }
 
     @Override
-    public List consultar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List consultar(EntidadeDominio entidade) {
+        Endereco endereco;
+        String sql = "SELECT * FROM ENDERECOS WHERE end_cli_id = ?;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        List<Endereco> enderecos = new ArrayList();
+        
+        try{
+            if(conn == null || this.conn.isClosed()){
+                this.conn = ConnectionFactory.getConnection();
+                ctrlTransacao = true; 
+            }else{
+                ctrlTransacao = false;
+            }
+            
+            conn.setAutoCommit(false);
+
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, entidade.getId());
+            rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                endereco = new Endereco();
+                
+                endereco.setId(rs.getInt("end_id"));
+                endereco.setTipoResidencia(rs.getString("end_tp_residencia"));
+                endereco.setTipoLogradouro(rs.getString("end_tp_logradouro"));
+                endereco.setLogradouro(rs.getString("end_logradouro"));
+                endereco.setNumero(rs.getString("end_numero"));
+                endereco.setObservacoes(rs.getString("end_observacoes"));
+                endereco.setIdentificacao(rs.getString("end_identificacao"));
+                endereco.setEnderecoCobranca(rs.getBoolean("end_endereco_cobranca"));
+                endereco.setEnderecoEntrega(rs.getBoolean("end_endereco_entrega"));
+                endereco.setEnderecoResidencial(rs.getBoolean("end_endereco_residencial"));
+                endereco.getCliente().setId(rs.getInt("end_cli_id"));
+                endereco.setCep(rs.getInt("end_cep"));
+                
+                enderecos.add(endereco);
+                
+            }
+            
+            return enderecos;
+            
+        }catch(Exception ex){
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Error: " + e1.getMessage());
+            }
+            
+            System.out.println("Não foi possível exclui no banco de dados" + ex.getMessage());
+        
+        }finally{
+            if(ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt);
+        } 
+        
+        return null;
     }
 
     @Override
-    public EntidadeDominio consultar(EntidadeDominio entidade) {
+    public EntidadeDominio consultar(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

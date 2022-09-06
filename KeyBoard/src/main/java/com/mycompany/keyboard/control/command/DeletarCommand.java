@@ -6,6 +6,7 @@
 package com.mycompany.keyboard.control.command;
 
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.util.Resultado;
 
 /**
  *
@@ -14,7 +15,7 @@ import com.mycompany.keyboard.model.domain.EntidadeDominio;
 public class DeletarCommand extends AbstractCommand{
     
     @Override
-    public Object execute(EntidadeDominio entidade) {
+    public Resultado execute(EntidadeDominio entidade) {
         return facade.deletar(entidade);
     }
 }

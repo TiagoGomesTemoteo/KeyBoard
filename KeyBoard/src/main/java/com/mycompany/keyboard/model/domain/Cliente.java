@@ -22,13 +22,13 @@ public class Cliente extends EntidadeDominio {
     private int rank;
     private String senha;
     private Date dtNascimento;
-    private int cpf;
+    private String cpf;
     private boolean ativo;
     private List<Endereco> enderecos;
     private List<CartaoDeCredito> cartoesDeCredito;
     private Telefone telefone;
 
-    public Cliente(String nome, Genero genero, String email, int rank, String senha, Date dtNascimento, int cpf, boolean ativo, List<Endereco> enderecos, List<CartaoDeCredito> cartoesDeCredito, Telefone telefone, int id, Date dt_cadastro) {
+    public Cliente(String nome, Genero genero, String email, int rank, String senha, Date dtNascimento, String cpf, boolean ativo, List<Endereco> enderecos, List<CartaoDeCredito> cartoesDeCredito, Telefone telefone, int id, Date dt_cadastro) {
         super(id, dt_cadastro);
         this.nome = nome;
         this.genero = genero;
@@ -50,7 +50,7 @@ public class Cliente extends EntidadeDominio {
         this.rank = 0;
         this.senha = "";
         this.dtNascimento = new Date();
-        this.cpf = 0;
+        this.cpf = "";
         this.ativo = false;
         this.enderecos = new ArrayList<Endereco>();
         this.cartoesDeCredito = new ArrayList<CartaoDeCredito>();
@@ -105,11 +105,11 @@ public class Cliente extends EntidadeDominio {
         this.dtNascimento = dtNascimento;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 

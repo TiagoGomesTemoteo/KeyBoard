@@ -36,10 +36,18 @@ public class ParameterParser {
     public static Date toDate(String texto){
         if(texto == null || texto.equals("")) return null;
         try {
-            return new SimpleDateFormat("yyyy-MM-dd").parse(texto);
+            return new SimpleDateFormat("dd/MM/yyyy").parse(texto);
         } catch (ParseException ex) {
             return null;
         }
+    }
+    
+    public static java.sql.Date utilDateToSqlDate (Date data){
+        return new java.sql.Date(data.getTime());
+    }
+    
+    public static java.util.Date sqlDateToUtilDate (java.sql.Date data){
+        return new java.util.Date(data.getTime());
     }
     
     public static Telefone toPhone (String texto){

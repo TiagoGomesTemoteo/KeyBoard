@@ -4,6 +4,8 @@
     Author     : Tiago
 --%>
 
+<%@page import="com.mycompany.keyboard.util.Masks"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.mycompany.keyboard.model.domain.Cliente"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycompany.keyboard.model.domain.EntidadeDominio"%>
@@ -104,7 +106,7 @@
                                         + cliente.getId()
                                         + "</td>"
                                         + "<td>"
-                                        + cliente.getDt_cadastro()
+                                        + Masks.brazilianDate(cliente.getDt_cadastro())
                                         + "</td>"
                                         + "<td>"
                                         + cliente.getNome()
@@ -119,7 +121,7 @@
                                         + cliente.getRank()
                                         + "</td>"
                                         + "<td>"
-                                        + cliente.getDtNascimento()
+                                        + Masks.brazilianDate(cliente.getDtNascimento())
                                         + "</td>"
                                         + "<td>"
                                         + cliente.getCpf()

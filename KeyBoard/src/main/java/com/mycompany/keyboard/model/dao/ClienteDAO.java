@@ -12,6 +12,7 @@ import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Telefone;
 import com.mycompany.keyboard.model.domain.enums.Genero;
 import com.mycompany.keyboard.util.ConnectionFactory;
+import com.mycompany.keyboard.util.ParameterParser;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,7 +56,7 @@ public class ClienteDAO extends AbstractDAO {
             stmt.setString(3, cliente.getEmail());
             stmt.setString(4, cliente.getSenha());
             stmt.setInt(5, cliente.getRank());
-            stmt.setDate(6, new java.sql.Date(cliente.getDtNascimento().getTime()));
+            stmt.setDate(6,ParameterParser.utilDateToSqlDate(cliente.getDtNascimento()));
             stmt.setString(7, cliente.getCpf());
             stmt.setBoolean(8, cliente.isAtivo());
             stmt.setInt(9, cliente.getTelefone().getId());
@@ -118,7 +119,7 @@ public class ClienteDAO extends AbstractDAO {
             stmt.setString(3, cliente.getEmail());
             stmt.setString(4, cliente.getSenha());
             stmt.setInt(5, cliente.getRank());
-            stmt.setDate(6, new java.sql.Date(cliente.getDtNascimento().getTime()));
+            stmt.setDate(6, ParameterParser.utilDateToSqlDate(cliente.getDtNascimento()));
             stmt.setString(7, cliente.getCpf());
             stmt.setBoolean(8, cliente.isAtivo());
             stmt.setInt(9, cliente.getTelefone().getId());

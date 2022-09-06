@@ -37,7 +37,7 @@
                            out.print("'" + cliente.getNome() + "'");
                    %> 
                    >
-            Data de nascimento: <input type="date" name="dtNascimento" value=
+            Data de nascimento: <input type="text" name="dtNascimento" value=
                                        <%
                                            if (cliente != null)
                                                out.print("'" + cliente.getDtNascimento() + "'");

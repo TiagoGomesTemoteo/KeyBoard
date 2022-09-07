@@ -20,6 +20,10 @@ public class Endereco extends EntidadeDominio {
     private String numero;
     private String observacoes;
     private String identificacao;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private String pais;
     private boolean EnderecoCobranca;
     private boolean EnderecoEntrega;
     private boolean EnderecoResidencial;
@@ -28,7 +32,7 @@ public class Endereco extends EntidadeDominio {
     public Endereco(int cep, String tipoResidencia, String tipoLogradouro, String logradouro, String numero,
             String observacoes, String identificacao, boolean EnderecoCobranca,
             boolean EnderecoEntrega, boolean EnderecoResidencial, int id, Date dt_cadastro,
-            Cliente cliente) {
+            Cliente cliente, String bairro, String cidade, String estado, String pais) {
         super(id, dt_cadastro);
         this.cep = cep;
         this.tipoResidencia = tipoResidencia;
@@ -41,6 +45,10 @@ public class Endereco extends EntidadeDominio {
         this.EnderecoEntrega = EnderecoEntrega;
         this.EnderecoResidencial = EnderecoResidencial;
         this.cliente = cliente;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.pais = pais;
     }
 
     public Endereco() {
@@ -55,6 +63,10 @@ public class Endereco extends EntidadeDominio {
         this.EnderecoEntrega = false;
         this.EnderecoResidencial = false;
         this.cliente = new Cliente();
+        this.bairro = "";
+        this.cidade = "";
+        this.estado = "";
+        this.pais = "";
     }
 
     public int getCep() {
@@ -143,6 +155,38 @@ public class Endereco extends EntidadeDominio {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
     }
 
 }

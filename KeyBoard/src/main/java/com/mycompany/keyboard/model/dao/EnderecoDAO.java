@@ -34,8 +34,9 @@ public class EnderecoDAO extends AbstractDAO {
 
         String sql = "INSERT INTO ENDERECOS (end_id, end_tp_residencia, end_tp_logradouro, end_logradouro, "
                 + "end_numero, end_observacoes, end_identificacao, end_endereco_cobranca, "
-                + "end_endereco_entrega, end_endereco_residencial, end_cli_id, end_cep)"
-                + " VALUES(end_id, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "end_endereco_entrega, end_endereco_residencial, end_cli_id, end_cep, end_bairro, end_cidade,"
+                + "end_estado, end_pais)"
+                + " VALUES(end_id, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -63,6 +64,10 @@ public class EnderecoDAO extends AbstractDAO {
             stmt.setBoolean(9, endereco.isEnderecoResidencial());
             stmt.setInt(10, endereco.getCliente().getId());
             stmt.setInt(11, endereco.getCep());
+            stmt.setString(12, endereco.getBairro());
+            stmt.setString(13, endereco.getCidade());
+            stmt.setString(14, endereco.getEstado());
+            stmt.setString(15, endereco.getPais());
 
 
             stmt.executeUpdate();
@@ -100,7 +105,8 @@ public class EnderecoDAO extends AbstractDAO {
 
         String sql = "UPDATE ENDERECOS SET end_tp_residencia=?, end_tp_logradouro=?, end_logradouro=?, "
                 + "end_numero=?, end_observacoes=?, end_identificacao=?, end_endereco_cobranca=?, "
-                + "end_endereco_entrega=?, end_endereco_residencial=?, end_cep=? "
+                + "end_endereco_entrega=?, end_endereco_residencial=?, end_cep=?, "
+                + "end_bairro=?, end_cidade=?, end_estado=?, end_pais=? "
                 + "WHERE end_id = ?";
 
         PreparedStatement stmt = null;
@@ -127,7 +133,11 @@ public class EnderecoDAO extends AbstractDAO {
             stmt.setBoolean(8, endereco.isEnderecoEntrega());
             stmt.setBoolean(9, endereco.isEnderecoResidencial());
             stmt.setInt(10, endereco.getCep());
-            stmt.setInt(11, endereco.getId());
+            stmt.setString(11, endereco.getBairro());
+            stmt.setString(12, endereco.getCidade());
+            stmt.setString(13, endereco.getEstado());
+            stmt.setString(14, endereco.getPais());
+            stmt.setInt(15, endereco.getId());
 
             stmt.executeUpdate();
 
@@ -142,7 +152,7 @@ public class EnderecoDAO extends AbstractDAO {
                 System.out.println("Error: " + e1.getMessage());
             }
 
-            System.out.println("Não foi possível salvar o endereço no banco de dados.\nErro: " + ex.getMessage());
+            System.out.println("Não foi possível alterar o endereço no banco de dados.\nErro: " + ex.getMessage());
 
         } finally {
             if (ctrlTransacao) {
@@ -228,6 +238,10 @@ public class EnderecoDAO extends AbstractDAO {
                 endereco.setEnderecoResidencial(rs.getBoolean("end_endereco_residencial"));
                 endereco.getCliente().setId(rs.getInt("end_cli_id"));
                 endereco.setCep(rs.getInt("end_cep"));
+                endereco.setBairro(rs.getString("end_bairro"));
+                endereco.setCidade(rs.getString("end_cidade"));
+                endereco.setEstado(rs.getString("end_estado"));
+                endereco.setPais(rs.getString("end_pais"));
                 
                 enderecos.add(endereco);
                 

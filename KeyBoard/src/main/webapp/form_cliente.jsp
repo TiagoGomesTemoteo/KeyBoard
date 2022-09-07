@@ -1,10 +1,11 @@
+<%@page import="com.mycompany.keyboard.util.Masks"%>
 <%@page import="com.mycompany.keyboard.model.domain.Cliente"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Cadastro/Login</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Cadastro/Login</title>   
     </head>
     <body>
         <a href="cliente?operacao=CONSULTAR">Consultar clientes</a>
@@ -40,7 +41,7 @@
             Data de nascimento: <input type="text" name="dtNascimento" value=
                                        <%
                                            if (cliente != null)
-                                               out.print("'" + cliente.getDtNascimento() + "'");
+                                               out.print("'" + Masks.brazilianDate(cliente.getDtNascimento()) + "'");
                                        %> 
                                        >
             <p><input type="text" name="telefone" placeholder="Telefone*" value=
@@ -49,7 +50,7 @@
                            out.print("'" + cliente.getTelefone().getDdd() + cliente.getTelefone().getNumero() + "'");
                    %> 
                    >
-            Gênero: <select name="genero">
+            GÃªnero: <select name="genero">
                 <option value="">Selecione...       </option>
                 <option value="masculino"
                         <%
@@ -79,66 +80,7 @@
             <input type="password" name="senha" placeholder="Crie sua senha*">
             <input type="password" name="confirmar_senha" placeholder="Confirme a senha*">
 
-            <p><input type="number" name="cep" placeholder="CEP*" value=
-                   <%
-                       if (cliente != null)
-                           out.print("'" + cliente.getEnderecos().get(0).getCep() + "'");
-                   %>
-                   >
-            Tipo de residência: <select name="tipoResidencia">
-                <option value="">Selecione...           </option>
-                <option value="casa" 
-                        <%
-                            if (cliente != null && cliente.getEnderecos().get(0).getTipoResidencia().equals("casa"))
-                                out.print(" selected");
-                        %>
-                        >Casa               </option>
-                <option value="escritorio"
-                        <%
-                            if (cliente != null && cliente.getEnderecos().get(0).getTipoResidencia().equals("escritorio"))
-                                out.print(" selected");
-                        %>        
-                        >Escritório   </option>
-            </select>
-            <input type="text" name="numero" placeholder="Número*" value=
-                   <%
-                       if (cliente != null)
-                           out.print("'" + cliente.getEnderecos().get(0).getNumero() + "'");
-                   %>
-                   >
-            <p><input type="text" name="observacoes" placeholder="Observações" value=
-                   <%
-                       if (cliente != null)
-                           out.print("'" + cliente.getEnderecos().get(0).getObservacoes() + "'");
-                   %>
-                   >
-            Tipo de Logradouro: <select name="tipoLogradouro">
-                <option value="">Selecione...           </option>
-                <option value="rua"
-                        <%
-                            if (cliente != null && cliente.getEnderecos().get(0).getTipoLogradouro().equals("rua"))
-                                out.print(" selected");
-                        %>
-                        >Rua                 </option>
-                <option value="avenida"
-                        <%
-                            if (cliente != null && cliente.getEnderecos().get(0).getTipoLogradouro().equals("avenida"))
-                                out.print(" selected");
-                        %>        
-                        >Avenida         </option>
-            </select>
-            <input type="text" name="logradouro" placeholder="Logradouro*" value=
-                   <%
-                       if (cliente != null)
-                           out.print("'" + cliente.getEnderecos().get(0).getLogradouro() + "'");
-                   %>
-                   >
-            <input type="text" name="identificacao" placeholder="Identificação*" value=
-                   <%
-                       if (cliente != null)
-                           out.print("'" + cliente.getEnderecos().get(0).getIdentificacao() + "'");
-                   %>
-                   >
+            <%@ include file="form_endereco.jsp" %>
 
             <p><input type="submit" name="operacao" value=
                    <%

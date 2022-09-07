@@ -10,11 +10,9 @@ import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
-import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,6 +33,10 @@ public class EnderecoVH implements IViewHelper {
         endereco.setObservacoes(request.getParameter("observacoes"));
         endereco.setLogradouro(request.getParameter("logradouro"));
         endereco.setIdentificacao(request.getParameter("identificacao"));
+        endereco.setBairro(request.getParameter("bairro"));
+        endereco.setCidade(request.getParameter("cidade"));
+        endereco.setEstado(request.getParameter("estado"));
+        endereco.setPais(request.getParameter("pais"));
         
         if(operacao.equals("ALTERAR") || operacao.equals("DELETAR")){
             endereco.setId(ParameterParser.toInt(request.getParameter("endereco_id")));

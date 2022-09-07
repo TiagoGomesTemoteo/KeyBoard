@@ -148,7 +148,7 @@ public class ClienteDAO extends AbstractDAO {
                 System.out.println("Error: "+ e1.getMessage());
             }
             
-            System.out.println("Não foi possível alterar o clinte no banco de dados.\nErro: " + ex.getMessage());
+            System.out.println("Não foi possível alterar o cliente no banco de dados.\nErro: " + ex.getMessage());
 
         } finally {
             ConnectionFactory.closeConnection(conn, stmt);

@@ -5,6 +5,7 @@
  */
 package com.mycompany.keyboard.control.viewhelper;
 
+import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
@@ -40,6 +41,7 @@ public class ClienteVH implements IViewHelper {
             cliente.setEmail(request.getParameter("email"));
             cliente.setSenha(request.getParameter("senha") + request.getParameter("confirmar_senha"));
             cliente.setEnderecos(Arrays.asList((Endereco) new EnderecoVH().getEntidade(request)));
+            cliente.setCartoesDeCredito(Arrays.asList((CartaoDeCredito) new CartaoVH().getEntidade(request)));
             
             if(operacao.equals("ALTERAR")){
                 cliente.setId(ParameterParser.toInt(request.getParameter("cliente_id")));

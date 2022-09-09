@@ -13,24 +13,8 @@
             Cliente cliente = (Cliente) request.getAttribute("cliente");
         %>
         <form action="cliente" method="post">
-            <input type="hidden" name="endereco_id" value=
-                   <%
-                       if (cliente != null)
-                           out.print("'" + cliente.getEnderecos().get(0).getId() + "'");
-                   %> 
-                   >
-            <input type="hidden" name="cliente_id" value=
-                   <%
-                       if (cliente != null)
-                           out.print("'" + cliente.getId() + "'");
-                   %> 
-                   >
-            <input type="hidden" name="telefone_id" value=
-                   <%
-                       if (cliente != null)
-                           out.print("'" + cliente.getTelefone().getId() + "'");
-                   %> 
-                   >
+            
+            <%@ include file="identities.jsp" %>
             
             <p><input type="text" name="nome" placeholder="Nome*" value=
                    <%
@@ -81,7 +65,7 @@
             <input type="password" name="confirmar_senha" placeholder="Confirme a senha*">
 
             <%@ include file="form_endereco.jsp" %>
-
+            <%@ include file="form_cartao.jsp" %>
             <p><input type="submit" name="operacao" value=
                    <%
                        if (cliente != null) {

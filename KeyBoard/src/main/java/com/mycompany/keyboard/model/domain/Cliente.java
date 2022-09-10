@@ -45,7 +45,7 @@ public class Cliente extends EntidadeDominio {
 
     public Cliente() {
         this.nome = "";
-        this.genero = Genero.FEMININO;
+        this.genero = null;
         this.email = "";
         this.rank = 0;
         this.senha = "";

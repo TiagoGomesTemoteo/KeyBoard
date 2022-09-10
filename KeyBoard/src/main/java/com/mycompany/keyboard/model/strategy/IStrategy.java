@@ -13,5 +13,5 @@ import com.mycompany.keyboard.model.domain.EntidadeDominio;
  */
 public interface IStrategy {
     
-    public String processar(EntidadeDominio entidade);
+    public String processar(EntidadeDominio entidade, String oporacao);
 }

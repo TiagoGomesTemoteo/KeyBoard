@@ -10,6 +10,7 @@ import com.mycompany.keyboard.model.dao.IDAO;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.strategy.IStrategy;
+import com.mycompany.keyboard.model.strategy.VerificarCamposInvalidos;
 import com.mycompany.keyboard.model.strategy.ValidarCamposObrigatorios;
 import com.mycompany.keyboard.util.Resultado;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class Facade implements IFacade {
         
         List<IStrategy> rns_salvar_cliente = new ArrayList<>(); // Criando map das RG para salvar um cliente
         rns_salvar_cliente.add(new ValidarCamposObrigatorios()); // Adicionando validação para salvar um cliente
+        rns_salvar_cliente.add(new VerificarCamposInvalidos());
         
         List<IStrategy> rns_alterar_cliente = new ArrayList<>();
         List<IStrategy> rns_deletar_cliente = new ArrayList<>();
@@ -67,7 +69,7 @@ public class Facade implements IFacade {
             List<IStrategy> regrasOperacao = regrasNegocio.get(operacao);
             if(regrasOperacao != null){
                 for(IStrategy regras : regrasOperacao){
-                    String mensagem = regras.processar(entidade);
+                    String mensagem = regras.processar(entidade, operacao);
                     if(mensagem != null){
                         msg.append(mensagem);
                         msg.append("\n");

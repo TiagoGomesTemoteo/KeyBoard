@@ -63,7 +63,9 @@ public class ParameterParser {
         return tel;
     }
     
-    public static Genero getGenSelected(String texto){
-        return texto.equals("masculino") ? Genero.MASCULINO : Genero.FEMININO;
+    public static Genero getGenSelected(String texto){        
+        if(!texto.equals("")) return texto.equals("masculino")? Genero.MASCULINO : Genero.FEMININO;
+        
+        return null;
     }
 }

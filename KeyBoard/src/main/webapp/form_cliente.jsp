@@ -14,7 +14,13 @@
             Cliente cliente = (Cliente) request.getAttribute("cliente");
             Resultado resultado = (Resultado) request.getAttribute("resultado");
         %>
+
         <form action="cliente" method="post">
+            <%
+                if(resultado != null && resultado.getMsg() != null){
+                    out.print("<label>" + resultado.getMsg() + "</label>");
+                }
+            %>
             
             <%@ include file="identities.jsp" %>
             
@@ -24,7 +30,7 @@
                            out.print("'" + cliente.getNome() + "'");
                    %> 
                    >
-            Data de nascimento: <input type="text" name="dtNascimento" value=
+            <input type="text" name="dtNascimento" placeholder="Data de nascimento*" value=
                                        <%
                                            if (cliente != null)
                                                out.print("'" + Masks.brazilianDate(cliente.getDtNascimento()) + "'");
@@ -67,14 +73,10 @@
             <input type="password" name="confirmar_senha" placeholder="Confirme a senha*">
             
             <label ></label>
-            <%@ include file="form_endereco.jsp" %>
-            <%@ include file="form_cartao.jsp" %>
             
-            <%
-                if(resultado != null && resultado.getMsg() != null){
-                    out.print("<label>" + resultado.getMsg() + "</label>");
-                }
-            %>
+            <p>Endereço: <%@ include file="form_endereco.jsp" %>
+            <p>Cartão: <%@ include file="form_cartao.jsp" %>
+            
             <p><input type="submit" name="operacao" value=
                    <%
                        if (cliente != null) {

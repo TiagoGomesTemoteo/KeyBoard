@@ -289,6 +289,30 @@ public class ClienteDAO extends AbstractDAO {
         return null;
     }
     
+    public boolean existeCpf(String cpf) {
+        
+        String sql = "SELECT * FROM CLIENTES WHERE cli_cpf = ?;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try{
+            this.conn = ConnectionFactory.getConnection();
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1,cpf);
+            rs = stmt.executeQuery();
+                 
+            return rs.next() == true;
+          
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar fornecedor no banco de dados \nErro:" + ex.getMessage());
+        }finally{
+            ConnectionFactory.closeConnection(conn, stmt, rs);
+        }
+        return false;
+    }
+    
     
 
 }

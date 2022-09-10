@@ -64,13 +64,8 @@
                            out.print("'" + endereco.getLogradouro() + "'");
                    %>
                    >
-            <input type="text" name="identificacao" placeholder="Identificação*" value=
-                   <%
-                       if (endereco != null)
-                           out.print("'" + endereco.getIdentificacao() + "'");
-                   %>
-                   >
-            <input type="text" name="bairro" placeholder="Bairro*" value=
+            
+            <p><input type="text" name="bairro" placeholder="Bairro*" value=
                    <%
                        if (endereco != null)
                            out.print("'" + endereco.getBairro() + "'");
@@ -88,10 +83,16 @@
                            out.print("'" + endereco.getEstado() + "'");
                    %>
                    >
-            <input type="text" name="pais" placeholder="País*" value=
+            <p><input type="text" name="pais" placeholder="País*" value=
                    <%
                        if (endereco != null)
                            out.print("'" + endereco.getPais() + "'");
+                   %>
+                   >
+            <p><input type="text" name="identificacao" placeholder="Identificação*" value=
+                   <%
+                       if (endereco != null)
+                           out.print("'" + endereco.getIdentificacao() + "'");
                    %>
                    >
     </body>

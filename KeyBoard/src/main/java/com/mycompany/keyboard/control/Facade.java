@@ -10,11 +10,13 @@ import com.mycompany.keyboard.model.dao.IDAO;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.strategy.IStrategy;
+import com.mycompany.keyboard.model.strategy.ValidarCamposObrigatorios;
 import com.mycompany.keyboard.util.Resultado;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,11 +32,30 @@ public class Facade implements IFacade {
         daos = new HashMap<>();
         daos.put(Cliente.class.getName(), new ClienteDAO());
         
-        rns = new HashMap<String, Map<String, List<IStrategy>>> ();
+        initRns();
+    }
+    
+    public void initRns(){
         
-        List<IStrategy> rns_salvar_cliente = new ArrayList<>();
-        Map<String, List<IStrategy>> rns_cliente = new HashMap<String, List<IStrategy>>();
-        rns.put("SALVAR", rns_cliente);
+        
+        rns = new HashMap<> (); // Inicializando map de Regras de negócio
+        
+        List<IStrategy> rns_salvar_cliente = new ArrayList<>(); // Criando map das RG para salvar um cliente
+        rns_salvar_cliente.add(new ValidarCamposObrigatorios()); // Adicionando validação para salvar um cliente
+        
+        List<IStrategy> rns_alterar_cliente = new ArrayList<>();
+        List<IStrategy> rns_deletar_cliente = new ArrayList<>();
+        List<IStrategy> rns_consultar_cliente = new ArrayList<>();
+        
+        
+        Map<String, List<IStrategy>> rns_cliente = new HashMap<>(); // Criando map das RG de todas as operações de um cliente
+        
+        rns_cliente.put("SALVAR", rns_salvar_cliente); // Adicionar ao map uma operação e um map com várias validações
+        rns_cliente.put("ALTERAR", rns_salvar_cliente);
+        rns_cliente.put("DELETAR", rns_salvar_cliente);
+        rns_cliente.put("CONSULTAR", rns_salvar_cliente);
+        
+        rns.put(Cliente.class.getName(), rns_cliente);
     }
 
     private String aplicarRegras(EntidadeDominio entidade, String operacao){
@@ -79,6 +100,8 @@ public class Facade implements IFacade {
                 ex.printStackTrace();
                 resultado.setMsg("Não foi possível salvar o(a)" + nmClass);
             }   
+        }else{
+            resultado.setMsg(msg);
         }     
         return resultado;
     }

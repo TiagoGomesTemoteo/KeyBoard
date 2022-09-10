@@ -54,15 +54,11 @@ public class ParameterParser {
         
         Telefone tel = new Telefone();
         
-        if(texto.trim().length() == 10){
-            tel.setTipo(TelefoneENUM.FIXO);
-        
-        }else{
-            tel.setTipo(TelefoneENUM.CELULAR);
+        if(texto.length() == 10 || texto.length() == 11){
+            tel.setTipo(texto.length() == 10 ? TelefoneENUM.FIXO : TelefoneENUM.CELULAR);
+            tel.setDdd(texto.trim().substring(0, 2));
+            tel.setNumero(texto.trim().substring(2));
         }
-        
-        tel.setDdd(texto.trim().substring(0, 2));
-        tel.setNumero(texto.trim().substring(2));
         
         return tel;
     }

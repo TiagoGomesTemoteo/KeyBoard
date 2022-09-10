@@ -77,9 +77,13 @@ public class ClienteVH implements IViewHelper {
         
         String operacao = request.getParameter("operacao");
         
-        if(resultado.getMsg() == null && operacao.equals("SALVAR")){
+        if(operacao.equals("SALVAR")){
 //            request.getSession().setAttribute("resultado",resultado);
 //            rD = request.getRequestDispatcher("lista_cliente.jsp");
+            if(resultado.getMsg() != null){
+                request.setAttribute("resultado", resultado);
+                request.getRequestDispatcher("form_cliente.jsp").forward(request, response); 
+            }
         response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
             
         }else if(resultado.getMsg() == null && operacao.equals("VISUALIZAR")) {

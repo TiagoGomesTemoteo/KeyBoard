@@ -1,3 +1,4 @@
+<%@page import="com.mycompany.keyboard.util.Resultado"%>
 <%@page import="com.mycompany.keyboard.util.Masks"%>
 <%@page import="com.mycompany.keyboard.model.domain.Cliente"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -11,6 +12,7 @@
         <a href="cliente?operacao=CONSULTAR">Consultar clientes</a>
         <%
             Cliente cliente = (Cliente) request.getAttribute("cliente");
+            Resultado resultado = (Resultado) request.getAttribute("resultado");
         %>
         <form action="cliente" method="post">
             
@@ -63,9 +65,16 @@
                    >
             <input type="password" name="senha" placeholder="Crie sua senha*">
             <input type="password" name="confirmar_senha" placeholder="Confirme a senha*">
-
+            
+            <label ></label>
             <%@ include file="form_endereco.jsp" %>
             <%@ include file="form_cartao.jsp" %>
+            
+            <%
+                if(resultado != null && resultado.getMsg() != null){
+                    out.print("<label>" + resultado.getMsg() + "</label>");
+                }
+            %>
             <p><input type="submit" name="operacao" value=
                    <%
                        if (cliente != null) {

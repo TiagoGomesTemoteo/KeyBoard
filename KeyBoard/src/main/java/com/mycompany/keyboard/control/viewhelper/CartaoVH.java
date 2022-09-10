@@ -29,7 +29,11 @@ public class CartaoVH implements IViewHelper {
 
         cartao.setNumero(ParameterParser.toInt(request.getParameter("cartao_numero")));
         cartao.setNomeImpressoNoCartao(request.getParameter("nomeImpressoNoCartao"));
-        cartao.setBandeira(BandeiraCartao.valueOf(request.getParameter("bandeira")));
+        
+        if (!request.getParameter("bandeira").equals("")){
+            cartao.setBandeira(BandeiraCartao.valueOf(request.getParameter("bandeira")));
+        }
+        
         cartao.setCodSeguranca(ParameterParser.toInt(request.getParameter("codSeguranca")));
         cartao.setPreferencial(ParameterParser.toBoolean(request.getParameter("preferencial")));
         

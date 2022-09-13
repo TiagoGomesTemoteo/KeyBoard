@@ -58,8 +58,10 @@ public class ParameterParser {
             tel.setTipo(texto.length() == 10 ? TelefoneENUM.FIXO : TelefoneENUM.CELULAR);
             tel.setDdd(texto.trim().substring(0, 2));
             tel.setNumero(texto.trim().substring(2));
+        }else{
+            tel.setNumero(texto);
         }
-        
+   
         return tel;
     }
     

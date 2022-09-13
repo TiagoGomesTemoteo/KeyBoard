@@ -35,13 +35,13 @@ public class ClienteVH implements IViewHelper {
             
             cliente.setNome(request.getParameter("nome"));
             cliente.setDtNascimento(ParameterParser.toDate(request.getParameter("dtNascimento")));
-            cliente.setTelefone(ParameterParser.toPhone(request.getParameter("telefone")));
+            cliente.setTelefone(ParameterParser.toPhone(request.getParameter("telefone").trim()));
             cliente.setGenero(ParameterParser.getGenSelected(request.getParameter("genero")));
             cliente.setCpf(request.getParameter("cpf"));
             cliente.setEmail(request.getParameter("email"));
             cliente.setSenha(request.getParameter("senha") + request.getParameter("confirmar_senha"));
             cliente.setEnderecos(Arrays.asList((Endereco) new EnderecoVH().getEntidade(request)));
-            cliente.setCartoesDeCredito(Arrays.asList((CartaoDeCredito) new CartaoVH().getEntidade(request)));
+//            cliente.setCartoesDeCredito(Arrays.asList((CartaoDeCredito) new CartaoVH().getEntidade(request)));
             
             if(operacao.equals("ALTERAR")){
                 cliente.setId(ParameterParser.toInt(request.getParameter("cliente_id")));
@@ -82,13 +82,13 @@ public class ClienteVH implements IViewHelper {
 //            rD = request.getRequestDispatcher("lista_cliente.jsp");
             if(resultado.getMsg() != null){
                 request.setAttribute("resultado", resultado);
-                request.getRequestDispatcher("form_cliente.jsp").forward(request, response); 
+                request.getRequestDispatcher("tela_editar_cliente.jsp").forward(request, response); 
             }
         response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
             
         }else if(resultado.getMsg() == null && operacao.equals("VISUALIZAR")) {
             request.setAttribute("cliente", resultado.getEntidades().get(0));
-            request.getRequestDispatcher("form_cliente.jsp").forward(request, response);
+            request.getRequestDispatcher("tela_editar_cliente.jsp").forward(request, response);
              
         }else if(resultado.getMsg() == null && operacao.equals("CONSULTAR")) {
             request.getSession().setAttribute("resultado",resultado);

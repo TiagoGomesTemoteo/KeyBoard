@@ -9,7 +9,6 @@ import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.enums.BandeiraCartao;
 import com.mycompany.keyboard.util.ConnectionFactory;
-import com.mycompany.keyboard.util.ParameterParser;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -208,7 +207,7 @@ public class CartaoDAO extends AbstractDAO {
                 
                 cartao.setId(rs.getInt("car_id"));
                 cartao.setNumero(rs.getInt("car_numero"));
-                cartao.setNomeImpressoNoCartao(rs.getString("car_numero"));
+                cartao.setNomeImpressoNoCartao(rs.getString("car_nome_impresso_no_cartao"));
                 cartao.setBandeira(BandeiraCartao.valueOf(rs.getString("car_bandeira")));
                 cartao.setCodSeguranca(rs.getInt("car_cod_seguranca"));
                 cartao.setPreferencial(rs.getBoolean("car_preferencial"));

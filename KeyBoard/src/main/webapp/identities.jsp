@@ -24,7 +24,7 @@
                 >
         <input type="hidden" name="cartao_id" value=
                 <%
-                    if (entities_cliente != null)
+                    if (entities_cliente != null && !entities_cliente.getCartoesDeCredito().isEmpty())
                         out.print("'" + entities_cliente.getCartoesDeCredito().get(0).getId() + "'");
                 %> 
                 >

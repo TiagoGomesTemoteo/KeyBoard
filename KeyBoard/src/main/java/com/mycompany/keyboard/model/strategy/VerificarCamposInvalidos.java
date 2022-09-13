@@ -8,6 +8,7 @@ package com.mycompany.keyboard.model.strategy;
 import com.mycompany.keyboard.model.dao.ClienteDAO;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.model.domain.Telefone;
 
 /**
  *
@@ -24,6 +25,7 @@ public class VerificarCamposInvalidos implements IStrategy {
         if (entidade instanceof Cliente) {
             if (!((Cliente) entidade).getCpf().equals("")) {
                 validarCPF(((Cliente) entidade).getCpf());
+//                validarTelefone(((Cliente) entidade).getTelefone());
             }
 
         }
@@ -78,6 +80,15 @@ public class VerificarCamposInvalidos implements IStrategy {
         }
 
         return true;
+    }
+    
+    public void validarTelefone(Telefone telefone){
+        
+        String tel = telefone.getDdd() + telefone.getNumero();
+        
+        if (tel.matches("[A-Z]*")) camposInvalidos += "Telefone só pode conter números!";
+        if (tel.length() != 10 || tel.length() != 11) camposInvalidos += "Telefone Inválido!";
+        
     }
 
 }

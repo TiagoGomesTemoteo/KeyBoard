@@ -22,7 +22,7 @@
             Resultado resultado = (Resultado) session.getAttribute("resultado");
         %>
         
-            <a href="form_cliente.jsp"> Cadastrar</a>
+            <a href="tela_cadastrar_cliente.jsp"> Cadastrar</a>
             <table border="1px">
                 <tr>
                     <td>

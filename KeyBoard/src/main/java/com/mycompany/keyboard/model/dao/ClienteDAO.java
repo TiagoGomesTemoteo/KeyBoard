@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -232,6 +233,7 @@ public class ClienteDAO extends AbstractDAO {
                 clientes.add(cliente);
             }
             
+            
             return clientes;
             
         }catch(SQLException ex){
@@ -300,10 +302,10 @@ public class ClienteDAO extends AbstractDAO {
             this.conn = ConnectionFactory.getConnection();
             
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1,cpf);
+            stmt.setString(1, cpf);
             rs = stmt.executeQuery();
                  
-            return rs.next() == true;
+            return rs.next();
           
         }catch(SQLException ex){
             System.out.println("Não foi possível consultar fornecedor no banco de dados \nErro:" + ex.getMessage());

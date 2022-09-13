@@ -7,7 +7,9 @@
         <%
             CartaoDeCredito cartao = null;
 
-            if (request.getAttribute("cliente") != null) {
+            if (request.getAttribute("cliente") != null && 
+                !((Cliente) request.getAttribute("cliente")).getCartoesDeCredito().isEmpty()) {
+                
                 cartao = ((Cliente) request.getAttribute("cliente")).getCartoesDeCredito().get(0);
             }
         %>
@@ -36,10 +38,10 @@
                       if (cartao != null) out.print("'" + cartao.getCodSeguranca() + "'");
                   %>
                   >
-        <p><input type="checkbox" name="preferencial"
-                  <%
-                      if(cartao != null && cartao.isPreferencial()) out.print("checked");
-                  %>
-                  > Preferencial   
+<!--        <p><input type="checkbox" name="preferencial"
+                  
+                    //if(cartao != null && cartao.isPreferencial()) out.print("checked");
+                  
+                  > Preferencial   -->
     </body>
 </html>

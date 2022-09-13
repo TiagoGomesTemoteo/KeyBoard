@@ -53,9 +53,9 @@ public class Facade implements IFacade {
         Map<String, List<IStrategy>> rns_cliente = new HashMap<>(); // Criando map das RG de todas as operações de um cliente
         
         rns_cliente.put("SALVAR", rns_salvar_cliente); // Adicionar ao map uma operação e um map com várias validações
-        rns_cliente.put("ALTERAR", rns_salvar_cliente);
-        rns_cliente.put("DELETAR", rns_salvar_cliente);
-        rns_cliente.put("CONSULTAR", rns_salvar_cliente);
+        rns_cliente.put("ALTERAR", rns_alterar_cliente);
+        rns_cliente.put("DELETAR", rns_deletar_cliente);
+        rns_cliente.put("CONSULTAR", rns_consultar_cliente);
         
         rns.put(Cliente.class.getName(), rns_cliente);
     }

@@ -7,8 +7,10 @@ package com.mycompany.keyboard.control;
 
 import com.mycompany.keyboard.model.dao.ClienteDAO;
 import com.mycompany.keyboard.model.dao.IDAO;
+import com.mycompany.keyboard.model.dao.TecladoDAO;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.model.domain.Teclado;
 import com.mycompany.keyboard.model.strategy.IStrategy;
 import com.mycompany.keyboard.model.strategy.VerificarCamposInvalidos;
 import com.mycompany.keyboard.model.strategy.ValidarCamposObrigatorios;
@@ -17,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,6 +33,7 @@ public class Facade implements IFacade {
     public Facade() {
         daos = new HashMap<>();
         daos.put(Cliente.class.getName(), new ClienteDAO());
+        daos.put(Teclado.class.getName(), new TecladoDAO());
         
         initRns();
     }

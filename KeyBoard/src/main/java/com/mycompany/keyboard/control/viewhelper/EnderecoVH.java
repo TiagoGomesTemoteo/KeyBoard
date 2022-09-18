@@ -5,8 +5,10 @@
  */
 package com.mycompany.keyboard.control.viewhelper;
 
+import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
@@ -41,12 +43,24 @@ public class EnderecoVH implements IViewHelper {
         if(operacao.equals("ALTERAR") || operacao.equals("DELETAR")){
             endereco.setId(ParameterParser.toInt(request.getParameter("endereco_id")));
         }
+        
+        if(operacao.equals("ADICIONAR")){
+            endereco.setCliente((Cliente)request.getSession().getAttribute("cliente_info"));
+        }
         return endereco;
     }
 
     @Override
     public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        String operacao = request.getParameter("operacao");
+        
+        ClienteInSession.Atualizar(request);
+        
+        if(operacao.equals("ADICIONAR")){
+            response.sendRedirect("/KeyBoard/carrinho?operacao=CONSULTAR");
+        }
+   
     }
 
 }

@@ -7,10 +7,12 @@ package com.mycompany.keyboard.control;
 
 import com.mycompany.keyboard.model.dao.CarrinhoDAO;
 import com.mycompany.keyboard.model.dao.ClienteDAO;
+import com.mycompany.keyboard.model.dao.EnderecoDAO;
 import com.mycompany.keyboard.model.dao.IDAO;
 import com.mycompany.keyboard.model.dao.TecladoDAO;
 import com.mycompany.keyboard.model.domain.Carrinho;
 import com.mycompany.keyboard.model.domain.Cliente;
+import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Teclado;
 import com.mycompany.keyboard.model.strategy.IStrategy;
@@ -37,6 +39,7 @@ public class Facade implements IFacade {
         daos.put(Cliente.class.getName(), new ClienteDAO());
         daos.put(Teclado.class.getName(), new TecladoDAO());
         daos.put(Carrinho.class.getName(), new CarrinhoDAO());
+        daos.put(Endereco.class.getName(), new EnderecoDAO());
         
         initRns();
     }

@@ -9,8 +9,9 @@
         <title>Cadastro/Login</title>   
     </head>
     <body>
+        <%@ include file="links_menu.jsp" %>
         
-        ALTERAR SENHA
+        <p>ALTERAR SENHA
         <%@ include file="form_alterar_senha.jsp" %>
         
         DADOS BÁSICOS

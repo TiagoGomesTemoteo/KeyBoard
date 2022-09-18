@@ -35,6 +35,7 @@ public class Controller extends HttpServlet {
     public Controller() {
         cmds = new HashMap<>();
         cmds.put("SALVAR", new SalvarCommand());
+        cmds.put("ADICIONAR", new SalvarCommand());
         cmds.put("ALTERAR", new AlterarCommand());
         cmds.put("DELETAR", new DeletarCommand());
         cmds.put("CONSULTAR", new ConsultarCommand());
@@ -42,7 +43,7 @@ public class Controller extends HttpServlet {
 
         vhs = new HashMap<>();
         vhs.put("/KeyBoard/cliente", new ClienteVH());
-        vhs.put("/KeyBoard/endereco", new ClienteVH());
+        vhs.put("/KeyBoard/endereco", new EnderecoVH());
         vhs.put("/KeyBoard/cartao", new ClienteVH());
         vhs.put("/KeyBoard/teclado", new TecladoVH());
         vhs.put("/KeyBoard/carrinho", new CarrinhoVH());

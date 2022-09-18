@@ -9,8 +9,8 @@
         <title>Cadastro/Login</title>   
     </head>
     <body>
-        <a href="cliente?operacao=CONSULTAR">Consultar clientes</a>
-        
+        <%@ include file="links_menu.jsp" %>
+        <p>
         <%@ include file="form_login.jsp" %>
 
         <p>QUERO ME CADASTRAR

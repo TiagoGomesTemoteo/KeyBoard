@@ -21,7 +21,9 @@ import java.util.List;
  */
 public class EnderecoDAO extends AbstractDAO {
 
-    private Connection conn;
+    private Connection conn = null;
+    
+    public EnderecoDAO(){}
 
     public EnderecoDAO(Connection conn) {
         this.conn = conn;
@@ -42,7 +44,7 @@ public class EnderecoDAO extends AbstractDAO {
         ResultSet rs = null;
 
         try {
-            if (conn == null) {
+            if (conn == null || conn.isClosed()) {
                 this.conn = ConnectionFactory.getConnection();
                 this.ctrlTransacao = true;
 
@@ -76,12 +78,11 @@ public class EnderecoDAO extends AbstractDAO {
             if (rs.next()) {
                 id = rs.getInt(1);
             }
+            
             endereco.setId(id);
 
-            if (ctrlTransacao) {
-                conn.commit();
-            }
-
+            if (ctrlTransacao) conn.commit();
+            
         } catch (Exception ex) {
             try {
                 conn.rollback();
@@ -92,9 +93,8 @@ public class EnderecoDAO extends AbstractDAO {
             System.out.println("Não foi possível salvar o endereço no banco de dados.\nErro: " + ex.getMessage());
 
         } finally {
-            if (ctrlTransacao) {
-                ConnectionFactory.closeConnection(conn, stmt, rs);
-            }
+            if (ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt, rs);
+            
         }
 
     }

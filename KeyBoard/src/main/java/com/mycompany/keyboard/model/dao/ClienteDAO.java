@@ -256,7 +256,7 @@ public class ClienteDAO extends AbstractDAO {
             this.conn = ConnectionFactory.getConnection();
             
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1,cliente.getId());
+            stmt.setInt(1, id);
             rs = stmt.executeQuery();
            
             enderecoDAO = new EnderecoDAO(conn);

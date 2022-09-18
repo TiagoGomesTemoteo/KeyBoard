@@ -8,6 +8,7 @@ package com.mycompany.keyboard.control.viewhelper;
 import com.mycompany.keyboard.model.domain.Carrinho;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Item;
+import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
@@ -49,6 +50,8 @@ public class CarrinhoVH implements IViewHelper{
     public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         String operacao = request.getParameter("operacao");
+        
+        ClienteInSession.Atualizar(request);
         
         if(operacao.equals("SALVAR")){
             if(resultado.getMsg() != null){

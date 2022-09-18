@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Tiago
  */
 @WebServlet(name = "Controller",
-        urlPatterns = {"/cliente", "/endereco", "/cartao", "/teclado"})
+        urlPatterns = {"/cliente", "/endereco", "/cartao", "/teclado", "/carrinho"})
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -45,6 +45,7 @@ public class Controller extends HttpServlet {
         vhs.put("/KeyBoard/endereco", new ClienteVH());
         vhs.put("/KeyBoard/cartao", new ClienteVH());
         vhs.put("/KeyBoard/teclado", new TecladoVH());
+        vhs.put("/KeyBoard/carrinho", new CarrinhoVH());
 
     }
 

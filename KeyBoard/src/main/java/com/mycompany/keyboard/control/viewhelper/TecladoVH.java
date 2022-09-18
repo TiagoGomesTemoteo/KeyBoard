@@ -23,6 +23,8 @@ public class TecladoVH implements IViewHelper{
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         Teclado teclado = new Teclado();
         
+        
+        
         return teclado;
     }
 

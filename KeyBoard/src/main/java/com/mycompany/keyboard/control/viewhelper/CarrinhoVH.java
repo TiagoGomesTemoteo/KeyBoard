@@ -37,7 +37,9 @@ public class CarrinhoVH implements IViewHelper{
             carrinho.getItens().add(item);
             carrinho.getCliente().setId(ParameterParser.toInt(request.getParameter("cliente_id")));
             
-        } 
+        } else if (operacao.equals("CONSULTAR")) {
+            carrinho.getCliente().setId(1);
+        }
 
         return carrinho;
         
@@ -61,9 +63,9 @@ public class CarrinhoVH implements IViewHelper{
 //            request.setAttribute("cliente", resultado.getEntidades().get(0));
 //            request.getRequestDispatcher("tela_editar_cliente.jsp").forward(request, response);
 //             
-//        }else if(resultado.getMsg() == null && operacao.equals("CONSULTAR")) {
-//            request.getSession().setAttribute("resultado",resultado);
-//            request.getRequestDispatcher("lista_cliente.jsp").forward(request, response);
+        else if(resultado.getMsg() == null && operacao.equals("CONSULTAR")) {
+            request.getSession().setAttribute("resultado",resultado);
+            request.getRequestDispatcher("tela_carrinho.jsp").forward(request, response);
 //            
 //        }else if(resultado.getMsg() == null && operacao.equals("ALTERAR")) {
 //            response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
@@ -72,6 +74,7 @@ public class CarrinhoVH implements IViewHelper{
 //            response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
 //        }
     
-    }
+        }
+    }       
 }
 

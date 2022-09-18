@@ -1,20 +1,29 @@
+<%-- 
+    Document   : tela_carrinho
+    Created on : 18 de set. de 2022, 13:28:04
+    Author     : Tiago
+--%>
+
+<%@page import="com.mycompany.keyboard.model.domain.Carrinho"%>
+<%@page import="com.mycompany.keyboard.model.domain.Item"%>
 <%@page import="com.mycompany.keyboard.model.domain.Teclado"%>
 <%@page import="java.util.List"%>
-<%@page import="com.mycompany.keyboard.model.domain.EntidadeDominio"%>
 <%@page import="com.mycompany.keyboard.util.Resultado"%>
+<%@page import="com.mycompany.keyboard.model.domain.EntidadeDominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Carrinho</title>
     </head>
     <body>
         <%
             Resultado resultado = (Resultado) session.getAttribute("resultado");
-        %>
-        
-            TECLADOS:
+        %>  
+            CARRINHO
+            
+            <p>TECLADOS:
             <table border="1px">
                 <tr>
                     <td>
@@ -37,28 +46,18 @@
                         List<EntidadeDominio> entidades = resultado.getEntidades();
                         StringBuilder sbRegistro = new StringBuilder();
                         StringBuilder sbLink = new StringBuilder();
-                        StringBuilder sbLinkAddCarrinho = new StringBuilder();
 
                         if (entidades != null) {
-                            for (int i = 0; i < entidades.size(); i++) {
-                                Teclado teclado = (Teclado) entidades.get(i);
+                            Carrinho carrinho = (Carrinho)entidades.get(0);
+                            
+                            for (Item item : carrinho.getItens()){
+                            
                                 sbRegistro.setLength(0);
                                 sbLink.setLength(0);
-                                sbLinkAddCarrinho.setLength(0);
-
-                                sbLinkAddCarrinho.append("<a href=carrinho?");
-                                sbLinkAddCarrinho.append("teclado_id=");
-                                sbLinkAddCarrinho.append(teclado.getId());
-                                sbLinkAddCarrinho.append("&");
-                                sbLinkAddCarrinho.append("cliente_id=");
-                                sbLinkAddCarrinho.append(1);
-                                sbLinkAddCarrinho.append("&");
-                                sbLinkAddCarrinho.append("operacao=");
-                                sbLinkAddCarrinho.append("SALVAR");
-                                
+                                                                
                                 sbLink.append("<a href=teclado?");
                                 sbLink.append("teclado_id=");
-                                sbLink.append(teclado.getId());
+                                sbLink.append(item.getTeclado().getId());
                                 sbLink.append("&");
                                 sbLink.append("operacao=");
                                 sbLink.append("VISUALIZAR");
@@ -66,21 +65,17 @@
                                 sbRegistro.append(
                                         "<tr>"
                                         + "<td>"
-                                        + teclado.getId()
+                                        + item.getTeclado().getId()
                                         + "</td>"
                                         + "<td>"
-                                        + teclado.getMarca()
+                                        + item.getTeclado().getMarca()
                                         + "</td>"
                                         + "<td>"
-                                        + teclado.getModelo()
+                                        + item.getTeclado().getModelo()
                                         + "</td>"
                                         + "<td>"
                                         + sbLink.toString() + ">" + "Visualizar" + "</a>"
                                         + "</td>"
-                                        + "<td>"
-                                        + sbLinkAddCarrinho.toString() + ">" + "Adicionar no Carrinho" + "</a>"
-                                        + "</td>"
-
                                 );
 
                                 out.print(sbRegistro.toString());
@@ -89,6 +84,6 @@
                         }
                     }
                 %>
-            </table>   
+            </table>
     </body>
 </html>

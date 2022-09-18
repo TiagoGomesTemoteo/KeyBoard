@@ -91,7 +91,52 @@ public class TecladoDAO extends AbstractDAO{
 
     @Override
     public EntidadeDominio consultar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Teclado teclado = new Teclado();
+        
+        String sql = "SELECT * FROM TECLADOS WHERE tec_id =? ;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try{
+            
+            this.conn = ConnectionFactory.getConnection();
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            
+            rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                
+                teclado.setId(rs.getInt("tec_id"));
+                teclado.setMarca(rs.getString("tec_marca"));
+                teclado.setModelo(rs.getString("tec_modelo"));
+                teclado.setQtd_teclas(rs.getInt("tec_qtd_teclas"));
+                teclado.setPolifonia_max(rs.getInt("tec_polifonia_max"));
+                teclado.setPeso(rs.getDouble("tec_peso"));
+                teclado.setAltura(rs.getDouble("tec_altura"));
+                teclado.setLargura(rs.getDouble("tec_largura"));
+                teclado.setComprimento(rs.getDouble("tec_comprimento"));
+                teclado.setCor(rs.getString("tec_cor"));
+                teclado.setVoltagem(rs.getString("tec_voltagem"));
+                teclado.setAtivo(rs.getBoolean("tec_is_ativo"));
+                teclado.setGrupo_precificacao(rs.getDouble("tec_grupo_precificacao"));
+                teclado.setValor_venda(rs.getDouble("tec_valor_venda"));
+                teclado.setValor_custo(rs.getDouble("tec_valor_custo"));
+                teclado.setQtd_disponivel(rs.getInt("est_qtd_disponivel"));
+                teclado.setQtd_bloqueada(rs.getInt("est_qtd_bloqueada"));
+
+            }
+            
+            return teclado;
+            
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar o teclado no banco de dados \nErro:" + ex.getMessage());
+        }finally{
+            ConnectionFactory.closeConnection(conn, stmt, rs);
+        }
+        return null;
     }
     
 }

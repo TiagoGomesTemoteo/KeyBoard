@@ -8,11 +8,13 @@ package com.mycompany.keyboard.model.dao;
 import com.mycompany.keyboard.model.domain.Carrinho;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Item;
+import com.mycompany.keyboard.model.domain.Teclado;
 import com.mycompany.keyboard.util.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,7 +102,9 @@ public class CarrinhoDAO extends AbstractDAO{
 
     @Override
     public List consultar(EntidadeDominio entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Carrinho> carrinho = new ArrayList();
+        carrinho.add((Carrinho)consultar(((Carrinho)entidade).getCliente().getId()));
+        return carrinho;
     }
 
     @Override
@@ -121,14 +125,14 @@ public class CarrinhoDAO extends AbstractDAO{
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1,id);
             rs = stmt.executeQuery();
-            
+                       
             while(rs.next()){
                 
                 item = new Item();
                 
                 item.setNewInTheCar(false);
                 item.setQuantidade(rs.getInt("crr_qtd_itens"));
-                item.getTeclado().setId((rs.getInt("crr_tec_id")));
+                item.setTeclado((Teclado) new TecladoDAO().consultar(rs.getInt("crr_tec_id")));
                 
                 carrinho.getItens().add(item);
             }

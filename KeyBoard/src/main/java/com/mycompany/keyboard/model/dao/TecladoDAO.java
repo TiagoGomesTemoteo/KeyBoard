@@ -22,7 +22,13 @@ import java.util.List;
 public class TecladoDAO extends AbstractDAO{
     
     private Connection conn;
-    
+
+    public TecladoDAO(Connection conn) {
+        this.conn = conn;
+    }
+
+    public TecladoDAO() {}
+            
     @Override
     public void salvar(EntidadeDominio entidade) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

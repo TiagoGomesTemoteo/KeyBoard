@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Tiago
  */
 @WebServlet(name = "Controller",
-        urlPatterns = {"/cliente", "/endereco", "/cartao", "/teclado", "/carrinho"})
+        urlPatterns = {"/cliente", "/endereco", "/cartao", "/teclado", "/carrinho", "/pedido"})
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -40,13 +40,14 @@ public class Controller extends HttpServlet {
         cmds.put("DELETAR", new DeletarCommand());
         cmds.put("CONSULTAR", new ConsultarCommand());
         cmds.put("VISUALIZAR", new VisualizarCommand());
-
+        
         vhs = new HashMap<>();
         vhs.put("/KeyBoard/cliente", new ClienteVH());
         vhs.put("/KeyBoard/endereco", new EnderecoVH());
         vhs.put("/KeyBoard/cartao", new ClienteVH());
         vhs.put("/KeyBoard/teclado", new TecladoVH());
         vhs.put("/KeyBoard/carrinho", new CarrinhoVH());
+        vhs.put("/KeyBoard/pedido", new PedidoVH());
 
     }
 
@@ -57,14 +58,16 @@ public class Controller extends HttpServlet {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException ex) {
         }
-
+        
+        Resultado resultado = new Resultado();
         operacao = request.getParameter("operacao");
 
         String uri = request.getRequestURI();
         IViewHelper viewHelper = vhs.get(uri);
         EntidadeDominio entidade = viewHelper.getEntidade(request);
         ICommand command = cmds.get(operacao);
-        Resultado resultado = command.execute(entidade);
+        if(command != null){ resultado = command.execute(entidade);}
+ 
         viewHelper.setView(resultado, request, response);
     }
 

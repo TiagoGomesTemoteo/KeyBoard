@@ -40,10 +40,10 @@ public class CarrinhoDAO extends AbstractDAO{
         
         try {
             
-            Carrinho carrinhoPersistido = (Carrinho) consultar(carrinho.getCliente().getId());
-            
             this.conn = ConnectionFactory.getConnection();
             
+            Carrinho carrinhoPersistido = (Carrinho) consultar(carrinho.getCliente().getId());
+
             this.conn.setAutoCommit(false);
             
             for (Item item : carrinho.getItens()) {
@@ -119,11 +119,16 @@ public class CarrinhoDAO extends AbstractDAO{
         ResultSet rs = null;
         
         try{
-            
-            this.conn = ConnectionFactory.getConnection();
+            if (conn == null || conn.isClosed()) {
+                this.conn = ConnectionFactory.getConnection();
+                this.ctrlTransacao = true;
+
+            } else {
+                this.ctrlTransacao = false;
+            }
             
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1,id);
+            stmt.setInt(1, id);
             rs = stmt.executeQuery();
                        
             while(rs.next()){
@@ -132,7 +137,7 @@ public class CarrinhoDAO extends AbstractDAO{
                 
                 item.setNewInTheCar(false);
                 item.setQuantidade(rs.getInt("crr_qtd_itens"));
-                item.setTeclado((Teclado) new TecladoDAO().consultar(rs.getInt("crr_tec_id")));
+                item.setTeclado((Teclado) new TecladoDAO(conn).consultar(rs.getInt("crr_tec_id")));
                 
                 carrinho.getItens().add(item);
             }
@@ -142,7 +147,7 @@ public class CarrinhoDAO extends AbstractDAO{
         }catch(SQLException ex){
             System.out.println("Não foi possível consultar o carrinho desse cliente no banco de dados \nErro:" + ex.getMessage());
         }finally{
-            ConnectionFactory.closeConnection(conn, stmt, rs);
+            if(ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt, rs);
         }
         return null;
     }

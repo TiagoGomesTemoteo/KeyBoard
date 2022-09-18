@@ -6,12 +6,15 @@
 package com.mycompany.keyboard.control.viewhelper;
 
 import com.mycompany.keyboard.model.domain.Carrinho;
+import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Item;
+import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,28 +24,24 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Tiago
  */
-public class CarrinhoVH implements IViewHelper{
+public class PedidoVH implements IViewHelper{
 
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         
-        Carrinho carrinho = new Carrinho();
-        Item item = new Item();
+        Pedido pedido = new Pedido();
         
         String operacao = request.getParameter("operacao");
         
-        if (operacao.equals("SALVAR")) {
-            item.setQuantidade(1);
-            item.setNewInTheCar(true);
-            item.getTeclado().setId(ParameterParser.toInt(request.getParameter("teclado_id")));
-            carrinho.getItens().add(item);
-            carrinho.getCliente().setId(ParameterParser.toInt(request.getParameter("cliente_id")));
+        if (operacao.equals("FINALIZAR")) {
             
-        } else if (operacao.equals("CONSULTAR")) {
-            carrinho.getCliente().setId(1);
-        }
+            pedido.setCliente((Cliente)request.getSession().getAttribute("cliente_info"));
+            pedido.setItens(((Carrinho)request.getSession().getAttribute("cliente_carrinho")).getItens());
+            pedido.getEndereco().setId(ParameterParser.toInt(request.getParameter("endereco_entrega")));
+            request.setAttribute("pedido", pedido);
+        } 
 
-        return carrinho;
+        return pedido;
         
     }
 
@@ -54,13 +53,8 @@ public class CarrinhoVH implements IViewHelper{
         ClienteInSession.Atualizar(request);
         ClienteInSession.getAllItensCar(request);
         
-        if(operacao.equals("SALVAR")){
-            if(resultado.getMsg() != null){
-                request.setAttribute("resultado", resultado);
-                request.getRequestDispatcher("lista_teclado.jsp").forward(request, response); 
-            }
-            
-            response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
+        if(operacao.equals("FINALIZAR")){
+                request.getRequestDispatcher("tela_forma_pagamento.jsp").forward(request, response);    
         }
 //            
 //        }else if(resultado.getMsg() == null && operacao.equals("VISUALIZAR")) {

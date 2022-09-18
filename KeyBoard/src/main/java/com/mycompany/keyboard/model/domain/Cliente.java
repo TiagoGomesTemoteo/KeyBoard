@@ -52,8 +52,8 @@ public class Cliente extends EntidadeDominio {
         this.dtNascimento = new Date();
         this.cpf = "";
         this.ativo = false;
-        this.enderecos = new ArrayList<Endereco>();
-        this.cartoesDeCredito = new ArrayList<CartaoDeCredito>();
+        this.enderecos = new ArrayList();
+        this.cartoesDeCredito = new ArrayList();
         this.telefone = new Telefone();
     }
 

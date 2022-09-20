@@ -26,9 +26,13 @@ public class Cliente extends EntidadeDominio {
     private boolean ativo;
     private List<Endereco> enderecos;
     private List<CartaoDeCredito> cartoesDeCredito;
+    private List<CupomDeTroca> cuponsDeTroca;
     private Telefone telefone;
 
-    public Cliente(String nome, Genero genero, String email, int rank, String senha, Date dtNascimento, String cpf, boolean ativo, List<Endereco> enderecos, List<CartaoDeCredito> cartoesDeCredito, Telefone telefone, int id, Date dt_cadastro) {
+    public Cliente(String nome, Genero genero, String email, int rank, String senha, Date dtNascimento, 
+            String cpf, boolean ativo, List<Endereco> enderecos, List<CartaoDeCredito> cartoesDeCredito, 
+            Telefone telefone, int id, Date dt_cadastro,
+            List<CupomDeTroca> cuponsDeTroca) {
         super(id, dt_cadastro);
         this.nome = nome;
         this.genero = genero;
@@ -41,6 +45,7 @@ public class Cliente extends EntidadeDominio {
         this.enderecos = enderecos;
         this.cartoesDeCredito = cartoesDeCredito;
         this.telefone = telefone;
+        this.cuponsDeTroca = cuponsDeTroca;
     }
 
     public Cliente() {
@@ -55,6 +60,7 @@ public class Cliente extends EntidadeDominio {
         this.enderecos = new ArrayList();
         this.cartoesDeCredito = new ArrayList();
         this.telefone = new Telefone();
+        this.cuponsDeTroca = new ArrayList();
     }
 
     public String getNome() {
@@ -144,4 +150,12 @@ public class Cliente extends EntidadeDominio {
     public void setTelefone(Telefone telefone) {
         this.telefone = telefone;
     }
+
+    public List<CupomDeTroca> getCuponsDeTroca() {
+        return cuponsDeTroca;
+    }
+
+    public void setCuponsDeTroca(List<CupomDeTroca> cuponsDeTroca) {
+        this.cuponsDeTroca = cuponsDeTroca;
+    }    
 }

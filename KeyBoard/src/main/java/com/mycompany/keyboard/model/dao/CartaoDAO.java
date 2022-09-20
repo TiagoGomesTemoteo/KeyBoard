@@ -29,6 +29,9 @@ public class CartaoDAO extends AbstractDAO {
         this.conn = conn;
     }
 
+    public CartaoDAO() {
+    }
+
     @Override
     public void salvar(EntidadeDominio entidade) {
         CartaoDeCredito cartao = (CartaoDeCredito) entidade;
@@ -42,7 +45,7 @@ public class CartaoDAO extends AbstractDAO {
         ResultSet rs = null;
 
         try {
-            if (conn == null) {
+            if (conn == null || conn.isClosed()) {
                 this.conn = ConnectionFactory.getConnection();
                 this.ctrlTransacao = true;
 

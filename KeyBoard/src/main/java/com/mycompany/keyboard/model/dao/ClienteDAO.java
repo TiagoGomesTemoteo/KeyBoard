@@ -7,6 +7,7 @@ package com.mycompany.keyboard.model.dao;
 
 import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.Cliente;
+import com.mycompany.keyboard.model.domain.CupomDeTroca;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Telefone;
@@ -215,7 +216,9 @@ public class ClienteDAO extends AbstractDAO {
             telefoneDAO = new TelefoneDAO(conn);
             
             while(rs.next()){
+                
                 cliente = new Cliente(); 
+                
                 cliente.setId(rs.getInt("cli_id"));
                 cliente.setDt_cadastro(rs.getDate("cli_dt_cadastro"));
                 cliente.setNome(rs.getString("cli_nome"));
@@ -228,6 +231,7 @@ public class ClienteDAO extends AbstractDAO {
                 cliente.setTelefone((Telefone)telefoneDAO.consultar(rs.getInt("cli_tel_id")));
                 cliente.setEnderecos(enderecoDAO.consultar(cliente));
                 cliente.setCartoesDeCredito(cartaoDAO.consultar(cliente));
+                cliente.setCuponsDeTroca(getCupons(rs.getInt("cli_id")));
                 
                 clientes.add(cliente);
             }
@@ -277,7 +281,7 @@ public class ClienteDAO extends AbstractDAO {
                 cliente.setTelefone((Telefone)telefoneDAO.consultar(rs.getInt("cli_tel_id")));
                 cliente.setEnderecos(enderecoDAO.consultar(cliente));
                 cliente.setCartoesDeCredito(cartaoDAO.consultar(cliente));
-                
+                cliente.setCuponsDeTroca(getCupons(id));
             }
             
             return cliente;
@@ -290,6 +294,7 @@ public class ClienteDAO extends AbstractDAO {
         return null;
     }
     
+    //Função usada por uma Strategy
     public boolean existeCpf(String cpf) {
         
         String sql = "SELECT * FROM CLIENTES WHERE cli_cpf = ?;";
@@ -314,6 +319,41 @@ public class ClienteDAO extends AbstractDAO {
         return false;
     }
     
+    public List<CupomDeTroca> getCupons(int cliente_id) {
+        
+        String sql = "SELECT * FROM CUPONS_DE_TROCA WHERE cdt_cli_id = ?;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try{
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, cliente_id);
+            rs = stmt.executeQuery();
+            
+            List<CupomDeTroca> lista_de_cupons = new ArrayList();
+            CupomDeTroca cupom_de_troca = new CupomDeTroca();
+            
+            while(rs.next()){
+               
+                cupom_de_troca = new CupomDeTroca();
+                
+                cupom_de_troca.setId(rs.getInt("cdt_id"));
+                cupom_de_troca.setValor(rs.getDouble("cdt_valor"));
+                cupom_de_troca.setValidade(rs.getDate("cdt_validade"));
+
+                lista_de_cupons.add(cupom_de_troca);
+            }
+            
+            return lista_de_cupons;
+          
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar fornecedor no banco de dados \nErro:" + ex.getMessage());
+        }
+        
+        return null;
+    }
     
 
 }

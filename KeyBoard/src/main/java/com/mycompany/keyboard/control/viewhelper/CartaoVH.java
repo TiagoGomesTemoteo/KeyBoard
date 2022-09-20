@@ -6,8 +6,10 @@
 package com.mycompany.keyboard.control.viewhelper;
 
 import com.mycompany.keyboard.model.domain.CartaoDeCredito;
+import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.enums.BandeiraCartao;
+import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
@@ -40,13 +42,25 @@ public class CartaoVH implements IViewHelper {
         if(operacao.equals("ALTERAR") || operacao.equals("DELETAR")){
             cartao.setId(ParameterParser.toInt(request.getParameter("cartao_id")));
         }
+        if(operacao.equals("ADICIONAR")){
+            cartao.setCliente((Cliente)request.getSession().getAttribute("cliente_info"));
+        }
+        
         
         return cartao;
     }
 
     @Override
     public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        String operacao = request.getParameter("operacao");
+        
+        ClienteInSession.Atualizar(request);
+        ClienteInSession.getAllItensCar(request);
+        
+        if(operacao.equals("ADICIONAR")){
+            request.getRequestDispatcher("tela_forma_pagamento.jsp").forward(request, response);  
+        }
     }
 
 }

@@ -10,7 +10,6 @@
 <%@page import="com.mycompany.keyboard.model.domain.Item"%>
 <%@page import="com.mycompany.keyboard.model.domain.Teclado"%>
 <%@page import="java.util.List"%>
-<%@page import="com.mycompany.keyboard.util.Resultado"%>
 <%@page import="com.mycompany.keyboard.model.domain.EntidadeDominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,8 +19,7 @@
         <title>Carrinho</title>
     </head>
     <body>
-        <%
-            Resultado resultado = (Resultado) session.getAttribute("resultado");
+        <% 
             Cliente cliente = null;
             Carrinho carrinho = null;
             

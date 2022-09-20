@@ -44,7 +44,7 @@ public class Controller extends HttpServlet {
         vhs = new HashMap<>();
         vhs.put("/KeyBoard/cliente", new ClienteVH());
         vhs.put("/KeyBoard/endereco", new EnderecoVH());
-        vhs.put("/KeyBoard/cartao", new ClienteVH());
+        vhs.put("/KeyBoard/cartao", new CartaoVH());
         vhs.put("/KeyBoard/teclado", new TecladoVH());
         vhs.put("/KeyBoard/carrinho", new CarrinhoVH());
         vhs.put("/KeyBoard/pedido", new PedidoVH());

@@ -21,15 +21,17 @@ public class Pedido extends EntidadeDominio {
     private List<Item> itens;
     private double valor_total;
     private Estatus estatus;
+    private List<Pagamento> pagamento;
 
     public Pedido(Cliente cliente, Endereco endereco, List<Item> itens, double valor_total, int id, Date dt_cadastro,
-            Estatus estatus) {
+            Estatus estatus, List<Pagamento> pagamento) {
         super(id, dt_cadastro);
         this.cliente = cliente;
         this.endereco = endereco;
         this.itens = itens;
         this.valor_total = valor_total;
         this.estatus = estatus;
+        this.pagamento = pagamento;
     }
 
     public Pedido() {
@@ -38,6 +40,7 @@ public class Pedido extends EntidadeDominio {
         this.itens = new ArrayList();
         this.valor_total = 0.0;
         this.estatus = Estatus.EM_ANALISE;
+        this.pagamento = new ArrayList();
     }
 
     public Cliente getCliente() {
@@ -80,4 +83,11 @@ public class Pedido extends EntidadeDominio {
         this.estatus = estatus;
     }
 
+    public List<Pagamento> getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(List<Pagamento> pagamento) {
+        this.pagamento = pagamento;
+    }
 }

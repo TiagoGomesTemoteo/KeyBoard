@@ -5,25 +5,18 @@
  */
 package com.mycompany.keyboard.model.domain;
 
-import java.util.Date;
-
 /**
  *
  * @author Tiago
  */
-public class CupomDeTroca extends FormasDePagamento{
-    
+public class Pagamento {
+
     private double valor;
-    private Date validade;
+    private FormasDePagamento forma_de_pagamento;
 
-    public CupomDeTroca (double valor, Date validade, int id, Date dt_cadastro) {
+    public Pagamento(double valor, FormasDePagamento forma_de_pagamento) {
         this.valor = valor;
-        this.validade = validade;
-    }
-
-    public CupomDeTroca() {
-        this.valor = 0.0;
-        this.validade = new Date();
+        this.forma_de_pagamento = forma_de_pagamento;
     }
 
     public double getValor() {
@@ -34,12 +27,12 @@ public class CupomDeTroca extends FormasDePagamento{
         this.valor = valor;
     }
 
-    public Date getValidade() {
-        return validade;
+    public FormasDePagamento getForma_de_pagamento() {
+        return forma_de_pagamento;
     }
 
-    public void setValidade(Date validade) {
-        this.validade = validade;
+    public void setForma_de_pagamento(FormasDePagamento forma_de_pagamento) {
+        this.forma_de_pagamento = forma_de_pagamento;
     }
-  
+
 }

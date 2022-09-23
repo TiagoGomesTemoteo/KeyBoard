@@ -35,6 +35,7 @@ public class Controller extends HttpServlet {
     public Controller() {
         cmds = new HashMap<>();
         cmds.put("SALVAR", new SalvarCommand());
+        cmds.put("PAGAR", new SalvarCommand());
         cmds.put("ADICIONAR", new SalvarCommand());
         cmds.put("ALTERAR", new AlterarCommand());
         cmds.put("DELETAR", new DeletarCommand());

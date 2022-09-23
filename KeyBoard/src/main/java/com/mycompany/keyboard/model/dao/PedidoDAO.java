@@ -6,8 +6,11 @@
 package com.mycompany.keyboard.model.dao;
 
 
+import com.mycompany.keyboard.model.domain.CupomDeTroca;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.model.domain.FormasDePagamento;
 import com.mycompany.keyboard.model.domain.Item;
+import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.util.ConnectionFactory;
 import java.sql.Connection;
@@ -41,6 +44,9 @@ public class PedidoDAO extends AbstractDAO{
         
         String sqlPedidoProduto = "INSERT INTO PEDIDOS_PRODUTOS (pep_id, pep_ped_id, pep_tec_id, pep_quantidade)"
                 + " VALUES(pep_id, ?,?,?)";
+        
+        String sqlPedidoPagamento = "INSERT INTO PAGAMENTOS (pag_id, pag_fpg_id, pag_valor, pag_ped_id)"
+                + " VALUES(pag_id, ?,?,?)";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -64,10 +70,26 @@ public class PedidoDAO extends AbstractDAO{
             
             stmt = conn.prepareStatement(sqlPedidoProduto);
             
-            for(Item item : pedido.getItens()){
+            for (Item item : pedido.getItens()) {
                 stmt.setInt(1, pedido.getId());
                 stmt.setInt(2, item.getTeclado().getId());
                 stmt.setInt(3, item.getQuantidade());
+                
+                stmt.executeUpdate();
+            }
+            
+            stmt = conn.prepareStatement(sqlPedidoPagamento);
+            
+            for (Pagamento pagamento : pedido.getPagamento()){
+                if (pagamento.getForma_de_pagamento() instanceof CupomDeTroca){
+                    stmt.setInt(1, 4);
+                    
+                } else {
+                    stmt.setInt(1, 5);
+                }
+                
+                stmt.setDouble(2, pagamento.getValor());
+                stmt.setInt(3, pedido.getId());
                 
                 stmt.executeUpdate();
             }

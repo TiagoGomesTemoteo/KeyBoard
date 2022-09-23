@@ -12,7 +12,7 @@ import java.util.Date;
  *
  * @author Tiago
  */
-public class CartaoDeCredito extends EntidadeDominio {
+public class CartaoDeCredito extends FormasDePagamento {
 
     private int numero;
     private String nomeImpressoNoCartao;
@@ -24,7 +24,6 @@ public class CartaoDeCredito extends EntidadeDominio {
     public CartaoDeCredito(int numero, String nomeImpressoNoCartao, BandeiraCartao bandeira,
             int codSeguranca, boolean preferencial, int id, Date dt_cadastro,
             Cliente cliente) {
-        super(id, dt_cadastro);
         this.numero = numero;
         this.nomeImpressoNoCartao = nomeImpressoNoCartao;
         this.bandeira = bandeira;

@@ -35,13 +35,12 @@
         <form action="pedido" method="post">
             <p>FORMA DE PAGAMENTO
 
-            <p> VALOR TOTAL: <input type="text" name="valor_total" value=<%
-                    if (carrinho != null && carrinho.getItens() != null && carrinho.getItens().size() != 0){
-                        out.print("'" + FunctionsUtilsPagamento.calcularValorTotal(carrinho) + "'");
-                    }
-                %> 
-               >
-
+            <p> VALOR TOTAL: <%
+                if (carrinho != null && carrinho.getItens() != null && carrinho.getItens().size() != 0){
+                    out.print(FunctionsUtilsPagamento.calcularValorTotal(carrinho.getItens()));
+                }
+            %>
+            
             <p> Adicionar cartão:
 
             <form action="cartao" method="post">

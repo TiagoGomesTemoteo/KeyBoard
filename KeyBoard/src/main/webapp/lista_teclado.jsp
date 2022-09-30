@@ -1,3 +1,4 @@
+<%@page import="javax.swing.JOptionPane"%>
 <%@page import="com.mycompany.keyboard.model.domain.Teclado"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycompany.keyboard.model.domain.EntidadeDominio"%>
@@ -8,6 +9,35 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <script>
+            var numero;
+
+            function less(id) {
+              getValue(id);  
+              if (numero != 0) {
+                numero--;
+              }
+              setValue(numero, id);
+            }
+
+            function more(id) {
+              getValue(id);
+              numero++;
+              setValue(numero, id);
+            }
+            
+            function getValue(id){
+                numero = document.getElementById('qtd_add_carrinho' + id).value;
+            }
+
+            function setValue(value, id) {
+              document.getElementById('qtd_add_carrinho' + id).value = value;
+            }
+
+            const a = document.querySelector("link_add_carrinho");
+            
+            a.href = a.href.toString()+document.getElementById();
+        </script>
     </head>
     <body>
         <%
@@ -40,34 +70,24 @@
             <%
                 if (resultado != null) {
                     List<EntidadeDominio> entidades = resultado.getEntidades();
-                    StringBuilder sbRegistro = new StringBuilder();
-                    StringBuilder sbLink = new StringBuilder();
-                    StringBuilder sbLinkAddCarrinho = new StringBuilder();
-
+                    StringBuilder sbRegistro = new StringBuilder(0);
+                    StringBuilder sbLink = new StringBuilder(0);
+                    
                     if (entidades != null) {
                         for (int i = 0; i < entidades.size(); i++) {
                             Teclado teclado = (Teclado) entidades.get(i);
+                            int id = teclado.getId();
+                            
                             sbRegistro.setLength(0);
                             sbLink.setLength(0);
-                            sbLinkAddCarrinho.setLength(0);
-
-                            sbLinkAddCarrinho.append("<a href=carrinho?");
-                            sbLinkAddCarrinho.append("teclado_id=");
-                            sbLinkAddCarrinho.append(teclado.getId());
-                            sbLinkAddCarrinho.append("&");
-                            sbLinkAddCarrinho.append("cliente_id=");
-                            sbLinkAddCarrinho.append(1);
-                            sbLinkAddCarrinho.append("&");
-                            sbLinkAddCarrinho.append("operacao=");
-                            sbLinkAddCarrinho.append("SALVAR");
 
                             sbLink.append("<a href=teclado?");
                             sbLink.append("teclado_id=");
-                            sbLink.append(teclado.getId());
+                            sbLink.append(id);
                             sbLink.append("&");
                             sbLink.append("operacao=");
                             sbLink.append("VISUALIZAR");
-
+                            
                             sbRegistro.append(
                                     "<tr>"
                                     + "<td>"
@@ -86,7 +106,13 @@
                                     + sbLink.toString() + ">" + "Visualizar" + "</a>"
                                     + "</td>"
                                     + "<td>"
-                                    + sbLinkAddCarrinho.toString() + ">" + "Adicionar no Carrinho" + "</a>"
+                                        + "<form action='carrinho' method='post'>"
+                                            + "<button type='button' id='menos' onclick='less("+id+")'>-</button>"
+                                            + "<input type='text' name='qtd_add_carrinho"+id+"' value='0' id='qtd_add_carrinho"+teclado.getId()+"'>" 
+                                            + "<button type='button' id='mais' onclick='more("+id+")'>+</button>"                              
+                                            + "<input type='hidden' name='teclado_id' value='" + id + "'>"
+                                            + "<input type='submit' name='operacao' value='ADICIONAR'>" 
+                                        + "</form>"
                                     + "</td>"
 
                             );

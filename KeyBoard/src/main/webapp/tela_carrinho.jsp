@@ -86,6 +86,7 @@
                     if (carrinho != null) {
                         StringBuilder sbRegistro = new StringBuilder();
                         StringBuilder sbLink = new StringBuilder();
+                        StringBuilder sbLinkAddOrRmProduto = new StringBuilder();
 
                         if (carrinho.getItens() != null) {                          
 
@@ -93,7 +94,18 @@
 
                                 sbRegistro.setLength(0);
                                 sbLink.setLength(0);
+                                sbLinkAddOrRmProduto.setLength(0);
 
+                                sbLinkAddOrRmProduto.append("<a href=carrinho?");
+                                sbLinkAddOrRmProduto.append("teclado_id=");
+                                sbLinkAddOrRmProduto.append(item.getTeclado().getId());
+                                sbLinkAddOrRmProduto.append("&");
+                                sbLinkAddOrRmProduto.append("operacao=");
+                                sbLinkAddOrRmProduto.append("ADICIONAR");
+                                sbLinkAddOrRmProduto.append("&");
+                                sbLinkAddOrRmProduto.append("qtd_add_carrinho"+item.getTeclado().getId()+"=");                                
+
+                                
                                 sbLink.append("<a href=teclado?");
                                 sbLink.append("teclado_id=");
                                 sbLink.append(item.getTeclado().getId());
@@ -116,7 +128,9 @@
                                         + item.getTeclado().getValor_venda()
                                         + "</td>"
                                         + "<td>"
+                                        + sbLinkAddOrRmProduto.toString()+"-1>" + "< " + "</a>"
                                         + item.getQuantidade()
+                                        + sbLinkAddOrRmProduto.toString()+"1>" + " >" + "</a>"
                                         + "</td>"
                                         + "<td>"
                                         + sbLink.toString() + ">" + "Visualizar" + "</a>"

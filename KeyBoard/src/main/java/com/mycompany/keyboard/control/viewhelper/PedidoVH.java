@@ -68,15 +68,15 @@ public class PedidoVH implements IViewHelper {
 
             }
             if (request.getParameter("cupom2") != null) {
-                cupom = (CupomDeTroca) getCupomUsado(request, 1);
+                cupom = (CupomDeTroca) getCupomUsado(request, 2);
                 pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));
             }
             if (request.getParameter("cupom3") != null) {
-                cupom = (CupomDeTroca) getCupomUsado(request, 1);
-                pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));;
+                cupom = (CupomDeTroca) getCupomUsado(request, 3);
+                pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));
             }
             if (request.getParameter("cupom4") != null) {
-                cupom = (CupomDeTroca) getCupomUsado(request, 1);
+                cupom = (CupomDeTroca) getCupomUsado(request, 4);
                 pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));
             }
 
@@ -101,10 +101,6 @@ public class PedidoVH implements IViewHelper {
             request.getSession().setAttribute("resultado", resultado);
             request.getRequestDispatcher("tela_carrinho.jsp").forward(request, response);
         }
-//        } else if (resultado.getMsg() == null && operacao.equals("PAGAR")) {
-//            request.getSession().setAttribute("resultado",resultado);
-//            request.getRequestDispatcher("lista_teclado.jsp").forward(request, response);
-//        }
     }
 
     public FormasDePagamento getCartaoSelecionado(HttpServletRequest request, String nomeCartaoUsado) {

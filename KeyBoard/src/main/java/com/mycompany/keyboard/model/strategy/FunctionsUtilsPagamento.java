@@ -5,8 +5,8 @@
  */
 package com.mycompany.keyboard.model.strategy;
 
-import com.mycompany.keyboard.model.domain.Carrinho;
 import com.mycompany.keyboard.model.domain.Item;
+import java.util.List;
 
 /**
  *
@@ -14,11 +14,11 @@ import com.mycompany.keyboard.model.domain.Item;
  */
 public class FunctionsUtilsPagamento {
     
-    public static Double calcularValorTotal(Carrinho carrinho){
+    public static Double calcularValorTotal(List<Item> itens){
         
         double valorTotal = 0.0;
         
-        for(Item item : carrinho.getItens()){
+        for(Item item : itens){
             valorTotal += item.getTeclado().getValor_venda() * item.getQuantidade();
         }
         

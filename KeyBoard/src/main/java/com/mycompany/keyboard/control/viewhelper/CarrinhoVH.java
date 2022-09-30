@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * @author Tiago
@@ -31,12 +30,12 @@ public class CarrinhoVH implements IViewHelper{
         
         String operacao = request.getParameter("operacao");
         
-        if (operacao.equals("SALVAR")) {
-            item.setQuantidade(1);
+        if (operacao.equals("SALVAR") || operacao.equals("ADICIONAR")) {
             item.setNewInTheCar(true);
             item.getTeclado().setId(ParameterParser.toInt(request.getParameter("teclado_id")));
+            item.setQuantidade(ParameterParser.toInt(request.getParameter("qtd_add_carrinho"+item.getTeclado().getId())));
             carrinho.getItens().add(item);
-            carrinho.getCliente().setId(ParameterParser.toInt(request.getParameter("cliente_id")));
+            carrinho.getCliente().setId(1);
             
         } else if (operacao.equals("CONSULTAR")) {
             carrinho.getCliente().setId(1);
@@ -54,7 +53,7 @@ public class CarrinhoVH implements IViewHelper{
         ClienteInSession.Atualizar(request);
         ClienteInSession.getAllItensCar(request);
         
-        if(operacao.equals("SALVAR")){
+        if (operacao.equals("SALVAR")) {
             if(resultado.getMsg() != null){
                 request.setAttribute("resultado", resultado);
                 request.getRequestDispatcher("lista_teclado.jsp").forward(request, response); 
@@ -62,21 +61,10 @@ public class CarrinhoVH implements IViewHelper{
             
             response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
         }
-//            
-//        }else if(resultado.getMsg() == null && operacao.equals("VISUALIZAR")) {
-//            request.setAttribute("cliente", resultado.getEntidades().get(0));
-//            request.getRequestDispatcher("tela_editar_cliente.jsp").forward(request, response);
-//             
-        else if(resultado.getMsg() == null && operacao.equals("CONSULTAR")) {
-            request.getSession().setAttribute("resultado",resultado);
+ 
+        else if(resultado.getMsg() == null && operacao.equals("CONSULTAR") || operacao.equals("ADICIONAR")) {
+            request.getSession().setAttribute("resultado", resultado);
             request.getRequestDispatcher("tela_carrinho.jsp").forward(request, response);
-//            
-//        }else if(resultado.getMsg() == null && operacao.equals("ALTERAR")) {
-//            response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
-//            
-//        }else if(resultado.getMsg() == null && operacao.equals("DELETAR")) {
-//            response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
-//        }
     
         }
     }       

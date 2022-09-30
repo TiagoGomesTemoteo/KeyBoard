@@ -61,6 +61,7 @@ public class Controller extends HttpServlet {
         }
         
         Resultado resultado = new Resultado();
+        
         operacao = request.getParameter("operacao");
 
         String uri = request.getRequestURI();

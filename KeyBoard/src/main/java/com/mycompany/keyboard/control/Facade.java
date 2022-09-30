@@ -19,6 +19,7 @@ import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.model.domain.Teclado;
+import com.mycompany.keyboard.model.strategy.CalcularValorTotalDoPedido;
 import com.mycompany.keyboard.model.strategy.IStrategy;
 import com.mycompany.keyboard.model.strategy.VerificarCamposInvalidos;
 import com.mycompany.keyboard.model.strategy.ValidarCamposObrigatorios;
@@ -55,23 +56,36 @@ public class Facade implements IFacade {
         
         rns = new HashMap<> (); // Inicializando map de Regras de negócio
         
-        List<IStrategy> rns_salvar_cliente = new ArrayList<>(); // Criando map das RG para salvar um cliente
-        rns_salvar_cliente.add(new ValidarCamposObrigatorios()); // Adicionando validação para salvar um cliente
-        rns_salvar_cliente.add(new VerificarCamposInvalidos());
+        Map<String, List<IStrategy>> rns_cliente = new HashMap<>(); // Criando map das RG de todas as operações de um cliente
+        Map<String, List<IStrategy>> rns_pedido = new HashMap<>();
         
+        List<IStrategy> rns_salvar_pedido = new ArrayList<>();       
+        List<IStrategy> rns_alterar_pedido = new ArrayList<>();
+        List<IStrategy> rns_deletar_pedido = new ArrayList<>();
+        List<IStrategy> rns_consultar_pedido = new ArrayList<>();
+        
+        List<IStrategy> rns_salvar_cliente = new ArrayList<>(); // Criando map das RG para salvar um cliente      
         List<IStrategy> rns_alterar_cliente = new ArrayList<>();
         List<IStrategy> rns_deletar_cliente = new ArrayList<>();
         List<IStrategy> rns_consultar_cliente = new ArrayList<>();
         
+        rns_salvar_cliente.add(new ValidarCamposObrigatorios()); // Adicionando validação para salvar um cliente
+        rns_salvar_cliente.add(new VerificarCamposInvalidos());
         
-        Map<String, List<IStrategy>> rns_cliente = new HashMap<>(); // Criando map das RG de todas as operações de um cliente
+        rns_salvar_pedido.add(new CalcularValorTotalDoPedido());
         
         rns_cliente.put("SALVAR", rns_salvar_cliente); // Adicionar ao map uma operação e um map com várias validações
         rns_cliente.put("ALTERAR", rns_alterar_cliente);
-        rns_cliente.put("DELETAR", rns_deletar_cliente);
-        rns_cliente.put("CONSULTAR", rns_consultar_cliente);
+        rns_cliente.put("DELETAR", rns_deletar_pedido);
+        rns_cliente.put("CONSULTAR", rns_consultar_pedido);
+        
+        rns_pedido.put("SALVAR", rns_salvar_pedido); 
+        rns_pedido.put("ALTERAR", rns_alterar_pedido);
+        rns_pedido.put("DELETAR", rns_deletar_cliente);
+        rns_pedido.put("CONSULTAR", rns_consultar_cliente);
         
         rns.put(Cliente.class.getName(), rns_cliente);
+        rns.put(Pedido.class.getName(), rns_pedido);
     }
 
     private String aplicarRegras(EntidadeDominio entidade, String operacao){

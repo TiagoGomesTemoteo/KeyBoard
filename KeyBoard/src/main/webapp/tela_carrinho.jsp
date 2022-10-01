@@ -104,8 +104,7 @@
                                 sbLinkAddOrRmProduto.append("ADICIONAR");
                                 sbLinkAddOrRmProduto.append("&");
                                 sbLinkAddOrRmProduto.append("qtd_add_carrinho"+item.getTeclado().getId()+"=");                                
-
-                                
+                               
                                 sbLink.append("<a href=teclado?");
                                 sbLink.append("teclado_id=");
                                 sbLink.append(item.getTeclado().getId());

@@ -45,8 +45,9 @@ public class PedidoDAO extends AbstractDAO{
         String sqlPedidoProduto = "INSERT INTO PEDIDOS_PRODUTOS (pep_id, pep_ped_id, pep_tec_id, pep_quantidade)"
                 + " VALUES(pep_id, ?,?,?)";
         
-        String sqlPedidoPagamento = "INSERT INTO PAGAMENTOS (pag_id, pag_fpg_id, pag_valor, pag_ped_id)"
-                + " VALUES(pag_id, ?,?,?)";
+        String sqlPedidoPagamento = "INSERT INTO PAGAMENTOS (pag_id, pag_fpg_id, pag_valor, pag_ped_id, pag_cdt_id,"
+                + " pag_car_id)"
+                + " VALUES(pag_id, ?,?,?,?,?)";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -83,13 +84,18 @@ public class PedidoDAO extends AbstractDAO{
             for (Pagamento pagamento : pedido.getPagamento()){
                 if (pagamento.getForma_de_pagamento() instanceof CupomDeTroca){
                     stmt.setInt(1, 4);
+                    stmt.setInt(4, pagamento.getForma_de_pagamento().getId());
+                    stmt.setNull(5, 0);
                     
                 } else {
                     stmt.setInt(1, 5);
+                    stmt.setInt(5, pagamento.getForma_de_pagamento().getId());
+                    stmt.setNull(4, 0);
                 }
                 
                 stmt.setDouble(2, pagamento.getValor());
                 stmt.setInt(3, pedido.getId());
+                
                 
                 stmt.executeUpdate();
             }

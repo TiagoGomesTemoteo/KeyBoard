@@ -13,6 +13,7 @@ import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.FormasDePagamento;
 import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Pedido;
+import com.mycompany.keyboard.model.domain.enums.Estatus;
 import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
@@ -42,7 +43,7 @@ public class PedidoVH implements IViewHelper {
             pedido.setItens(((Carrinho) request.getSession().getAttribute("cliente_carrinho")).getItens());
             pedido.getEndereco().setId(ParameterParser.toInt(request.getParameter("endereco_entrega")));
             pedido.setValor_total(ParameterParser.toDouble(request.getParameter("valor_total")));
-
+            pedido.setEstatus(Estatus.EM_ANALISE);
             request.getSession().setAttribute("pedido", pedido);
 
         }

@@ -216,8 +216,6 @@ public class EnderecoDAO extends AbstractDAO {
             }else{
                 ctrlTransacao = false;
             }
-            
-            conn.setAutoCommit(false);
 
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, entidade.getId());
@@ -250,16 +248,11 @@ public class EnderecoDAO extends AbstractDAO {
             return enderecos;
             
         }catch(Exception ex){
-            try {
-                conn.rollback();
-            } catch (SQLException e1) {
-                System.out.println("Error: " + e1.getMessage());
-            }
-            
-            System.out.println("Não foi possível exclui no banco de dados" + ex.getMessage());
+          
+            System.out.println("Não foi possível consultar os endereços no banco de dados" + ex.getMessage());
         
         }finally{
-            if(ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt);
+            if (ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt);
         } 
         
         return null;
@@ -267,7 +260,55 @@ public class EnderecoDAO extends AbstractDAO {
 
     @Override
     public EntidadeDominio consultar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Endereco endereco = new Endereco();
+        String sql = "SELECT * FROM ENDERECOS WHERE end_id = ?;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+               
+        try{
+            if(conn == null || this.conn.isClosed()){
+                this.conn = ConnectionFactory.getConnection();
+                ctrlTransacao = true; 
+            }else{
+                ctrlTransacao = false;
+            }
+                
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                
+                endereco.setId(rs.getInt("end_id"));
+                endereco.setTipoResidencia(rs.getString("end_tp_residencia"));
+                endereco.setTipoLogradouro(rs.getString("end_tp_logradouro"));
+                endereco.setLogradouro(rs.getString("end_logradouro"));
+                endereco.setNumero(rs.getString("end_numero"));
+                endereco.setObservacoes(rs.getString("end_observacoes"));
+                endereco.setIdentificacao(rs.getString("end_identificacao"));
+                endereco.setEnderecoCobranca(rs.getBoolean("end_endereco_cobranca"));
+                endereco.setEnderecoEntrega(rs.getBoolean("end_endereco_entrega"));
+                endereco.setEnderecoResidencial(rs.getBoolean("end_endereco_residencial"));
+                endereco.getCliente().setId(rs.getInt("end_cli_id"));
+                endereco.setCep(rs.getInt("end_cep"));
+                endereco.setBairro(rs.getString("end_bairro"));
+                endereco.setCidade(rs.getString("end_cidade"));
+                endereco.setEstado(rs.getString("end_estado"));
+                endereco.setPais(rs.getString("end_pais"));
+                               
+            }
+            
+            return endereco;
+            
+        }catch(Exception ex){           
+            System.out.println("Não foi possível consultar o endereço no banco de dados" + ex.getMessage());
+        
+        }finally{
+            if (ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt);
+        } 
+        
+        return null;
     }
 
 }

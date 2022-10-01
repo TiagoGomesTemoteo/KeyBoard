@@ -47,7 +47,13 @@ public class PedidoVH implements IViewHelper {
             request.getSession().setAttribute("pedido", pedido);
 
         }
-
+        
+        System.out.println("Entrou em PedidoVH");
+        if (operacao.equals("CONSULTAR")) {
+            pedido.getCliente().setId(1);
+            System.out.println("Entrou em Consultar");
+        }
+        
         if (operacao.equals("PAGAR")) {
             pedido = (Pedido) request.getSession().getAttribute("pedido");
 
@@ -97,11 +103,13 @@ public class PedidoVH implements IViewHelper {
 
         if (operacao.equals("FINALIZAR")) {
             request.getRequestDispatcher("tela_forma_pagamento.jsp").forward(request, response);
-            
-        } else if (resultado.getMsg() == null && operacao.equals("CONSULTAR")) {
+               
+        } else if (operacao.equals("PAGAR") || operacao.equals("CONSULTAR")) {
             request.getSession().setAttribute("resultado", resultado);
-            request.getRequestDispatcher("tela_carrinho.jsp").forward(request, response);
+            request.getRequestDispatcher("lista_pedidos_cliente.jsp").forward(request, response);
         }
+        
+        
     }
 
     public FormasDePagamento getCartaoSelecionado(HttpServletRequest request, String nomeCartaoUsado) {

@@ -223,7 +223,7 @@ public class CartaoDAO extends AbstractDAO {
             return cartoesCredito;
         
         }catch(SQLException ex){
-            System.out.println("Não foi possível consultar o CNAE no banco de dados \nErro: " + ex.getMessage());
+            System.out.println("Não foi possível consultar o cartão no banco de dados \nErro: " + ex.getMessage());
         }finally{
             if(ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt, rs);
         }        
@@ -232,7 +232,46 @@ public class CartaoDAO extends AbstractDAO {
 
     @Override
     public EntidadeDominio consultar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CartaoDeCredito cartao = new CartaoDeCredito();
+        
+        String sql = "SELECT * FROM CARTOES_DE_CREDITO WHERE car_id = ?";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+                
+        try{   
+            if(conn == null || this.conn.isClosed()){
+                this.conn = ConnectionFactory.getConnection();
+                ctrlTransacao = true; 
+            }else{
+                ctrlTransacao = false;
+            }
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                
+                cartao.setId(rs.getInt("car_id"));
+                cartao.setNumero(rs.getInt("car_numero"));
+                cartao.setNomeImpressoNoCartao(rs.getString("car_nome_impresso_no_cartao"));
+                cartao.setBandeira(BandeiraCartao.valueOf(rs.getString("car_bandeira")));
+                cartao.setCodSeguranca(rs.getInt("car_cod_seguranca"));
+                cartao.setPreferencial(rs.getBoolean("car_preferencial"));
+                cartao.getCliente().setId(rs.getInt("car_cli_id"));
+   
+            }
+            
+            return cartao;
+        
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar o cartão no banco de dados \nErro: " + ex.getMessage());
+        }finally{
+            if(ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt, rs);
+        }        
+        return null;   
     }
 
 }

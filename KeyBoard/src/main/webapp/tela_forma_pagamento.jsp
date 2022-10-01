@@ -32,7 +32,6 @@
             
         <%@ include file="links_menu.jsp" %>
         
-        <form action="pedido" method="post">
             <p>FORMA DE PAGAMENTO
 
             <p> VALOR TOTAL: <%

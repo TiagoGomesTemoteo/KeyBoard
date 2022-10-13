@@ -49,6 +49,7 @@ public class Cliente extends EntidadeDominio {
     }
 
     public Cliente() {
+        super();
         this.nome = "";
         this.genero = null;
         this.email = "";

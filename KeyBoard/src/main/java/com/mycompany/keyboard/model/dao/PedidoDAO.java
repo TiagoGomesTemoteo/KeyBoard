@@ -11,12 +11,10 @@ import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.CupomDeTroca;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
-import com.mycompany.keyboard.model.domain.FormasDePagamento;
 import com.mycompany.keyboard.model.domain.Item;
 import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.model.domain.Teclado;
-import com.mycompany.keyboard.model.domain.enums.BandeiraCartao;
 import com.mycompany.keyboard.model.domain.enums.Estatus;
 import com.mycompany.keyboard.util.ConnectionFactory;
 import java.sql.Connection;
@@ -125,7 +123,37 @@ public class PedidoDAO extends AbstractDAO{
 
     @Override
     public void alterar(EntidadeDominio entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Pedido pedido = (Pedido) entidade;
+        
+        String sql = "UPDATE PEDIDOS SET ped_stt_id = ? WHERE ped_id = ?";
+        
+        PreparedStatement stmt = null;
+        
+        try{
+            this.conn = ConnectionFactory.getConnection();
+            conn.setAutoCommit(false);  
+            
+            stmt = conn.prepareStatement(sql);
+            
+            stmt.setInt(1, consultarIdStatusByCod(pedido.getEstatus().getEstatus()));
+            stmt.setInt(2, pedido.getId());
+            
+            stmt.executeUpdate();            
+
+            conn.commit();
+            
+        }catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Error: "+ e1.getMessage());
+            }
+            
+            System.out.println("Não foi possível alterar o pedido no banco de dados.\nErro: " + ex.getMessage());
+
+        } finally {
+            ConnectionFactory.closeConnection(conn, stmt);
+        }
     }
 
     @Override
@@ -137,6 +165,7 @@ public class PedidoDAO extends AbstractDAO{
     public List consultar(EntidadeDominio entidade) {
         Pedido pedido = (Pedido) entidade;
         
+        String sqlAllPedido = "SELECT * FROM PEDIDOS";
         String sql = "SELECT * FROM PEDIDOS WHERE ped_cli_id = ?";
         String sqlProdutosPedido = "SELECT * FROM PEDIDOS_PRODUTOS WHERE pep_ped_id = ?";
         String sqlPagamentoPedido = "SELECT * FROM PAGAMENTOS WHERE pag_ped_id = ?";
@@ -149,9 +178,13 @@ public class PedidoDAO extends AbstractDAO{
         try{
             this.conn = ConnectionFactory.getConnection();
             
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, pedido.getCliente().getId());
-            
+            if (pedido.getCliente().getId() != 0){
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, pedido.getCliente().getId());
+            } else {
+                stmt = conn.prepareStatement(sqlAllPedido);
+            }
+    
             rs = stmt.executeQuery();
             
             while (rs.next()) {

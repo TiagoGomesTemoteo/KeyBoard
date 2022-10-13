@@ -1,6 +1,16 @@
-<%@page import="com.mycompany.keyboard.util.Masks"%>
-<%@page import="javax.swing.JOptionPane"%>
+<%-- 
+    Document   : lista_cliente
+    Created on : 4 de set. de 2022, 19:32:52
+    Author     : Tiago
+--%>
+
 <%@page import="com.mycompany.keyboard.model.domain.Teclado"%>
+<%@page import="com.mycompany.keyboard.model.domain.enums.Estatus"%>
+<%@page import="com.mycompany.keyboard.model.domain.CartaoDeCredito"%>
+<%@page import="com.mycompany.keyboard.model.domain.enums.BandeiraCartao"%>
+<%@page import="com.mycompany.keyboard.util.Masks"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.mycompany.keyboard.model.domain.Cliente"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycompany.keyboard.model.domain.EntidadeDominio"%>
 <%@page import="com.mycompany.keyboard.util.Resultado"%>
@@ -8,9 +18,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="css/css_caixa_produto_tela_lista_teclado.css" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Detalhes do Teclado</title>
         <script>
             var numero;
 
@@ -43,43 +52,26 @@
     </head>
     <body>
         <%
-            Resultado resultado = (Resultado) session.getAttribute("resultado");
+            Teclado teclado = (Teclado) request.getAttribute("teclado");
         %>
         
         <%@ include file="links_menu.jsp" %>
         
-        <p>TECLADOS:
+        <p>
         
-            <%
-                if (resultado != null) {
-                    List<EntidadeDominio> entidades = resultado.getEntidades();
+        <%
+            if (teclado != null) {
+            
                     StringBuilder sbRegistro = new StringBuilder(0);
-                    StringBuilder sbLink = new StringBuilder(0);
+                    int id = teclado.getId();
                     
-                    if (entidades != null) {
-                        for (int i = 0; i < entidades.size(); i++) {
-                            Teclado teclado = (Teclado) entidades.get(i);
-                            int id = teclado.getId();
-                            
-                            sbRegistro.setLength(0);
-                            sbLink.setLength(0);
-
-                            sbLink.append("<a href=teclado?");
-                            sbLink.append("teclado_id=");
-                            sbLink.append(id);
-                            sbLink.append("&");
-                            sbLink.append("operacao=");
-                            sbLink.append("VISUALIZAR");
-                            sbLink.append(">");
-                            
-                            sbRegistro.append(
+                    sbRegistro.append(
                               "<div class='caixa_produto'>"
+                                + "<div class='descricao_produto_caixa_produto'>" + Masks.buildDescricaoTeclado(teclado) + "</div>"
                                 + "<img src='img/teclado.png' class='imagem_produto_caixa_produto' />"
-                                + "<div class='descricao_produto_caixa_produto'>" + sbLink.toString() + Masks.buildDescricaoTeclado(teclado) + "</a></div>"
-                                + "<div class='valor_produto_caixa_produto'>"+teclado.getValor_venda()+"</div>" 
+                                + "<div class='valor_produto_caixa_produto'> R$ "+teclado.getValor_venda()+"</div>" 
                                 + "<div class='div_quantidade_add_produto_caixa_produto'>"
-                                    + "<center>Quant:</center>"
-                                    + "<center>"
+                                    + "Quant:"
                                         + "<form action='carrinho' method='post'>"
                                         + "<div class='div_quantidade_add_produto_caixa_produto_nivel_2'>"                             
                                             + "<button type='button' id='menos' onclick='less("+id+")'>-</button>"
@@ -97,10 +89,29 @@
                             
 
                             out.print(sbRegistro.toString());
-                        }
+                }                
+        %> 
+        
+        <p>INFORMAÇÕES DO PRODUTO
+        <%
+            if (teclado != null) { 
+                StringBuilder info_produto = new StringBuilder(0);
+              
+                info_produto.append(
+                    "<p>Marca: " + teclado.getMarca()
+                    + "<p>Modelo: " + teclado.getModelo()
+                    + "<p>Quantidade de Teclas: " + teclado.getQtd_teclas()
+                    + "<p>Polifonia máxima: " + teclado.getPolifonia_max()
+                    + "<p>Peso: " + teclado.getPeso()
+                    + "<p>Dimensões(altura, largura, comprimento): " + teclado.getAltura() + " x " + teclado.getLargura() + " x " + teclado.getComprimento()
+                    + "<p>Cor: " + teclado.getCor()
+                    + "<p>Voltagem: " + teclado.getVoltagem()
+                );
+                
+                out.print(info_produto.toString());
+            }
+        %>
 
-                    }
-                }
-            %>
+        
     </body>
 </html>

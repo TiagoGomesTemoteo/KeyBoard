@@ -48,10 +48,11 @@ public class PedidoVH implements IViewHelper {
 
         }
         
-        System.out.println("Entrou em PedidoVH");
         if (operacao.equals("CONSULTAR")) {
-            pedido.getCliente().setId(1);
-            System.out.println("Entrou em Consultar");
+            if (request.getParameter("cliente_id") != null ) 
+                pedido.getCliente().setId(ParameterParser.toInt(request.getParameter("cliente_id")));
+            else
+                pedido.getCliente().setId(0);
         }
         
         if (operacao.equals("PAGAR")) {
@@ -88,6 +89,12 @@ public class PedidoVH implements IViewHelper {
             }
 
         }
+        
+        if (operacao.equals("ALTERAR")) {
+            pedido.setId(ParameterParser.toInt(request.getParameter("pedido_id")));
+            pedido.setEstatus(Estatus.pegaEstatusPorDescricao(request.getParameter("estatus")));
+            System.out.println(pedido.getId());
+        }
 
         return pedido;
 
@@ -104,9 +111,23 @@ public class PedidoVH implements IViewHelper {
         if (operacao.equals("FINALIZAR")) {
             request.getRequestDispatcher("tela_forma_pagamento.jsp").forward(request, response);
                
-        } else if (operacao.equals("PAGAR") || operacao.equals("CONSULTAR")) {
+        } else if (operacao.equals("PAGAR")) {
             request.getSession().setAttribute("resultado", resultado);
             request.getRequestDispatcher("lista_pedidos_cliente.jsp").forward(request, response);
+    
+        } else if (operacao.equals("CONSULTAR")){
+            request.getSession().setAttribute("resultado", resultado);
+            
+            if (request.getParameter("cliente_id") != null ) { 
+                request.getRequestDispatcher("lista_pedidos_cliente.jsp").forward(request, response);
+
+            } else {
+                request.getRequestDispatcher("lista_vendas.jsp").forward(request, response);
+            }   
+            
+        } else if (operacao.equals("ALTERAR")){
+            request.getSession().setAttribute("resultado", ClienteInSession.getAllPedidos());
+            request.getRequestDispatcher("lista_vendas.jsp").forward(request, response);
         }
         
         

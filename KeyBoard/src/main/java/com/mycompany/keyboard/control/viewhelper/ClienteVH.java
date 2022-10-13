@@ -5,7 +5,6 @@
  */
 package com.mycompany.keyboard.control.viewhelper;
 
-import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
@@ -16,7 +15,6 @@ import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,7 +39,6 @@ public class ClienteVH implements IViewHelper {
             cliente.setEmail(request.getParameter("email"));
             cliente.setSenha(request.getParameter("senha") + request.getParameter("confirmar_senha"));
             cliente.setEnderecos(Arrays.asList((Endereco) new EnderecoVH().getEntidade(request)));
-//            cliente.setCartoesDeCredito(Arrays.asList((CartaoDeCredito) new CartaoVH().getEntidade(request)));
             
             if(operacao.equals("ALTERAR")){
                 cliente.setId(ParameterParser.toInt(request.getParameter("cliente_id")));
@@ -49,8 +46,7 @@ public class ClienteVH implements IViewHelper {
             }
 
         } else if (operacao.equals("VISUALIZAR")){
-            HttpSession session = request.getSession();
-            Resultado resultado = (Resultado)session.getAttribute("resultado");
+            Resultado resultado = (Resultado)request.getSession().getAttribute("resultado");
             int idCliente = ParameterParser.toInt(request.getParameter("cliente_id"));
             
             for(EntidadeDominio ed : resultado.getEntidades()){
@@ -61,11 +57,8 @@ public class ClienteVH implements IViewHelper {
         } else if (operacao.equals("DELETAR")) {
             cliente.setId(ParameterParser.toInt(request.getParameter("cliente_id")));
             
-            if(request.getParameter("ativo").equals("false")){
-                cliente.setAtivo(true);
-            }else{
-                cliente.setAtivo(false);
-            }
+            if(request.getParameter("ativo").equals("false")) cliente.setAtivo(true); else cliente.setAtivo(false);
+     
         }
 
         return cliente;
@@ -78,8 +71,6 @@ public class ClienteVH implements IViewHelper {
         String operacao = request.getParameter("operacao");
         
         if(operacao.equals("SALVAR")){
-//            request.getSession().setAttribute("resultado",resultado);
-//            rD = request.getRequestDispatcher("lista_cliente.jsp");
             if(resultado.getMsg() != null){
                 request.setAttribute("resultado", resultado);
                 request.getRequestDispatcher("tela_editar_cliente.jsp").forward(request, response); 

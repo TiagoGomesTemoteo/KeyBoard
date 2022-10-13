@@ -1,0 +1,77 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 6 de out. de 2022, 20:08:51
+    Author     : Tiago
+*/
+
+body {
+    background: #F5F5F5;
+}
+
+.caixa_produto {
+    width: 244px;
+    height: 309px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    font-family: 'Inter';
+    font-style: normal;
+}
+
+.imagem_produto_caixa_produto {
+    width: 200px;
+    height: 65px;
+    margin: 71px 0px 0px 22px;
+}
+
+.descricao_produto_caixa_produto {
+    width: 200px;
+    height: 32px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 16px;
+    margin: 26px 0px 0px 22px;
+}
+
+.valor_produto_caixa_produto {
+    width: 103px;
+    height: 24px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    color: #10CDB9;
+    margin: 10px 0px 0px 22px;
+    display: inline-block;
+}
+
+.adicionar_produto_caixa_produto {
+    width: 225px;
+    height: 28px;
+    size: 12px;
+    background: #10CDB9;
+    border: 1px solid #10CDB9;
+    border-radius: 5px;
+    margin: 35px 0px 9px 9.5px;
+    box-sizing: border-box;
+    font-weight: bold;
+    color: #FFFFFF
+}
+
+.div_quantidade_add_produto_caixa_produto {
+    width: 95px;
+    display: inline-block;
+}
+
+.input_quantidade_add_produto_caixa_produto {
+    width: 25px;
+    text-align: center;
+}
+
+.div_quantidade_add_produto_caixa_produto_nivel_2 {
+    width: 95px;
+}
+

@@ -18,10 +18,12 @@ public enum Estatus {
     private final int estatus;
     
     private static final Map<Integer, Estatus> estatusPorValor = new HashMap<>();
+    private static final Map<String, Estatus> estatusPorDescricao = new HashMap<>();
     
     static {
         for (Estatus funcao : Estatus.values()) {
             estatusPorValor.put(funcao.getEstatus(), funcao);
+            estatusPorDescricao.put(funcao.toString(), funcao);
         }
      }
     private Estatus(final int estatus) {
@@ -34,5 +36,9 @@ public enum Estatus {
     
     public static Estatus pegaEstatusPorValor(int valor){
         return estatusPorValor.get(valor);
+    }
+    
+    public static Estatus pegaEstatusPorDescricao(String descricao){
+        return estatusPorDescricao.get(descricao);
     }
 }

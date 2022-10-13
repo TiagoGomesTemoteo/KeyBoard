@@ -8,6 +8,7 @@ package com.mycompany.keyboard.util;
 import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.CupomDeTroca;
 import com.mycompany.keyboard.model.domain.Pagamento;
+import com.mycompany.keyboard.model.domain.Teclado;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -38,5 +39,9 @@ public class Masks {
         if (isCupom && text.equals("")) text = "Cupom de Troca"; else text+="\nCupom de Troca"; 
         
         return text;
+    }
+    
+    public static String buildDescricaoTeclado (Teclado teclado){
+        return "Teclado " + teclado.getMarca() + " modelo " + teclado.getModelo() + " com " + teclado.getQtd_teclas() + " teclas";
     }
 }

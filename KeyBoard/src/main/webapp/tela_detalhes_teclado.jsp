@@ -18,6 +18,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="css/css_tela_detalhes_teclado.css" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Detalhes do Teclado</title>
         <script>
@@ -58,54 +59,63 @@
         <%@ include file="links_menu.jsp" %>
         
         <p>
-        
+      
         <%
             if (teclado != null) {
             
                     StringBuilder sbRegistro = new StringBuilder(0);
                     int id = teclado.getId();
-                    
+                            
                     sbRegistro.append(
-                              "<div class='caixa_produto'>"
-                                + "<div class='descricao_produto_caixa_produto'>" + Masks.buildDescricaoTeclado(teclado) + "</div>"
-                                + "<img src='img/teclado.png' class='imagem_produto_caixa_produto' />"
-                                + "<div class='valor_produto_caixa_produto'> R$ "+teclado.getValor_venda()+"</div>" 
-                                + "<div class='div_quantidade_add_produto_caixa_produto'>"
-                                    + "Quant:"
-                                        + "<form action='carrinho' method='post'>"
-                                        + "<div class='div_quantidade_add_produto_caixa_produto_nivel_2'>"                             
-                                            + "<button type='button' id='menos' onclick='less("+id+")'>-</button>"
-                                            + "<input type='text' name='qtd_add_carrinho"+id+"' value='0' id='qtd_add_carrinho"+teclado.getId()+"' class='input_quantidade_add_produto_caixa_produto'>" 
-                                            + "<button type='button' id='mais' onclick='more("+id+")'>+</button>"                              
-                                            + "<input type='hidden' name='teclado_id' value='" + id + "'>"
-                                        + "</div>"
-                                + "</div>"        
-                                + "<input type='submit' name='operacao' value='ADICIONAR' class='adicionar_produto_caixa_produto'>" 
-                                        + "</form>"                                          
-                            + "</div>"
-                            + "<p>"
-                            );
-                            
-                            
+                    "<div class='box_detalhes_produto'>"
+                       +"<div class='title_detalhe_produto'>" + Masks.buildDescricaoTeclado(teclado) + "</div>"    
+                       +"<div>"
+                            +"<img class='imagem_detalhe_teclado' src='img/teclado.png'>"
+                        +"</div>"
+                        +"<div class='text_vendido_por_detalhes_produto'>"
+                            +"Vendido e entregue por KeyBoards | <span class='text_em_estoque'>Em estoque</span>"
+                            +"<p><span class='valor_produto_detalhes'>"+Masks.buildDinheiro(teclado.getValor_venda())+"</span>"
+                        +"</div>"
+                        + "<form action='carrinho' method='post'>"
+                            +"<div>"
+                                +"<input type='submit' name='operacao' value='ADICIONAR'  class='button_green btn_comprar_detalhes_produto'>"
+                            +"</div>" 
+                            +"<div class='add_quantidade'>"
+                                +"<button type='button' id='menos' onclick='less("+id+")'>-</button>"
+                                +"<input type='text' name='qtd_add_carrinho"+id+"' value='0' id='qtd_add_carrinho"+teclado.getId()+"' class='qtd_add_produto_detalhes'>"
+                                +"<button type='button' id='mais' onclick='more("+id+")'>+</button>"
+                                +"<input type='hidden' name='teclado_id' value='" + id + "'>"
+                            +"</div>"
+                        + "</form>" 
+                    +"</div>"
+                    );        
 
-                            out.print(sbRegistro.toString());
+                    out.print(sbRegistro.toString());
                 }                
         %> 
         
-        <p>INFORMAÇÕES DO PRODUTO
         <%
             if (teclado != null) { 
                 StringBuilder info_produto = new StringBuilder(0);
-              
+                
                 info_produto.append(
-                    "<p>Marca: " + teclado.getMarca()
-                    + "<p>Modelo: " + teclado.getModelo()
-                    + "<p>Quantidade de Teclas: " + teclado.getQtd_teclas()
-                    + "<p>Polifonia máxima: " + teclado.getPolifonia_max()
-                    + "<p>Peso: " + teclado.getPeso()
-                    + "<p>Dimensões(altura, largura, comprimento): " + teclado.getAltura() + " x " + teclado.getLargura() + " x " + teclado.getComprimento()
-                    + "<p>Cor: " + teclado.getCor()
-                    + "<p>Voltagem: " + teclado.getVoltagem()
+                "<div class='box_info_produto'>"
+                    +"<div>"
+                        +"<img class='icon_info_produto' src='icons/arquivo.png'>"
+                        +"<span class='text_info_produto'>INFORMAÇÕES DO PRODUTO</span>"
+                    +"</div>"
+                    +"<br>"
+                    +"<div class='info_produto'>"
+                        +"<p>Marca:                                  <span class='info_produto_dado'>"+teclado.getMarca()+"</span></p>"
+                        +"<p>Modelo:                                 <span class='info_produto_dado'>"+teclado.getModelo()+"</span></p>"
+                        +"<p>Quantidade de Teclas:                   <span class='info_produto_dado'>"+teclado.getQtd_teclas()+"</span></p>"
+                        +"<p>Polifonia máxima:                       <span class='info_produto_dado'>"+teclado.getPolifonia_max()+"</span></p>"
+                        +"<p>Peso:                                   <span class='info_produto_dado'>"+teclado.getPeso()+"</span></p>"
+                        +"<p>Dimensões(altura, largura, comprimento):<span class='info_produto_dado'>"+teclado.getAltura() + " x " + teclado.getLargura() + " x " + teclado.getComprimento()+"</span></p>"
+                        +"<p>Cor:                                    <span class='info_produto_dado'>"+teclado.getCor()+"</span></p>"
+                        +"<p>Voltagem:                               <span class='info_produto_dado'>"+teclado.getVoltagem()+"</span></p>"
+                    +"</div>"
+                +"</div>"
                 );
                 
                 out.print(info_produto.toString());

@@ -8,6 +8,8 @@ and open the template in the editor.
     Author     : Tiago
 */
 
+
+
 body {
     background: #F5F5F5;
 }
@@ -58,7 +60,8 @@ body {
     margin: 35px 0px 9px 9.5px;
     box-sizing: border-box;
     font-weight: bold;
-    color: #FFFFFF
+    color: #FFFFFF;
+    margin-top: 30px;    
 }
 
 .div_quantidade_add_produto_caixa_produto {
@@ -67,11 +70,12 @@ body {
 }
 
 .input_quantidade_add_produto_caixa_produto {
-    width: 25px;
+    width: 20px;
+    height: 20px;
     text-align: center;
 }
 
 .div_quantidade_add_produto_caixa_produto_nivel_2 {
-    width: 95px;
+    width: 95px;   
 }
 

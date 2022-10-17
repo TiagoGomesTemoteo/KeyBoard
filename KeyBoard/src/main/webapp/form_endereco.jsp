@@ -1,6 +1,6 @@
 <%@page import="com.mycompany.keyboard.model.domain.Endereco"%>
 <%@page import="com.mycompany.keyboard.model.domain.Cliente"%>
-<html>
+<html>    
     <body>
         
         <%
@@ -10,13 +10,13 @@
                 endereco = ((Cliente) request.getAttribute("cliente")).getEnderecos().get(0);
             }
         %>
-        <p><input type="number" name="cep" placeholder="CEP*" value=
+        <p><input class="campo_cep" type="number" name="cep" placeholder="CEP*" value=
                    <%
                        if (endereco != null)
                            out.print("'" + endereco.getCep() + "'");
                    %>
                    >
-            Tipo de residência: <select name="tipoResidencia">
+            <select class="campo_tipo_residencia" name="tipoResidencia">
                 <option value="">Selecione...           </option>
                 <option value="casa" 
                         <%
@@ -31,69 +31,69 @@
                         %>        
                         >Escritório   </option>
             </select>
-            <input type="text" name="numero" placeholder="Número*" value=
+            <input class="campo_numero" type="text" name="numero" placeholder="Número*" value=
                    <%
                        if (endereco != null)
                            out.print("'" + endereco.getNumero() + "'");
                    %>
                    >
-            <p><input type="text" name="observacoes" placeholder="Observações" value=
+            <p><input class="campo_observacao" type="text" name="observacoes" placeholder="Observações" value=
                    <%
                        if (endereco != null)
                            out.print("'" + endereco.getObservacoes() + "'");
                    %>
                    >
-            Tipo de Logradouro: <select name="tipoLogradouro">
+<!--            Tipo de Logradouro: <select name="tipoLogradouro">
                 <option value="">Selecione...           </option>
                 <option value="rua"
                         <%
-                            if (endereco != null && endereco.getTipoLogradouro().equals("rua"))
-                                out.print(" selected");
+//                            if (endereco != null && endereco.getTipoLogradouro().equals("rua"))
+//                                out.print(" selected");
                         %>
                         >Rua                 </option>
                 <option value="avenida"
                         <%
-                            if (endereco != null && endereco.getTipoLogradouro().equals("avenida"))
-                                out.print(" selected");
+//                            if (endereco != null && endereco.getTipoLogradouro().equals("avenida"))
+//                                out.print(" selected");
                         %>        
                         >Avenida         </option>
             </select>
             <input type="text" name="logradouro" placeholder="Logradouro*" value=
                    <%
-                       if (endereco != null)
-                           out.print("'" + endereco.getLogradouro() + "'");
+//                       if (endereco != null)
+//                           out.print("'" + endereco.getLogradouro() + "'");
                    %>
                    >
             
             <p><input type="text" name="bairro" placeholder="Bairro*" value=
                    <%
-                       if (endereco != null)
-                           out.print("'" + endereco.getBairro() + "'");
+//                       if (endereco != null)
+//                           out.print("'" + endereco.getBairro() + "'");
                    %>
                    >
             <input type="text" name="cidade" placeholder="Cidade*" value=
                    <%
-                       if (endereco != null)
-                           out.print("'" + endereco.getCidade() + "'");
+//                       if (endereco != null)
+//                           out.print("'" + endereco.getCidade() + "'");
                    %>
                    >
             <input type="text" name="estado" placeholder="Estado*" value=
                    <%
-                       if (endereco != null)
-                           out.print("'" + endereco.getEstado() + "'");
+//                       if (endereco != null)
+//                           out.print("'" + endereco.getEstado() + "'");
                    %>
                    >
             <p><input type="text" name="pais" placeholder="País*" value=
                    <%
-                       if (endereco != null)
-                           out.print("'" + endereco.getPais() + "'");
+//                       if (endereco != null)
+//                           out.print("'" + endereco.getPais() + "'");
                    %>
                    >
             <p><input type="text" name="identificacao" placeholder="Identificação*" value=
                    <%
-                       if (endereco != null)
-                           out.print("'" + endereco.getIdentificacao() + "'");
+//                       if (endereco != null)
+//                           out.print("'" + endereco.getIdentificacao() + "'");
                    %>
-                   >
+                   >-->
     </body>
 </html>

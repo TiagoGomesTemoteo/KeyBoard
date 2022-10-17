@@ -7,8 +7,10 @@ package com.mycompany.keyboard.util;
 
 import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.CupomDeTroca;
+import com.mycompany.keyboard.model.domain.Item;
 import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Teclado;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -43,5 +45,17 @@ public class Masks {
     
     public static String buildDescricaoTeclado (Teclado teclado){
         return "Teclado " + teclado.getMarca() + " modelo " + teclado.getModelo() + " com " + teclado.getQtd_teclas() + " teclas";
+    }
+    
+    public static String buildDinheiro (Double valor){
+        NumberFormat f = NumberFormat.getCurrencyInstance();
+        return f.format(valor);
+    }
+    
+    public static String itemValorTotal (Item item){
+        double valor = item.getQuantidade() * item.getTeclado().getValor_venda();
+        
+        NumberFormat f = NumberFormat.getCurrencyInstance();
+        return f.format(valor);
     }
 }

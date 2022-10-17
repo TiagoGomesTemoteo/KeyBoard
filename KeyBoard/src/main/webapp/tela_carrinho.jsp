@@ -4,6 +4,8 @@
     Author     : Tiago
 --%>
 
+<%@page import="com.mycompany.keyboard.model.strategy.FunctionsUtilsPagamento"%>
+<%@page import="com.mycompany.keyboard.util.Masks"%>
 <%@page import="com.mycompany.keyboard.model.domain.Endereco"%>
 <%@page import="com.mycompany.keyboard.model.domain.Cliente"%>
 <%@page import="com.mycompany.keyboard.model.domain.Carrinho"%>
@@ -16,6 +18,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="css/css_carrinho.css" rel="stylesheet">
         <title>Carrinho</title>
     </head>
     <body>
@@ -33,119 +36,110 @@
         %>  
             
         <%@ include file="links_menu.jsp" %>
-        
-        <p>CARRINHO
-            
-        <form action="endereco" method="post">
-            <p> Adicionar novo endereço: <%@ include file="form_endereco.jsp" %>
-            <p> <input type="submit" name="operacao" value="ADICIONAR">
-        </form>
-        
+        <div class="box_provisorio">
+            <form action="endereco" method="post">
+                <p> Adicionar novo endereço: <%@ include file="form_endereco.jsp" %>
+                <p> <input type="submit" name="operacao" value="ADICIONAR">
+            </form>
+        </div>
+        <p>    
         <form action="pedido" method="post">
-            <p>SELECIONE UM ENDEREÇO
-                <select name="endereco_entrega">
-                    <option value="">Selecione...</option>
+            <div class="box_selecione_endereco">
+                <img class="icon_title_forms_carrinho" src="icons/localization_point.png">
+                <span class="text_title_forms_carrinho">SELECIONE UM ENDEREÇO</span>
+                <p><select class="select_endereco_carrinho" name="endereco_entrega">
+                        <option value="">Selecione...</option>
+                        <%
+                            if(cliente != null && cliente.getEnderecos() != null && cliente.getEnderecos().size() != 0){
+                                for(Endereco endereco_select : cliente.getEnderecos()){
+                                    out.print("<option value='" + endereco_select.getId() + "'>" +
+                                    endereco_select.getCidade() + " - " + endereco_select.getBairro() + " - "
+                                    + endereco_select.getLogradouro() + " - " + endereco_select.getNumero()
+                                    + "</option>");
+                                }
+                            }
+                        %>
+                    </select>
+            </div>
+                    
+            <div class="box_produto_frete">
+                <img class="icon_title_forms_carrinho" src="icons/cesta.png">
+                <span class="text_title_forms_carrinho">PRODUTO</span>
+                
+                <div class="linha_produto_frete"></div>
                     <%
-                        if(cliente != null && cliente.getEnderecos() != null && cliente.getEnderecos().size() != 0){
-                            for(Endereco endereco_select : cliente.getEnderecos()){
-                                out.print("<option value='" + endereco_select.getId() + "'>" +
-                                endereco_select.getCidade() + " - " + endereco_select.getBairro() + " - "
-                                + endereco_select.getLogradouro() + " - " + endereco_select.getNumero()
-                                + "</option>");
+                        if (carrinho != null) {
+                            StringBuilder sbRegistro = new StringBuilder();
+                            StringBuilder sbLink = new StringBuilder();
+                            StringBuilder sbLinkAddOrRmProduto = new StringBuilder();
+
+                            if (carrinho.getItens() != null) {                          
+
+                                for (Item item : carrinho.getItens()){
+
+                                    sbRegistro.setLength(0);
+                                    sbLink.setLength(0);
+                                    sbLinkAddOrRmProduto.setLength(0);
+
+                                    sbLinkAddOrRmProduto.append("<a href=carrinho?");
+                                    sbLinkAddOrRmProduto.append("teclado_id=");
+                                    sbLinkAddOrRmProduto.append(item.getTeclado().getId());
+                                    sbLinkAddOrRmProduto.append("&");
+                                    sbLinkAddOrRmProduto.append("operacao=");
+                                    sbLinkAddOrRmProduto.append("ADICIONAR");
+                                    sbLinkAddOrRmProduto.append("&");
+                                    sbLinkAddOrRmProduto.append("qtd_add_carrinho"+item.getTeclado().getId()+"=");                                
+
+                                    sbLink.append("<a href=teclado?");
+                                    sbLink.append("teclado_id=");
+                                    sbLink.append(item.getTeclado().getId());
+                                    sbLink.append("&");
+                                    sbLink.append("operacao=");
+                                    sbLink.append("VISUALIZAR");
+
+                                    
+                                    sbRegistro.append(
+                                    "<div class='produtos_carrinho'>"
+                                        +"<img class='img_produto_carrinho' src='img/teclado.png'>"
+                                        +"<div class='descricao_produto'>"+Masks.buildDescricaoTeclado(item.getTeclado())+"</div>"
+                                        +"<div class='qtd_produto'>"
+                                            +"<center>"
+                                                +"Quant:"
+                                                +"<br>"+sbLinkAddOrRmProduto+"-1>< </a>"+item.getQuantidade()+" " + sbLinkAddOrRmProduto + "1> ></a>"
+                                                +"<br> Remover"
+                                            +"</center>"        
+                                        +"</div>" 
+                                        +"<span class='preco_produto'>"+Masks.itemValorTotal(item)+"</span>"
+                                    +"</div>"
+                                    +"<br>"
+                                    );
+
+                                    out.print(sbRegistro.toString());
+                                }
+
                             }
                         }
                     %>
 
-                </select>
-
-            <p>TECLADOS:
-            <table border="1px">
-                <tr>
-                    <td>
-                        ID:
-                    </td>
-                    <td>
-                        Marca:
-                    </td>
-                    <td>
-                        Modelo:
-                    </td>
-                    <td>
-                        Preço:
-                    </td>
-                    <td>
-                        Quantidade:
-                    </td>
-                    <td>
-                        Visualizar:
-                    </td>
-                    <td>                        
-                    </td>
-                </tr>
-                <%
-                    if (carrinho != null) {
-                        StringBuilder sbRegistro = new StringBuilder();
-                        StringBuilder sbLink = new StringBuilder();
-                        StringBuilder sbLinkAddOrRmProduto = new StringBuilder();
-
-                        if (carrinho.getItens() != null) {                          
-
-                            for (Item item : carrinho.getItens()){
-
-                                sbRegistro.setLength(0);
-                                sbLink.setLength(0);
-                                sbLinkAddOrRmProduto.setLength(0);
-
-                                sbLinkAddOrRmProduto.append("<a href=carrinho?");
-                                sbLinkAddOrRmProduto.append("teclado_id=");
-                                sbLinkAddOrRmProduto.append(item.getTeclado().getId());
-                                sbLinkAddOrRmProduto.append("&");
-                                sbLinkAddOrRmProduto.append("operacao=");
-                                sbLinkAddOrRmProduto.append("ADICIONAR");
-                                sbLinkAddOrRmProduto.append("&");
-                                sbLinkAddOrRmProduto.append("qtd_add_carrinho"+item.getTeclado().getId()+"=");                                
-                               
-                                sbLink.append("<a href=teclado?");
-                                sbLink.append("teclado_id=");
-                                sbLink.append(item.getTeclado().getId());
-                                sbLink.append("&");
-                                sbLink.append("operacao=");
-                                sbLink.append("VISUALIZAR");
-
-                                sbRegistro.append(
-                                        "<tr>"
-                                        + "<td>"
-                                        + item.getTeclado().getId()
-                                        + "</td>"
-                                        + "<td>"
-                                        + item.getTeclado().getMarca()
-                                        + "</td>"
-                                        + "<td>"
-                                        + item.getTeclado().getModelo()
-                                        + "</td>"
-                                        + "<td>"
-                                        + item.getTeclado().getValor_venda()
-                                        + "</td>"
-                                        + "<td>"
-                                        + sbLinkAddOrRmProduto.toString()+"-1>" + "< " + "</a>"
-                                        + item.getQuantidade()
-                                        + sbLinkAddOrRmProduto.toString()+"1>" + " >" + "</a>"
-                                        + "</td>"
-                                        + "<td>"
-                                        + sbLink.toString() + ">" + "Visualizar" + "</a>"
-                                        + "</td>"
-                                );
-
-                                out.print(sbRegistro.toString());
+            </div>    
+            
+            <div class="resumo_carrinho">
+                <div>
+                    <img class="icon_title_forms_carrinho" src="icons/arquivo.png">
+                    <span class="text_title_forms_carrinho">RESUMO</span>
+                </div>
+                <div class="valor_produtos_carrinho">
+                    <span>Valor dos produtos:</span>
+                    <span>
+                        <%
+                            if (carrinho != null && carrinho.getItens() != null && carrinho.getItens().size() != 0){
+                                out.print(Masks.buildDinheiro(FunctionsUtilsPagamento.calcularValorTotal(carrinho.getItens())));
                             }
-
-                        }
-                    }
-                %>
-            </table>
-
-            <p> <input type="submit" name="operacao" value="FINALIZAR">
-                
+                        %>
+                    </span>
+                </div> 
+                <p><center><input class="button_white btn_finalizar_carrinho" type="submit" name="operacao" value="FINALIZAR"></center>
+            </div>    
         </form>
     </body>
 </html>

@@ -1,0 +1,32 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15 de out. de 2022, 10:22:57
+    Author     : Tiago
+*/
+
+.icon_title_identificacao {
+    width: 25px;
+    height: 25px;
+}
+
+.title_identificacao {
+    margin-left: 62px;
+}
+
+.form_login {
+    width: 386px;
+    margin-left: 174px;
+    margin-top: 54px;
+}
+
+.form_title_page_login_cadastro {
+    font-size: 24px;
+    color: #10CDB9;
+    font-weight: bold;
+    text-align: center;
+    margin: 0px 0px 34px 0px;
+}

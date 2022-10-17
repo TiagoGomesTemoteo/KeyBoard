@@ -76,7 +76,7 @@
                               "<div class='caixa_produto'>"
                                 + "<img src='img/teclado.png' class='imagem_produto_caixa_produto' />"
                                 + "<div class='descricao_produto_caixa_produto'>" + sbLink.toString() + Masks.buildDescricaoTeclado(teclado) + "</a></div>"
-                                + "<div class='valor_produto_caixa_produto'>"+teclado.getValor_venda()+"</div>" 
+                                + "<div class='valor_produto_caixa_produto'>"+Masks.buildDinheiro(teclado.getValor_venda())+"</div>" 
                                 + "<div class='div_quantidade_add_produto_caixa_produto'>"
                                     + "<center>Quant:</center>"
                                     + "<center>"
@@ -101,6 +101,6 @@
 
                     }
                 }
-            %>
+            %>         
     </body>
 </html>

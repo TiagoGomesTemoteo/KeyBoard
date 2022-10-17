@@ -1,0 +1,129 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15 de out. de 2022, 13:30:44
+    Author     : Tiago
+*/
+
+body {
+    background-color: #F5F5F5;
+}
+
+.box_provisorio {
+    width: 779px;
+    height: 243px;
+    margin-left: 63px;
+    border-radius: 5px;
+}
+
+.box_selecione_endereco {
+    width: 779px;
+    height: 243px;
+    background: #FFFFFF;
+    margin-left: 63px;
+    border-radius: 5px;
+}
+
+.icon_title_forms_carrinho {
+    width: 25px;
+    height: 25px;
+    margin: 42px 0px 0px 23px;
+}
+
+.text_title_forms_carrinho {
+    position: relative;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24.2px;
+    color: #393838;
+    margin-left: 22px;
+    top: -5px;
+}
+
+.select_endereco_carrinho {
+    margin-left: 22px;
+}
+
+.box_produto_frete {
+    width: 779px;
+    height: auto;
+    background: #FFFFFF;
+    margin-left: 63px;
+    margin-top: 28px;
+    border-radius: 5px;   
+}
+
+.linha_produto_frete {
+    width: 705px;
+    height: 0px;
+    border: 1px solid #D9D9D9;
+    margin-left: 31px;
+    margin-top: 34.02px;
+    margin-bottom: 10px;
+}
+
+/*Produtos no carrinho*/
+.produtos_carrinho {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.img_produto_carrinho {
+    width: 100px;
+    height: 32px;
+    margin-left: 31px;
+}
+
+.descricao_produto {
+    width: 200px;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 16px;
+    margin-left: 31px;
+}
+
+.qtd_produto {
+    display: flex;
+    flex-direction: column;
+    width: 116px;
+    margin-left: 100px;
+    font-size: 12px;
+    color: #676767;
+    font-weight: bold;
+    align-items: center;
+}
+
+.preco_produto {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 17px;
+    color: #10CDB9;
+    margin-left: 90px;
+}
+
+.resumo_carrinho {
+    position: absolute;
+    width: 399px;
+    height: 243px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    top: 430px;
+    right: 42px;
+}
+
+.valor_produtos_carrinho {
+    width: 334px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 23px;
+    margin-top: 10px;
+}
+
+.btn_finalizar_carrinho {
+    width: 333px;    
+    margin-top: 55px;
+}

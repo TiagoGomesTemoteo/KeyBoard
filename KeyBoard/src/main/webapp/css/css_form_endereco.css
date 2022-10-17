@@ -1,0 +1,33 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15 de out. de 2022, 11:59:32
+    Author     : Tiago
+*/
+
+.campo_cep {
+   width: 185px;
+   height: 42px;
+   padding-left: 14px;
+}
+
+.campo_tipo_residencia {
+   width: 140px;
+   height: 42px;
+   padding-left: 14px;
+   margin-left: 8px;
+}
+
+.campo_numero {
+    width: 150px;
+    padding-left: 14px;
+    margin-left: 11px;
+}
+
+.campo_observacao{
+    width: 522px;
+    padding-left: 14px;
+} 

@@ -1,0 +1,69 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 6 de out. de 2022, 20:08:51
+    Author     : Tiago
+*/
+
+body {
+    font-family: 'Inter';
+    min-height: 100%;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit
+}
+
+a:hover {
+    text-decoration: none;
+    color: #10CDB9;
+}
+
+input, select {
+    border-radius: 5px;
+    height: 38px;
+    border: 1px solid #676767;     
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.title_pages {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 29.05px;
+    margin-left: 10px;
+}
+
+.button_white {
+    height: 38px;
+    background: #FFFFFF;
+    border: 1px solid #10CDB9;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
+    color: #10CDB9;
+    padding: 2px;
+}
+
+.button_green {
+    height: 38px;
+    background: #10CDB9;
+    border: 1px solid #10CDB9;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
+    color: #FFFFFF;
+    padding: 2px;
+}

@@ -1,0 +1,27 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 13 de out. de 2022, 20:58:09
+    Author     : Tiago
+*/
+
+footer {
+    position: absolute;
+    width: 100%;
+    height: 65px;
+    background: #10CDB9;
+    top: 1000px;
+}
+
+.text_rodape {
+    width: 1260px;
+    height: 33px;
+    font-size: 12px;
+    color: #FFFFFF;
+    line-height: 15px;
+    margin-left: 26px;
+    font-weight: bold
+}

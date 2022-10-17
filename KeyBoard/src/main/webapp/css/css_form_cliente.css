@@ -1,0 +1,43 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15 de out. de 2022, 11:30:15
+    Author     : Tiago
+*/
+
+.campo_nome {
+    width: 372px;
+    padding-left: 14px;
+}
+
+.campo_dt_nascimento {
+    width: 125px;
+    padding-left: 14px;
+    margin-left: 5px;
+}
+
+.campo_telefone {
+    width: 161px;
+    padding-left: 14px;
+}
+
+.campo_genero {
+   width: 125px;
+   height: 42px;
+   padding-left: 14px;
+   margin-left: 8px;
+}
+
+.campo_cpf {
+    width: 193px;
+    padding-left: 14px;
+    margin-left: 11px;
+}
+
+.campo_email {
+    width: 372px;
+    padding-left: 14px;
+}

@@ -1,0 +1,162 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15 de out. de 2022, 21:57:30
+    Author     : Tiago
+*/
+
+body {
+    background: #F5F5F5;
+}
+
+.icon_forma_pagamento_title {
+    width: 25px;
+    height: 25px; 
+}
+
+.text_forma_pagamento_title {
+    position: relative;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24.2px;
+    color: #393838;
+    margin-left: 22px;
+    top: -5px;
+}
+
+.box_forma_pagamento {
+    position: absolute;
+    width: 100%;
+    background: #FFFFFF;
+    top:222px;   
+}
+
+.title_forma_pagamento {
+    margin-left: 100px;
+    margin-top: 42px;
+}
+
+.box_cartao_credito {
+    width: 914px;
+    height: 433px;
+    background: #F5F5F5;
+    border-radius: 5px;
+    margin-left: 32px;
+}
+
+.icon_cartao_de_credito {
+    width: 30px;
+    height: 30px;
+    margin: 65px 0px 0px 42px;
+}
+
+.text_title_cartao_de_credito {
+    position: relative;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24.2px;
+    color: #393838;
+    margin-left: 12px;
+    top: -5px;
+}
+
+.cartao_forma_pagamento {
+    margin-left: 42px;
+    size: 14px;
+    font-weight: bold;
+    line-height: 17px;
+    color: #393838;
+}
+
+.box_cupom_troca {
+    position: absolute;
+    width: 387px;
+    height: 433px;
+    background: #F5F5F5;
+    border-radius: 5px;
+    right: 48px;
+    top: 405px;
+}
+
+.icon_forma_pagamento_cupom {
+    width: 30px;
+    height: 30px;
+    margin-top: 70px;
+}
+
+.text_title_cupom {
+    position: relative;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24.2px;
+    color: #393838;
+    margin-left: 12px;
+    top: -8px; 
+}
+
+.box_option_cupons {
+    width: 333px;
+    margin-left: 37px;
+}
+
+.option_cupom {
+    display: flex;
+    width: 333px;
+    height: 38px;
+    background: #FFFFFF;
+    border: 1px solid #10CDB9;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 5px;
+}
+
+.conteudo_option_cupom {
+    margin-left: 14px;
+}
+
+.btn_pagar {
+    position: relative;
+    width: 334px;
+    left: 1015px;
+    top: 3px;
+}
+
+.box_total_pagar {
+    position: relative;
+    width: 291px;
+    height: 106px;
+    background: #D8FFFB;
+    border-radius: 5px;
+    color: #10CDB9;
+    font-weight: bold;
+    left: 656px;
+    top: -50px;
+}
+
+.text_box_total_pagar {
+    font-size: 16px;
+}
+
+.valor_box_total_pagar {
+    font-size: 24px;
+}
+
+.btn_voltar {
+    position: relative;
+    display:flex;
+    width: 334px;
+    left: 1015px;
+    top: -100px;
+    align-items: center;
+    justify-content: center;
+}
+
+.box_provisorio_add_cartao {
+    width: 914px;
+    border-radius: 5px;
+    margin-left: 32px;
+}

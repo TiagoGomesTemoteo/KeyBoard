@@ -25,6 +25,13 @@ public class CarrinhoDAO extends AbstractDAO{
     
     private Connection conn;
     
+    public CarrinhoDAO(Connection conn) {
+        this.conn = conn;
+    }
+
+    public CarrinhoDAO() {
+    }
+    
     
     @Override
     public void salvar(EntidadeDominio entidade) {
@@ -54,12 +61,24 @@ public class CarrinhoDAO extends AbstractDAO{
                         stmt = conn.prepareStatement(sqlAddExists);
                         item.setNewInTheCar(false);
                         
-                        stmt.setInt(1, item.getQuantidade() + itemPersistido.getQuantidade());
-                        stmt.setInt(2, carrinho.getCliente().getId());
-                        stmt.setInt(3, item.getTeclado().getId());
-                        
-                        stmt.executeUpdate();
-                   
+                        if(itemPersistido.getQuantidade() == 0 ||
+                          (itemPersistido.getQuantidade() + item.getQuantidade() == 0)){
+                            Carrinho carrinho_deletar = new Carrinho();
+                            Item item_deletar = new Item();
+                            item_deletar.setTeclado(item.getTeclado());
+                            carrinho_deletar.getItens().add(item_deletar);
+                            carrinho_deletar.setCliente(carrinho.getCliente());
+                            
+                            deletar(carrinho_deletar);
+                            
+                        }else {
+                            stmt.setInt(1, item.getQuantidade() + itemPersistido.getQuantidade());
+                            stmt.setInt(2, carrinho.getCliente().getId());
+                            stmt.setInt(3, item.getTeclado().getId());
+                            
+                            stmt.executeUpdate();
+                        }
+
                     } 
                 }
                 
@@ -97,7 +116,50 @@ public class CarrinhoDAO extends AbstractDAO{
 
     @Override
     public void deletar(EntidadeDominio entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Carrinho carrinho = (Carrinho) entidade;
+        Teclado teclado = carrinho.getItens().get(0).getTeclado();
+        
+        String sql = "DELETE FROM CARRINHOS WHERE crr_tec_id=? AND crr_cli_id=?";
+
+        PreparedStatement stmt = null;
+        
+        try {
+            
+            if (conn == null || conn.isClosed()) {
+                this.conn = ConnectionFactory.getConnection();
+                this.ctrlTransacao = true;
+
+            } else {
+                this.ctrlTransacao = false;
+            }
+            
+            this.conn.setAutoCommit(false);
+            
+            stmt = conn.prepareStatement(sql);
+            
+            stmt.setInt(1, teclado.getId());
+            stmt.setInt(2, carrinho.getCliente().getId());
+            
+            stmt.executeUpdate();
+            
+            if (ctrlTransacao) {
+                conn.commit();
+            }
+
+        } catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Error: " + e1.getMessage());
+            }
+
+            System.out.println("Não foi possível remover o produto do carrinho.\nErro: " + ex.getMessage());
+
+        } finally {
+            if (ctrlTransacao) {
+                ConnectionFactory.closeConnection(conn, stmt);
+            }
+        }
     }
 
     @Override
@@ -139,6 +201,8 @@ public class CarrinhoDAO extends AbstractDAO{
                 item.setQuantidade(rs.getInt("crr_qtd_itens"));
                 item.setTeclado((Teclado) new TecladoDAO(conn).consultar(rs.getInt("crr_tec_id")));
                 
+                carrinho.setId(rs.getInt("crr_id"));
+                
                 carrinho.getItens().add(item);
             }
             
@@ -152,4 +216,47 @@ public class CarrinhoDAO extends AbstractDAO{
         return null;
     }
     
+    public void deletarCarrinho(int cliente_id) {
+
+        String sql = "DELETE FROM CARRINHOS WHERE crr_cli_id=?";
+
+        PreparedStatement stmt = null;
+        
+        try {
+            
+            if (conn == null || conn.isClosed()) {
+                this.conn = ConnectionFactory.getConnection();
+                this.ctrlTransacao = true;
+
+            } else {
+                this.ctrlTransacao = false;
+            }
+            
+            this.conn.setAutoCommit(false);
+            
+            stmt = conn.prepareStatement(sql);
+            
+            stmt.setInt(1, cliente_id);
+                        
+            stmt.executeUpdate();
+            
+            if (ctrlTransacao) {
+                conn.commit();
+            }
+
+        } catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Error: " + e1.getMessage());
+            }
+
+            System.out.println("Não foi possível remover os produtos do carrinho.\nErro: " + ex.getMessage());
+
+        } finally {
+            if (ctrlTransacao) {
+                ConnectionFactory.closeConnection(conn, stmt);
+            }
+        }
+    }
 }

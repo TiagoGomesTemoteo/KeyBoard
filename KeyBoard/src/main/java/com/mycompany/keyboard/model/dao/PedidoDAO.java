@@ -104,6 +104,10 @@ public class PedidoDAO extends AbstractDAO{
                 
                 stmt.executeUpdate();
             }
+            
+            //Limpando o carrinho quando o pedido for fechado
+            CarrinhoDAO carrinhoDao = new CarrinhoDAO(conn);           
+            carrinhoDao.deletarCarrinho(pedido.getCliente().getId());
                        
             conn.commit();
 
@@ -217,10 +221,10 @@ public class PedidoDAO extends AbstractDAO{
                 rs = stmt.executeQuery();
 
                 while (rs.next()) {
-                    if (rs.getInt("pag_fpg_id") == 5){
+                    if (rs.getInt("pag_fpg_id") == 2){
                         pedidoPagamento.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), (CartaoDeCredito)new CartaoDAO().consultar(rs.getInt("pag_car_id"))));
                     
-                    } else if (rs.getInt("pag_fpg_id") == 5) {
+                    } else if (rs.getInt("pag_fpg_id") == 1) {
                         pedidoPagamento.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomDeTroca(rs.getInt("pag_cdt_id"))));
                     }
                       

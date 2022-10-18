@@ -40,7 +40,7 @@ body {
 }
 
 .box_cartao_credito {
-    width: 914px;
+    width: 850px;
     height: 433px;
     background: #F5F5F5;
     border-radius: 5px;
@@ -121,7 +121,7 @@ body {
 .btn_pagar {
     position: relative;
     width: 334px;
-    left: 1015px;
+    left: 942px;
     top: 3px;
 }
 
@@ -133,7 +133,7 @@ body {
     border-radius: 5px;
     color: #10CDB9;
     font-weight: bold;
-    left: 656px;
+    left: 588px;
     top: -50px;
 }
 
@@ -149,7 +149,7 @@ body {
     position: relative;
     display:flex;
     width: 334px;
-    left: 1015px;
+    left: 942px;
     top: -100px;
     align-items: center;
     justify-content: center;

@@ -1,0 +1,49 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 18 de out. de 2022, 08:19:02
+    Author     : Tiago
+*/
+
+body {
+    background: #F5F5F5;
+}
+
+.icon_title_meus_pedidos {
+    width: 25px;
+    height: 25px;
+}
+
+.title_meus_pedidos {
+    margin-left: 62px;
+}
+
+.filtrado_por {
+    margin-left: 62px; 
+}
+
+.box_pedido {
+    width: 927px;
+    height: 491px;
+    margin-left: 62px;
+    margin-top: 15px;
+    background: #FFFFFF;
+    border-radius: 5px;
+}
+
+.dados_pedido {
+    display: flex;
+    width: 927px;
+    height: 105px;
+    border-radius: 5px;
+    background-color: greenyellow;
+    justify-content: space-around;
+}
+
+.info_pedido {
+    text-align: center;
+    margin-top: 19px;
+}

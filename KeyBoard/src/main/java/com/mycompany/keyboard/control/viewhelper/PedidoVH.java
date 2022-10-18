@@ -18,9 +18,12 @@ import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -58,36 +61,13 @@ public class PedidoVH implements IViewHelper {
         if (operacao.equals("PAGAR")) {
             pedido = (Pedido) request.getSession().getAttribute("pedido");
 
-            if (request.getParameter("cartao1") != null) {
-                Double valor = ParameterParser.toDouble(request.getParameter("valor_cartao1"));
-                FormasDePagamento forma_de_pagamento = getCartaoSelecionado(request, "cartao1");
-                pedido.getPagamento().add(new Pagamento(valor, forma_de_pagamento));
+            if(request.getParameterValues("cartao").length > 1) {
+                getCartoesUsados(request, pedido);
             }
 
-            if (request.getParameter("cartao2") != null) {
-                Double valor = ParameterParser.toDouble(request.getParameter("valor_cartao2"));
-                FormasDePagamento forma_de_pagamento = getCartaoSelecionado(request, "cartao2");
-                pedido.getPagamento().add(new Pagamento(valor, forma_de_pagamento));
-            }
-
-            if (request.getParameter("cupom1") != null) {
-                cupom = (CupomDeTroca) getCupomUsado(request, 1);
-                pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));
-
-            }
-            if (request.getParameter("cupom2") != null) {
-                cupom = (CupomDeTroca) getCupomUsado(request, 2);
-                pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));
-            }
-            if (request.getParameter("cupom3") != null) {
-                cupom = (CupomDeTroca) getCupomUsado(request, 3);
-                pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));
-            }
-            if (request.getParameter("cupom4") != null) {
-                cupom = (CupomDeTroca) getCupomUsado(request, 4);
-                pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));
-            }
-
+            if(request.getParameterValues("cupom").length > 0) {
+                getCuponsUsados(request, pedido);
+            }            
         }
         
         if (operacao.equals("ALTERAR")) {
@@ -133,22 +113,49 @@ public class PedidoVH implements IViewHelper {
         
     }
 
-    public FormasDePagamento getCartaoSelecionado(HttpServletRequest request, String nomeCartaoUsado) {
+    public void getCartoesUsados(HttpServletRequest request, Pedido pedido) {
 
-        int cartao_selecionado_id = ParameterParser.toInt(request.getParameter(nomeCartaoUsado));
+        String [] valoresAndCartoes = request.getParameterValues("cartao");
+        
+        double valor;
+        CartaoDeCredito cartao;
+        
+        for (int i = 0; i<valoresAndCartoes.length; i+=2){
+            valor = ParameterParser.toDouble(valoresAndCartoes[i]);
+            cartao = getCartao(request, ParameterParser.toInt(valoresAndCartoes[i+1]));
+            
+            pedido.getPagamento().add(new Pagamento(valor, cartao));    
+        }
+    }   
+    
+    public void getCuponsUsados(HttpServletRequest request, Pedido pedido) {
 
+        String [] valoresAndCartoes = request.getParameterValues("cupom");
+        CupomDeTroca cupom;
+        
+        for (int j = 0; j<valoresAndCartoes.length; j++) {
+            System.out.println(valoresAndCartoes[j]);
+        }
+        
+        for (int i = 0; i<valoresAndCartoes.length; i++) {
+            cupom = getCupom(request, ParameterParser.toInt(valoresAndCartoes[i]));
+            pedido.getPagamento().add(new Pagamento(cupom.getValor(), cupom));
+        }
+    }
+      
+    public CartaoDeCredito getCartao (HttpServletRequest request, int idCartao) {
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente_info");
 
         for (CartaoDeCredito cartao : cliente.getCartoesDeCredito()) {
-            if (cartao.getId() == cartao_selecionado_id) {
+            if (cartao.getId() == idCartao) {
                 return cartao;
             }
         }
-
+        
         return null;
     }
-
-    public FormasDePagamento getCupomUsado(HttpServletRequest request, int idCupomUsado) {
+     
+    public CupomDeTroca getCupom(HttpServletRequest request, int idCupomUsado) {
 
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente_info");
 

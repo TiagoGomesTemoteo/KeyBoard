@@ -71,7 +71,8 @@
                         if (carrinho != null) {
                             StringBuilder sbRegistro = new StringBuilder();
                             StringBuilder sbLink = new StringBuilder();
-                            StringBuilder sbLinkAddOrRmProduto = new StringBuilder();
+                            StringBuilder sbLinkAddOrRmOneProduto = new StringBuilder();
+                            StringBuilder sbLinkRemoverProduto = new StringBuilder();
 
                             if (carrinho.getItens() != null) {                          
 
@@ -79,16 +80,25 @@
 
                                     sbRegistro.setLength(0);
                                     sbLink.setLength(0);
-                                    sbLinkAddOrRmProduto.setLength(0);
+                                    sbLinkAddOrRmOneProduto.setLength(0);
+                                    sbLinkRemoverProduto.setLength(0);
 
-                                    sbLinkAddOrRmProduto.append("<a href=carrinho?");
-                                    sbLinkAddOrRmProduto.append("teclado_id=");
-                                    sbLinkAddOrRmProduto.append(item.getTeclado().getId());
-                                    sbLinkAddOrRmProduto.append("&");
-                                    sbLinkAddOrRmProduto.append("operacao=");
-                                    sbLinkAddOrRmProduto.append("ADICIONAR");
-                                    sbLinkAddOrRmProduto.append("&");
-                                    sbLinkAddOrRmProduto.append("qtd_add_carrinho"+item.getTeclado().getId()+"=");                                
+                                    sbLinkAddOrRmOneProduto.append("<a href=carrinho?");
+                                    sbLinkAddOrRmOneProduto.append("teclado_id=");
+                                    sbLinkAddOrRmOneProduto.append(item.getTeclado().getId());
+                                    sbLinkAddOrRmOneProduto.append("&");
+                                    sbLinkAddOrRmOneProduto.append("operacao=");
+                                    sbLinkAddOrRmOneProduto.append("ADICIONAR");
+                                    sbLinkAddOrRmOneProduto.append("&");
+                                    sbLinkAddOrRmOneProduto.append("qtd_add_carrinho"+item.getTeclado().getId()+"=");
+                                    
+                                    sbLinkRemoverProduto.append("<a href=carrinho?");
+                                    sbLinkRemoverProduto.append("teclado_id=");
+                                    sbLinkRemoverProduto.append(item.getTeclado().getId());
+                                    sbLinkRemoverProduto.append("&");
+                                    sbLinkRemoverProduto.append("operacao=");
+                                    sbLinkRemoverProduto.append("DELETAR");
+                                    sbLinkRemoverProduto.append(">");
 
                                     sbLink.append("<a href=teclado?");
                                     sbLink.append("teclado_id=");
@@ -105,8 +115,8 @@
                                         +"<div class='qtd_produto'>"
                                             +"<center>"
                                                 +"Quant:"
-                                                +"<br>"+sbLinkAddOrRmProduto+"-1>< </a>"+item.getQuantidade()+" " + sbLinkAddOrRmProduto + "1> ></a>"
-                                                +"<br> Remover"
+                                                +"<br>"+sbLinkAddOrRmOneProduto+"-1>< </a>"+item.getQuantidade()+" " + sbLinkAddOrRmOneProduto + "1> ></a>"
+                                                +"<br>"+sbLinkRemoverProduto+"Remover</a>"
                                             +"</center>"        
                                         +"</div>" 
                                         +"<span class='preco_produto'>"+Masks.itemValorTotal(item)+"</span>"

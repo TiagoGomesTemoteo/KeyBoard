@@ -57,9 +57,9 @@
                     <div class="cartao_forma_pagamento">
                         <p>Cartão 01:
 
-                        <br><br><input type="text" name="valor_cartao1" placeholder="Valor a ser pago">
+                        <br><br><input type="text" name="cartao" placeholder="Valor a ser pago">
 
-                        <select name="cartao1">
+                        <select name="cartao">
                             <option value="">Selecione um cartão</option>
                             <%
                                 if(cliente != null && cliente.getCartoesDeCredito()!= null && cliente.getCartoesDeCredito().size() != 0){
@@ -78,9 +78,9 @@
                     <div class="cartao_forma_pagamento">        
                         <p>Cartão 02:
 
-                        <br><br><input type="text" name="valor_cartao2" placeholder="Valor a ser pago">
+                        <br><br><input type="text" name="cartao" placeholder="Valor a ser pago">
 
-                        <select name="cartao2">
+                        <select name="cartao">
                             <option value="">Selecione um cartão</option>
                             <%
                                 if(cliente != null && cliente.getCartoesDeCredito()!= null && cliente.getCartoesDeCredito().size() != 0){
@@ -112,7 +112,7 @@
                                 for(CupomDeTroca cupom : cliente.getCuponsDeTroca()){
                                     out.print(""
                                     + "<div class='option_cupom'>"
-                                        + "<input class='conteudo_option_cupom' type='checkbox' name='cupom"+ cupom.getId() + "'>" 
+                                        + "<input class='conteudo_option_cupom' type='checkbox' name='cupom' value='"+cupom.getId()+"'>" 
                                     + "<span>" + Masks.buildDinheiro(cupom.getValor()) + "</span><span>Validade: " + Masks.brazilianDate(cupom.getValidade()) + "</span>"
                                     + "</div>");
                                 }

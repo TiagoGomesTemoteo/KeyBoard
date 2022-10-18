@@ -16,6 +16,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="css/css_lista_pedidos_cliente.css" rel="stylesheet">
         <title>JSP Page</title>
     </head>
     <body>
@@ -24,6 +25,41 @@
         %>
         
         <%@ include file="links_menu.jsp" %>
+        <br>
+        <br>
+        <div class="title_meus_pedidos">
+            <img class="icon_title_meus_pedidos" src="icons/cesta.png"/>
+            <span class="title_pages"> MEUS PEDIDOS</span>
+        </div>
+        
+        <br>
+        <div class="filtrado_por">
+            Filtrado por: 
+            <select>
+                <option></option>
+            </select>
+        </div>
+        
+        <div class="box_pedido">
+            <div class="dados_pedido">
+                <div class="info_pedido">
+                    Número de Pedido
+                    <p> #123
+                </div>
+                <div class="info_pedido">
+                    Status
+                    <p> Em Análise
+                </div>
+                <div class="info_pedido">
+                    Data
+                    <p> 10/10/2022
+                </div>
+                <div class="info_pedido">
+                    Pagamento
+                    <p> Cartão de crédito
+                </div>
+            </div>    
+        </div>    
         <table border="1px">
             <tr>
                 <td>

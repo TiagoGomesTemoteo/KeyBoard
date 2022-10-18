@@ -33,12 +33,22 @@ public class CarrinhoVH implements IViewHelper{
         if (operacao.equals("SALVAR") || operacao.equals("ADICIONAR")) {
             item.setNewInTheCar(true);
             item.getTeclado().setId(ParameterParser.toInt(request.getParameter("teclado_id")));
-            item.setQuantidade(ParameterParser.toInt(request.getParameter("qtd_add_carrinho"+item.getTeclado().getId())));
+            int quantidade = ParameterParser.toInt(request.getParameter("qtd_add_carrinho"+item.getTeclado().getId()));
+            
+            if(quantidade == 0) quantidade = 1;
+            
+            item.setQuantidade(quantidade);
+            
             carrinho.getItens().add(item);
             carrinho.getCliente().setId(1);
             
         } else if (operacao.equals("CONSULTAR")) {
             carrinho.getCliente().setId(1);
+            
+        } else if (operacao.equals("DELETAR")) {
+            carrinho.getCliente().setId(1);
+            item.getTeclado().setId(ParameterParser.toInt(request.getParameter("teclado_id")));
+            carrinho.getItens().add(item);
         }
 
         return carrinho;
@@ -62,7 +72,7 @@ public class CarrinhoVH implements IViewHelper{
             response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
         }
  
-        else if(resultado.getMsg() == null && operacao.equals("CONSULTAR") || operacao.equals("ADICIONAR")) {
+        else if(resultado.getMsg() == null && operacao.equals("CONSULTAR") || operacao.equals("ADICIONAR") || operacao.equals("DELETAR")) {
             request.getSession().setAttribute("resultado", resultado);
             request.getRequestDispatcher("tela_carrinho.jsp").forward(request, response);
     

@@ -7,6 +7,7 @@ package com.mycompany.keyboard.util;
 
 import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.CupomDeTroca;
+import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.Item;
 import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Teclado;
@@ -57,5 +58,10 @@ public class Masks {
         
         NumberFormat f = NumberFormat.getCurrencyInstance();
         return f.format(valor);
+    }
+    
+    public static String buildDescricaoEndereco (Endereco endereco){
+        return "Rua " + endereco.getLogradouro() + ",  Nº " + endereco.getNumero() + " " + endereco.getBairro() + ", CEP "
+               + endereco.getCep() + " - " + endereco.getCidade();
     }
 }

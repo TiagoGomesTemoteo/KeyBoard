@@ -5,24 +5,9 @@
  */
 package com.mycompany.keyboard.control;
 
-import com.mycompany.keyboard.model.dao.CarrinhoDAO;
-import com.mycompany.keyboard.model.dao.CartaoDAO;
-import com.mycompany.keyboard.model.dao.ClienteDAO;
-import com.mycompany.keyboard.model.dao.EnderecoDAO;
-import com.mycompany.keyboard.model.dao.IDAO;
-import com.mycompany.keyboard.model.dao.PedidoDAO;
-import com.mycompany.keyboard.model.dao.TecladoDAO;
-import com.mycompany.keyboard.model.domain.Carrinho;
-import com.mycompany.keyboard.model.domain.CartaoDeCredito;
-import com.mycompany.keyboard.model.domain.Cliente;
-import com.mycompany.keyboard.model.domain.Endereco;
-import com.mycompany.keyboard.model.domain.EntidadeDominio;
-import com.mycompany.keyboard.model.domain.Pedido;
-import com.mycompany.keyboard.model.domain.Teclado;
-import com.mycompany.keyboard.model.strategy.CalcularValorTotalDoPedido;
-import com.mycompany.keyboard.model.strategy.IStrategy;
-import com.mycompany.keyboard.model.strategy.VerificarCamposInvalidos;
-import com.mycompany.keyboard.model.strategy.ValidarCamposObrigatorios;
+import com.mycompany.keyboard.model.dao.*;
+import com.mycompany.keyboard.model.domain.*;
+import com.mycompany.keyboard.model.strategy.*;
 import com.mycompany.keyboard.util.Resultado;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +32,7 @@ public class Facade implements IFacade {
         daos.put(Endereco.class.getName(), new EnderecoDAO());
         daos.put(Pedido.class.getName(), new PedidoDAO());
         daos.put(CartaoDeCredito.class.getName(), new CartaoDAO());
+        daos.put(Troca.class.getName(), new TrocaDAO());
         
         initRns();
     }

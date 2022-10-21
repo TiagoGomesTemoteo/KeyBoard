@@ -28,6 +28,10 @@ public class TrocaVH implements IViewHelper {
         if (operacao.equals("SOLICITAR_TROCA")) {
             troca.getPedidoOrigem().setId(ParameterParser.toInt(request.getParameter("pedido_origem_id")));
             getItensTroca(request, troca);
+            troca.getCliente().setId(1);
+            
+        } else if (operacao.equals("CONSULTAR")) {
+            troca.getCliente().setId(1);
         }
                 
         return troca;
@@ -41,7 +45,11 @@ public class TrocaVH implements IViewHelper {
 
         if (operacao.equals("SOLICITAR_TROCA")) {
             response.sendRedirect("/KeyBoard/pedido?operacao=CONSULTAR&cliente_id=1");
-        }       
+        
+        } else if (operacao.equals("CONSULTAR")) {
+            request.getSession().setAttribute("resultado", resultado);
+            request.getRequestDispatcher("lista_pedidos_cliente.jsp").forward(request, response);        
+        }        
     }
     
     /*Essa função recebe todos os valores de produtos selecionados para troca bem como a quantidade de cada um*/

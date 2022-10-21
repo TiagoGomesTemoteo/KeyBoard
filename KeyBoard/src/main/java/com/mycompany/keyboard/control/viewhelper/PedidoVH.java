@@ -10,7 +10,6 @@ import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.CupomDeTroca;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
-import com.mycompany.keyboard.model.domain.FormasDePagamento;
 import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.model.domain.enums.Estatus;
@@ -18,12 +17,9 @@ import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,8 +31,6 @@ public class PedidoVH implements IViewHelper {
     public EntidadeDominio getEntidade(HttpServletRequest request) {
 
         Pedido pedido = new Pedido();
-
-        CupomDeTroca cupom;
 
         String operacao = request.getParameter("operacao");
 

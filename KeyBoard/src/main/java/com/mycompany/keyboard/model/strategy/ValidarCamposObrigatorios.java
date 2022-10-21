@@ -16,8 +16,7 @@ import com.mycompany.keyboard.model.domain.EntidadeDominio;
  */
 public class ValidarCamposObrigatorios implements IStrategy{
 
-    String camposObrigatorios = "Os campos abaixo são obrigatórios: ";
-    
+
     @Override
     public String processar(EntidadeDominio entidade, String operacao) {
         
@@ -31,34 +30,40 @@ public class ValidarCamposObrigatorios implements IStrategy{
     
     public String validarCamposEmBrancoCliente(Cliente cliente, String operacao){
         
-        if (cliente.getNome().equals("")) camposObrigatorios += " Nome - ";
-        if (cliente.getGenero() == null) camposObrigatorios += "Gênero - ";
-        if (cliente.getEmail().equals("")) camposObrigatorios += "E-mail - ";
-        if (cliente.getDtNascimento() == null) camposObrigatorios += "Data de nascimento - ";
-        if (cliente.getCpf().equals("")) camposObrigatorios += "CPF - ";
-        if ((cliente.getTelefone().getDdd() + cliente.getTelefone().getNumero()).equals("")) camposObrigatorios += "Telefone - ";
+        if (cliente.getNome().equals("")) return Messages.campoObrigatorio("Nome");
+        if (cliente.getGenero() == null) return Messages.campoObrigatorio("Gênero");
+        if (cliente.getEmail().equals("")) return Messages.campoObrigatorio("E-mail");
+        if (cliente.getDtNascimento() == null) return Messages.campoObrigatorio("Data de nascimento");
+        if (cliente.getCpf().equals("")) return Messages.campoObrigatorio("CPF");
+        if ((cliente.getTelefone().getDdd() + cliente.getTelefone().getNumero()).equals("")) return Messages.campoObrigatorio("Telefone");
         
-        if (operacao.equals("SALVAR")) validarCamposEmBrancoEndereco(cliente.getEnderecos().get(0));
+        if (operacao.equals("SALVAR")) return validarCamposEmBrancoEndereco(cliente.getEnderecos().get(0));
         
-        return camposObrigatorios.equals("Os campos abaixo são obrigatórios: ")? null : camposObrigatorios;
+        return null;
     }
     public String validarCamposEmBrancoEndereco(Endereco endereco){
         
-        if(endereco.getTipoResidencia().equals("")) camposObrigatorios += "Tipo de residência - ";
-        if(endereco.getCep() == 0) camposObrigatorios += "CEP - ";
-        if(endereco.getNumero().equals("")) camposObrigatorios += "Número - ";
-        if(endereco.getIdentificacao().equals("")) camposObrigatorios += "Identificação do endereço - ";
+        if(endereco.getTipoResidencia().equals("")) return Messages.campoObrigatorio("Tipo de residência");
+        if(endereco.getCep() == 0) return Messages.campoObrigatorio("Cep");
+        if(endereco.getNumero().equals("")) return Messages.campoObrigatorio("Número");
+        if(endereco.getIdentificacao().equals("")) return Messages.campoObrigatorio("Identidade do endereço");
+        if(endereco.getTipoLogradouro().equals("")) return Messages.campoObrigatorio("Tipo de logradouro");
+        if(endereco.getLogradouro().equals("")) return Messages.campoObrigatorio("Logradouro");
+        if(endereco.getBairro().equals("")) return Messages.campoObrigatorio("Bairro");
+        if(endereco.getCidade().equals("")) return Messages.campoObrigatorio("Cidade");
+        if(endereco.getEstado().equals("")) return Messages.campoObrigatorio("Estado");
+        if(endereco.getPais().equals("")) return Messages.campoObrigatorio("País");
         
-        return camposObrigatorios.equals("Os campos abaixo são obrigatórios: ")? null : camposObrigatorios;
+        return null;
     }
     public String validarCamposEmBrancoCartao(CartaoDeCredito cartao){
         
-        if(cartao.getNumero() == 0) camposObrigatorios += "Número do cartão - ";
-        if(cartao.getNomeImpressoNoCartao().equals("")) camposObrigatorios += "Nome impresso no cartão - ";
-        if(cartao.getBandeira().toString().equals("")) camposObrigatorios += "Bandeira - ";
-        if(cartao.getCodSeguranca() == 0) camposObrigatorios += "Código de segurança - ";
+        if(cartao.getNumero() == 0) return Messages.campoObrigatorio("Número");
+        if(cartao.getNomeImpressoNoCartao().equals("")) return Messages.campoObrigatorio("Nome impresso no cartão");
+        if(cartao.getBandeira().toString().equals("")) return Messages.campoObrigatorio("Bandeira");
+        if(cartao.getCodSeguranca() == 0) return Messages.campoObrigatorio("Código de segurança");
          
-        return camposObrigatorios.equals("Os campos abaixo são obrigatórios: ")? null : camposObrigatorios;
+        return null;
     }
     
 }

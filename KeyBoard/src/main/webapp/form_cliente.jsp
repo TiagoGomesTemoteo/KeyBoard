@@ -19,11 +19,11 @@
                %> 
                >
         <input class="campo_dt_nascimento" type="text" name="dtNascimento" placeholder="Data de nascimento*" value=
-                                   <%
-                                       if (cliente != null)
-                                           out.print("'" + Masks.brazilianDate(cliente.getDtNascimento()) + "'");
-                                   %> 
-                                   >
+                <%
+                    if (cliente != null && cliente.getDtNascimento() != null)
+                        out.print("'" + Masks.brazilianDate(cliente.getDtNascimento()) + "'");
+                %> 
+                >
         <p><input class="campo_telefone" type="text" name="telefone" placeholder="Telefone*" value=
                <%
                    if (cliente != null)
@@ -31,17 +31,20 @@
                %> 
                >
         <select class="campo_genero" name="genero">
-            <option value="">Selecione...       </option>
+            <option value="">Gênero       </option>
             <option value="masculino"
                     <%
-                        if (cliente != null && cliente.getGenero().toString().equals("MASCULINO"))
-                            out.print(" selected");
+                        if (cliente != null && cliente.getGenero() != null){
+                            if(cliente.getGenero().toString().equals("MASCULINO"))out.print(" selected");                            
+                        } 
+                        
                     %>        
                     >Masculino </option>
             <option value="feminino"
                     <%
-                        if (cliente != null && cliente.getGenero().toString().equals("FEMININO"))
-                            out.print(" selected");
+                        if (cliente != null && cliente.getGenero() != null){
+                            if(cliente.getGenero().toString().equals("FEMININO"))out.print(" selected");                            
+                        } 
                     %> 
                     >Feminino   </option>
         </select>

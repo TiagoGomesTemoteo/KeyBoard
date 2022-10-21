@@ -85,8 +85,7 @@ public class Facade implements IFacade {
                 for(IStrategy regras : regrasOperacao){
                     String mensagem = regras.processar(entidade, operacao);
                     if(mensagem != null){
-                        msg.append(mensagem);
-                        msg.append("\n");
+                        msg.append(mensagem);                        
                     }
                 }
             }
@@ -116,7 +115,10 @@ public class Facade implements IFacade {
                 ex.printStackTrace();
                 resultado.setMsg("Não foi possível salvar o(a)" + nmClass);
             }   
-        }else{
+        }else{            
+            List<EntidadeDominio> entidades = new ArrayList<EntidadeDominio>();
+            entidades.add(entidade);
+            resultado.setEntidades(entidades);
             resultado.setMsg(msg);
         }     
         return resultado;

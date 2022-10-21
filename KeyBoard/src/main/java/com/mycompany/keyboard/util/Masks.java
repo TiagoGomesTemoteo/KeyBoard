@@ -23,7 +23,10 @@ import java.util.List;
 public class Masks {
     
     public static String brazilianDate(Date data){
-        return new SimpleDateFormat("dd/MM/yyyy").format(data);
+        
+        if (data != null) return new SimpleDateFormat("dd/MM/yyyy").format(data);
+        
+        return null;
     }
     
     public static String buildTextFormaPagamento(List<Pagamento> pagamentos){

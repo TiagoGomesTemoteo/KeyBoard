@@ -14,7 +14,6 @@ body {
 
 .box_provisorio {
     width: 779px;
-    height: 243px;
     margin-left: 63px;
     border-radius: 5px;
 }
@@ -111,7 +110,7 @@ body {
     height: 243px;
     background: #FFFFFF;
     border-radius: 5px;
-    top: 430px;
+    top: 552px;
     right: 42px;
 }
 

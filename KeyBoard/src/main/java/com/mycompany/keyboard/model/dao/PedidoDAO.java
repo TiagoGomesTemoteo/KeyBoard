@@ -64,7 +64,7 @@ public class PedidoDAO extends AbstractDAO{
             
             stmt = conn.prepareStatement(sqlPedido, Statement.RETURN_GENERATED_KEYS);
             
-            stmt.setInt(1, consultarIdStatusByCod(pedido.getEstatus().getEstatus()));
+            stmt.setInt(1, UtilsDAO.consultarIdStatusByCod(pedido.getEstatus().getEstatus(), conn));
             stmt.setInt(2, pedido.getCliente().getId());
             stmt.setInt(3, pedido.getEndereco().getId());
             stmt.setDouble(4, pedido.getValor_total());
@@ -139,7 +139,7 @@ public class PedidoDAO extends AbstractDAO{
             
             stmt = conn.prepareStatement(sql);
             
-            stmt.setInt(1, consultarIdStatusByCod(pedido.getEstatus().getEstatus()));
+            stmt.setInt(1, UtilsDAO.consultarIdStatusByCod(pedido.getEstatus().getEstatus(), conn));
             stmt.setInt(2, pedido.getId());
             
             stmt.executeUpdate();            
@@ -169,8 +169,8 @@ public class PedidoDAO extends AbstractDAO{
     public List consultar(EntidadeDominio entidade) {
         Pedido pedido = (Pedido) entidade;
         
-        String sqlAllPedido = "SELECT * FROM PEDIDOS";
         String sql = "SELECT * FROM PEDIDOS WHERE ped_cli_id = ?";
+        String sqlAllPedido = "SELECT * FROM PEDIDOS";       
         String sqlProdutosPedido = "SELECT * FROM PEDIDOS_PRODUTOS WHERE pep_ped_id = ?";
         String sqlPagamentoPedido = "SELECT * FROM PAGAMENTOS WHERE pag_ped_id = ?";
         
@@ -180,7 +180,14 @@ public class PedidoDAO extends AbstractDAO{
         List<Pedido> pedidos = new ArrayList();
         
         try{
-            this.conn = ConnectionFactory.getConnection();
+            if (conn == null || conn.isClosed()) {
+                this.conn = ConnectionFactory.getConnection();
+                this.ctrlTransacao = true;
+
+            } else {
+                this.ctrlTransacao = false;
+            }           
+            
             
             if (pedido.getCliente().getId() != 0){
                 stmt = conn.prepareStatement(sql);
@@ -195,7 +202,7 @@ public class PedidoDAO extends AbstractDAO{
                 pedido = new Pedido();
                 
                 pedido.setId(rs.getInt("ped_id"));
-                pedido.setEstatus(Estatus.pegaEstatusPorValor(consultaEstatus(rs.getInt("ped_stt_id"))));
+                pedido.setEstatus(Estatus.pegaEstatusPorValor(UtilsDAO.consultaEstatus(rs.getInt("ped_stt_id"), conn)));                
                 pedido.setCliente((Cliente)new ClienteDAO().consultar(rs.getInt("ped_cli_id")));
                 pedido.setEndereco((Endereco)new EnderecoDAO().consultar(rs.getInt("ped_end_id")));
                 pedido.setValor_total(rs.getDouble("ped_valor_total"));
@@ -236,14 +243,82 @@ public class PedidoDAO extends AbstractDAO{
         }catch(SQLException ex){
             System.out.println("Não foi possível consultar o pedido no banco de dados \nErro:" + ex.getMessage());
         }finally{
-            ConnectionFactory.closeConnection(conn, stmt, rs);
+            if (ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt, rs);
         }
         return null;
     }
 
     @Override
-    public EntidadeDominio consultar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public EntidadeDominio consultar(int pedido_id) {
+        
+        Pedido pedido = new Pedido();
+        
+        String sql = "SELECT * FROM PEDIDOS WHERE ped_id = ?";     
+        String sqlProdutosPedido = "SELECT * FROM PEDIDOS_PRODUTOS WHERE pep_ped_id = ?";
+        String sqlPagamentoPedido = "SELECT * FROM PAGAMENTOS WHERE pag_ped_id = ?";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;        
+        
+        try{
+            if (conn == null || conn.isClosed()) {
+                this.conn = ConnectionFactory.getConnection();
+                this.ctrlTransacao = true;
+
+            } else {
+                this.ctrlTransacao = false;
+            }                                   
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pedido_id);
+    
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                pedido = new Pedido();
+                
+                pedido.setId(rs.getInt("ped_id"));
+                pedido.setEstatus(Estatus.pegaEstatusPorValor(UtilsDAO.consultaEstatus(rs.getInt("ped_stt_id"), conn)));               
+                pedido.setCliente((Cliente)new ClienteDAO().consultar(rs.getInt("ped_cli_id")));
+                pedido.setEndereco((Endereco)new EnderecoDAO().consultar(rs.getInt("ped_end_id")));
+                pedido.setValor_total(rs.getDouble("ped_valor_total"));
+                
+            }
+                   
+            /*Consulta os produtos desse pedido*/
+            stmt = conn.prepareStatement(sqlProdutosPedido);
+            stmt.setInt(1, pedido.getId());
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                pedido.getItens().add(new Item((Teclado)new TecladoDAO().consultar(rs.getInt("pep_tec_id")), rs.getInt("pep_quantidade"), false));
+            }
+                        
+            /*Consulta a forma de pagamento de pedido*/
+            stmt = conn.prepareStatement(sqlPagamentoPedido);
+            stmt.setInt(1, pedido.getId());
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                if (rs.getInt("pag_fpg_id") == 2){
+                    pedido.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), (CartaoDeCredito)new CartaoDAO().consultar(rs.getInt("pag_car_id"))));
+
+                } else if (rs.getInt("pag_fpg_id") == 1) {
+                    pedido.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomDeTroca(rs.getInt("pag_cdt_id"))));
+                }
+
+            }
+                        
+            return pedido;
+            
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar o pedido no banco de dados \nErro:" + ex.getMessage());
+        }finally{
+            if (ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt, rs);
+        }
+        return null;
     }
     
     
@@ -273,51 +348,5 @@ public class PedidoDAO extends AbstractDAO{
             System.out.println("Não foi possível consultar o cupom de troca no banco de dados \nErro: " + ex.getMessage());
         }       
         return null;
-    }
-    
-    public int consultaEstatus(int id) {
-                
-        String sql = "SELECT * FROM ESTATUS WHERE stt_id = ?";
-        
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-             
-        try{   
-            
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, id);
-            rs = stmt.executeQuery();
-            
-            if (rs.next()) return rs.getInt("stt_codigo");
-
-        
-        }catch(SQLException ex){
-            System.out.println("Não foi possível consultar o Status no banco de dados \nErro: " + ex.getMessage());
-        }    
-        
-        return 0;
-    }
-    
-    public int consultarIdStatusByCod(int cod) {
-                
-        String sql = "SELECT * FROM ESTATUS WHERE stt_codigo = ?";
-        
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-             
-        try{   
-            
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, cod);
-            rs = stmt.executeQuery();
-            
-            if (rs.next()) return rs.getInt("stt_id");
-
-        
-        }catch(SQLException ex){
-            System.out.println("Não foi possível consultar o Status no banco de dados \nErro: " + ex.getMessage());
-        }    
-        
-        return 0;
-    }
+    }    
 }

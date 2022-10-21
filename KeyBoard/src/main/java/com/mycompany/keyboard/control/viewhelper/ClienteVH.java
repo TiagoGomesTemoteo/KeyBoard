@@ -72,8 +72,11 @@ public class ClienteVH implements IViewHelper {
         
         if(operacao.equals("SALVAR")){
             if(resultado.getMsg() != null){
-                request.setAttribute("resultado", resultado);
-                request.getRequestDispatcher("tela_editar_cliente.jsp").forward(request, response); 
+                  
+                if(resultado.getEntidades() != null) request.setAttribute("cliente", resultado.getEntidades().get(0));
+                
+                request.setAttribute("messageError", resultado);
+                request.getRequestDispatcher("tela_cadastrar_cliente.jsp").forward(request, response);
             }
         response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
             

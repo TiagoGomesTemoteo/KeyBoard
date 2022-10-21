@@ -12,6 +12,7 @@
         <link href="css/css_form_endereco.css" rel="stylesheet">
         <link href="css/css_form_cliente.css" rel="stylesheet">
     </head>
+ 
     <body>
         <%@ include file="links_menu.jsp" %>
         <p>
@@ -40,7 +41,15 @@
 
             </form> 
         </div>
-                
-        <%@ include file="rodape.jsp" %>       
+              
+        <%
+            Resultado messageError = (Resultado)request.getAttribute("messageError");
+            
+            if(messageError != null && messageError.getMsg() != null) {
+                out.println("<script>messageError('"+messageError.getMsg()+"')</script>");
+            }
+            
+        %>
+        
     </body>
 </html>

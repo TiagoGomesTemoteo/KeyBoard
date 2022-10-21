@@ -1,14 +1,13 @@
 <head>
     <link href="css/css_padroes.css" rel="stylesheet">
-    <link href="css/css_menu.css" rel="stylesheet">
+    <link href="css/css_menu.css" rel="stylesheet">    
 </head>
 <div class="barra_grande_menu">
     <img class="logo" src="img/logo.png"/>
     <input class="barra_pesquisa" type="text" placeholder="  Busque aqui">
     <img class="icon_login_cadastro" src="icons/profile-user.png"/>
     <span class="text_faca_login"> Faça <b><a href="tela_cadastrar_cliente.jsp" class="link_login_cadastro">Login</a></b> ou<br> crie seu <b><a href="tela_cadastrar_cliente.jsp" class="link_login_cadastro">Cadastro</a></b></span>
-    <a href="carrinho?operacao=CONSULTAR"><img class="icon_carrinho_compra_preto" src="icons/carrinho-de-compras-preto.png"/></a>
-        
+    <a href="carrinho?operacao=CONSULTAR"><img class="icon_carrinho_compra_preto" src="icons/carrinho-de-compras-preto.png"/></a>        
     <img class="icon_notification" src="icons/notificacao.png"/>
 </div>
 <div class="opcoes_menu">
@@ -22,6 +21,4 @@
     <span class="text_spans_menu span_menu_vendas"><a href="pedido?operacao=CONSULTAR">Vendas</a></span>
 </div>    
 
-
-
-
+<%@ include file="function_utils.jsp" %>

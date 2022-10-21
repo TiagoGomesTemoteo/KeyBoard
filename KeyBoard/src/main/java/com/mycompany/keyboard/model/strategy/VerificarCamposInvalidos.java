@@ -24,7 +24,7 @@ public class VerificarCamposInvalidos implements IStrategy {
     public String processar(EntidadeDominio entidade, String string) {
         if (entidade instanceof Cliente) {
             if (!((Cliente) entidade).getCpf().equals("")) {
-                validarCPF(((Cliente) entidade).getCpf());
+//                validarCPF(((Cliente) entidade).getCpf());
 //                validarTelefone(((Cliente) entidade).getTelefone());
             }
 

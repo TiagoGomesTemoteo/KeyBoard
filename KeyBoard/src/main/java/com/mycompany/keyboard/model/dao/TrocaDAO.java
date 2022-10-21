@@ -7,13 +7,17 @@ package com.mycompany.keyboard.model.dao;
 
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Item;
+import com.mycompany.keyboard.model.domain.Pedido;
+import com.mycompany.keyboard.model.domain.Teclado;
 import com.mycompany.keyboard.model.domain.Troca;
+import com.mycompany.keyboard.model.domain.enums.Estatus;
 import com.mycompany.keyboard.util.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +27,7 @@ import java.util.List;
 public class TrocaDAO extends AbstractDAO{
     
     private Connection conn;
+    private PedidoDAO pedidoDAO;
 
     public TrocaDAO(Connection conn) {
         this.conn = conn;
@@ -34,8 +39,8 @@ public class TrocaDAO extends AbstractDAO{
     public void salvar(EntidadeDominio entidade) {
         Troca troca = (Troca) entidade;
 
-        String sqlTroca = "INSERT INTO TROCA (tro_id, tro_stt_id, tro_ped_id)"
-                + " VALUES(tro_id, ?, ?)";
+        String sqlTroca = "INSERT INTO TROCA (tro_id, tro_stt_id, tro_ped_id, tro_cli_id)"
+                + " VALUES(tro_id, ?, ?, ?)";
         
         String sqlItensTroca = "INSERT INTO ITENS_TROCA (itt_id, itt_tro_id, itt_tec_id, itt_quantidade)"
                 + " VALUES(itt_id, ?, ?, ?)";
@@ -52,8 +57,9 @@ public class TrocaDAO extends AbstractDAO{
                         
             stmt = conn.prepareStatement(sqlTroca, Statement.RETURN_GENERATED_KEYS);
             
-            stmt.setInt(1, troca.getEstatus().getEstatus());
+            stmt.setInt(1, UtilsDAO.consultarIdStatusByCod(troca.getEstatus().getEstatus(), conn));
             stmt.setInt(2, troca.getPedidoOrigem().getId());
+            stmt.setInt(3, troca.getCliente().getId());
             
             stmt.executeUpdate();
 
@@ -99,11 +105,68 @@ public class TrocaDAO extends AbstractDAO{
 
     @Override
     public List consultar(EntidadeDominio entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates. 
+        Troca troca = (Troca) entidade;
+        
+        String sql = "SELECT * FROM TROCA WHERE tro_cli_id=?;";
+        String sqlItensTroca = "SELECT * FROM ITENS_TROCA WHERE itt_tro_id=?;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ResultSet rsItensTroca = null;
+        
+        List<Troca> pedidosTroca = new ArrayList();
+        Item item;
+        
+        try{
+            this.conn = ConnectionFactory.getConnection();
+            stmt = conn.prepareStatement(sql);
+            
+            stmt.setInt(1, troca.getCliente().getId());
+            rs = stmt.executeQuery();
+            
+            pedidoDAO = new PedidoDAO(conn);
+                     
+            while(rs.next()){
+                
+                troca = new Troca(); 
+                
+                troca.setId(rs.getInt("tro_id"));
+                troca.setEstatus(Estatus.pegaEstatusPorValor(UtilsDAO.consultaEstatus(rs.getInt("tro_stt_id"), conn)));
+                troca.setPedidoOrigem((Pedido)pedidoDAO.consultar((rs.getInt("tro_ped_id"))));
+                troca.getCliente().setId(rs.getInt("tro_cli_id"));
+                
+                stmt = conn.prepareStatement(sqlItensTroca);
+                stmt.setInt(1, troca.getId());
+                rsItensTroca = stmt.executeQuery();
+                
+                while(rsItensTroca.next()) {
+                    item = new Item();
+                    
+                    item.setQuantidade(rsItensTroca.getInt("itt_quantidade"));
+                    item.setTeclado((Teclado)new TecladoDAO().consultar(rsItensTroca.getInt("itt_tec_id")));
+                    item.setNewInTheCar(false);
+                    
+                    troca.getProdutos().add(item);
+                }
+                
+                pedidosTroca.add(troca);
+                                               
+            }
+                       
+            return pedidosTroca;
+            
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar os pedidos de troca no banco de dados \nErro:" + ex.getMessage());
+        }finally{
+            ConnectionFactory.closeConnection(conn, stmt, rs);
+        }
+        return null; 
+       
     }
 
     @Override
     public EntidadeDominio consultar(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }   
+    }  
+   
 }

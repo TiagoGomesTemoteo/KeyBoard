@@ -75,7 +75,7 @@ public class Facade implements IFacade {
     }
 
     private String aplicarRegras(EntidadeDominio entidade, String operacao){
-        StringBuilder msg = new StringBuilder();
+        String msg = null;
         
         Map <String, List<IStrategy>> regrasNegocio = rns.get(entidade.getClass().getName());
         
@@ -85,13 +85,13 @@ public class Facade implements IFacade {
                 for(IStrategy regras : regrasOperacao){
                     String mensagem = regras.processar(entidade, operacao);
                     if(mensagem != null){
-                        msg.append(mensagem);                        
+                        msg = mensagem;                        
                     }
                 }
             }
         }
-        if(msg.length() > 0){
-            return msg.toString();
+        if(msg != null){
+            return msg;
         }else{
             return null;
         }

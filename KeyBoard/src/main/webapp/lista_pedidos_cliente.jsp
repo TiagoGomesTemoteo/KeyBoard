@@ -4,6 +4,7 @@
     Author     : Tiago
 --%>
 
+<%@page import="com.mycompany.keyboard.model.domain.enums.Estatus"%>
 <%@page import="com.mycompany.keyboard.model.domain.Troca"%>
 <%@page import="com.mycompany.keyboard.model.domain.Item"%>
 <%@page import="com.mycompany.keyboard.util.ParameterParser"%>
@@ -75,7 +76,9 @@
             if (resultado != null) {                
                 List<EntidadeDominio> entidades = resultado.getEntidades();                
                 
-                if (entidades != null && entidades.size() > 0) {                    
+                if (entidades != null && entidades.size() > 0) {    
+                    String sbOperacoesAdm;
+                    
                     if(entidades.get(0) instanceof Pedido) {
                         StringBuilder sbRegistro = new StringBuilder();
                         StringBuilder sbProdutos = new StringBuilder();
@@ -88,10 +91,11 @@
                             sbRegistro.setLength(0);
                             sbProdutos.setLength(0);
                             sbTroca.setLength(0);
-                            sbProdutosTroca.setLength(0);
-
+                            sbProdutosTroca.setLength(0);                         
+                            
                             for (Item item: pedido.getItens()) {                            
                                 indice++;
+                                
                                 sbProdutos.append(
                                 "<div class='produto_pedido'>"
                                     +"<img class='img_produto_pedido' src='img/teclado.png'>"
@@ -107,7 +111,7 @@
                                 );
 
                                 sbProdutosTroca.append(
-                                "<div class='produto_pedido'>"
+                                "<div class='produto_troca'>"
                                         +"<input type='checkbox' name='item_troca' value='T"+item.getTeclado().getId()+"'>"
                                         +"<img class='img_produto_pedido' src='img/teclado.png'>"
                                         +"<span class='descricao_produto_pedido'>"+Masks.buildDescricaoTeclado(item.getTeclado())+"</span>"
@@ -127,30 +131,32 @@
                             sbRegistro.append(                                              
                             "<div class='box_pedido'>"
                                 +"<div class='dados_pedido'>"
-                                    +"<div class='info_pedido'>"
+                                    +"<div class='info_title_pedido'>"
                                         +"Número de Pedido"
-                                        +"<p>" + pedido.getId()
+                                        +"<p class='info_pedido'>" + pedido.getId()
                                     +"</div>"
-                                    +"<div class='info_pedido'>"
+                                    +"<div class='info_title_pedido'>"
                                         +"Status"
-                                        +"<p>" + pedido.getEstatus()
+                                        +"<p class='info_pedido color_green'>" + Masks.buildDescricaoStatus(pedido.getEstatus())
                                     +"</div>"
-                                    +"<div class='info_pedido'>"
+                                    +"<div class='info_title_pedido'>"
                                         +"Data"
-                                        +"<p>" + Masks.brazilianDate(pedido.getDt_cadastro())
+                                        +"<p class='info_pedido'>" + Masks.brazilianDate(pedido.getDt_cadastro())
                                     +"</div>"
-                                    +"<div class='info_pedido'>"
+                                    +"<div class='info_title_pedido'>"
                                         +"Pagamento"
-                                        +"<p>" + Masks.buildTextFormaPagamento(pedido.getPagamento())
+                                        +"<p class='info_pedido'>" + Masks.buildTextFormaPagamento(pedido.getPagamento())
                                     +"</div>"
                                 +"</div>"
+                                + "<div class='linha_divisoria_pedidos_cliente'></div>"
                                 +"<div class='endereco_pedido'>"
-                                    +"<span class='title_endereco_itens_pedido'>ENDEREÇO</span>"
+                                    +"<p><span class='title_endereco_itens_pedido'>ENDEREÇO</span>"
                                     +"<div class='info_endereco_pedido'>"
                                         + Masks.buildDescricaoEndereco(pedido.getEndereco())
                                     +"</div>"
                                 +"</div>"
-                                +"<div class='itens_pedido'>"
+                                + "<div class='linha_divisoria_pedidos_cliente'></div>"
+                                +"<p><div class='itens_pedido'>"
                                     +"<span class='title_endereco_itens_pedido'>ITENS</span>"                
                                     +"<p>"
                                     +sbProdutos.toString()
@@ -160,20 +166,26 @@
 
                             out.print(sbRegistro.toString());
 
+                            if (pedido.getEstatus() == Estatus.ENTREGUE) {
+                                sbTroca.append(
+                                "<form action='troca' method='post'>"
+                                    +"<input type='hidden' name='pedido_origem_id' value='"+pedido.getId()+"'>"
+                                    +"<div class='box_pedido_trocar'>"
+                                        +"<div>"
+                                            +"<img class='icon_itens_troca' src='icons/caixa-de-devolucao.png'>"
+                                            +"<span class='title_itens_troca'>ITENS PARA TROCA</span>"
+                                            +"<p class='frase_itens_troca'> Selecione a quantidade e os itens que deseja trocar."    
+                                        +"</div>"
+                                        +"<p>"
+                                        + sbProdutosTroca.toString()
+                                        + "<input class='btn_solicitar_troca button_green' type='submit' name='operacao' value='SOLICITAR_TROCA'>"
+                                    +"</div>"
+                                    +"<br><br>"
+                                +"</form>"
+                                ); 
 
-                            sbTroca.append(
-                            "<form action='troca' method='post'>"
-                                +"<input type='hidden' name='pedido_origem_id' value='"+pedido.getId()+"'>"
-                                +"<div class='box_pedido_trocar'>"
-                                   +"ITENS"
-                                    +"<p> Selecione a quantidade e os itens que deseja trocar."
-                                    + sbProdutosTroca.toString()
-                                    + "<input type='submit' name='operacao' value='SOLICITAR_TROCA'>"
-                                +"</div>"
-                            +"</form>"
-                            ); 
-
-                            out.print(sbTroca.toString());
+                                out.print(sbTroca.toString());
+                            }
                         }  
                         
                     } else if (entidades.get(0) instanceof Troca) {
@@ -184,8 +196,14 @@
                         for (int i = 0; i < entidades.size(); i++) {
                             Troca troca = (Troca) entidades.get(i);
                             
+                            sbOperacoesAdm = "";
                             sbItensTroca.setLength(0);
                             sbPedidosTroca.setLength(0);
+                            
+                            if (troca.getEstatus().getEstatus() == 16) {
+                                sbOperacoesAdm = "<a href='troca?operacao=ALTERAR&troca_id="+troca.getId()+"&estatus="+Estatus.TROCADO+"'>Itens recebidos</a>";
+                            }
+                            
 
                             for (Item item: troca.getProdutos()) {                            
                                
@@ -207,34 +225,37 @@
                             sbPedidosTroca.append(                                              
                             "<div class='box_pedido'>"
                                 +"<div class='dados_pedido'>"
-                                    +"<div class='info_pedido'>"
-                                        +"Número de Pedido de Troca"
-                                        +"<p>" + troca.getId()
+                                    +"<div class='info_title_pedido'>"
+                                        +"Número de pedido de Troca"
+                                        +"<p class='info_pedido'>" + troca.getId()
                                     +"</div>"
-                                    +"<div class='info_pedido'>"
+                                    +"<div class='info_title_pedido'>"
                                         +"Status"
-                                        +"<p>" + troca.getEstatus()
+                                        +"<p class='info_pedido color_green'>" + Masks.buildDescricaoStatus(troca.getEstatus())
                                     +"</div>"
-                                    +"<div class='info_pedido'>"
+                                    +"<div class='info_title_pedido'>"
                                         +"Data"
-                                        +"<p>" + Masks.brazilianDate(troca.getDt_cadastro())
+                                        +"<p class='info_pedido'>" + Masks.brazilianDate(troca.getDt_cadastro())
                                     +"</div>"
-                                    +"<div class='info_pedido'>"
+                                    +"<div class='info_title_pedido'>"
                                         +"Pagamento"
-                                        +"<p>" + Masks.buildTextFormaPagamento(troca.getPedidoOrigem().getPagamento())
+                                        +"<p class='info_pedido'>" + Masks.buildTextFormaPagamento(troca.getPedidoOrigem().getPagamento())
                                     +"</div>"
                                 +"</div>"
+                                +"<div class='linha_divisoria_pedidos_cliente'></div>"
                                 +"<div class='endereco_pedido'>"
-                                    +"<span class='title_endereco_itens_pedido'>ENDEREÇO</span>"
+                                    +"<p><span class='title_endereco_itens_pedido'>ENDEREÇO</span>"
                                     +"<div class='info_endereco_pedido'>"
                                         + Masks.buildDescricaoEndereco(troca.getPedidoOrigem().getEndereco())
                                     +"</div>"
                                 +"</div>"
-                                +"<div class='itens_pedido'>"
+                                +"<div class='linha_divisoria_pedidos_cliente'></div>"
+                                +"<p><div class='itens_pedido'>"
                                     +"<span class='title_endereco_itens_pedido'>ITENS</span>"                
                                     +"<p>"
                                     +sbItensTroca.toString()
                                 +"</div>"
+                                + sbOperacoesAdm
                             +"</div>"
                             );
 

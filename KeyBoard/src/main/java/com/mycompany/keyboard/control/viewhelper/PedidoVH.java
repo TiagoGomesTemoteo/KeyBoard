@@ -40,7 +40,7 @@ public class PedidoVH implements IViewHelper {
             pedido.setItens(((Carrinho) request.getSession().getAttribute("cliente_carrinho")).getItens());
             pedido.getEndereco().setId(ParameterParser.toInt(request.getParameter("endereco_entrega")));
             pedido.setValor_total(ParameterParser.toDouble(request.getParameter("valor_total")));
-            pedido.setEstatus(Estatus.EM_ANALISE);
+            pedido.setEstatus(Estatus.APROVADA);
             request.getSession().setAttribute("pedido", pedido);
 
         }
@@ -66,8 +66,7 @@ public class PedidoVH implements IViewHelper {
         
         if (operacao.equals("ALTERAR")) {
             pedido.setId(ParameterParser.toInt(request.getParameter("pedido_id")));
-            pedido.setEstatus(Estatus.pegaEstatusPorDescricao(request.getParameter("estatus")));
-            System.out.println(pedido.getId());
+            pedido.setEstatus(Estatus.pegaEstatusPorDescricao(request.getParameter("estatus")));              
         }
 
         return pedido;

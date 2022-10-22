@@ -39,7 +39,7 @@ public class Troca extends EntidadeDominio{
         super();
         this.cliente = new Cliente();
         this.pedidoOrigem = new Pedido();
-        this.estatus = Estatus.EM_ANALISE;
+        this.estatus = Estatus.EM_TROCA;
         this.produtos = new ArrayList();
     }
 

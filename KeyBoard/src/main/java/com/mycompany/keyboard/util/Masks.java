@@ -11,6 +11,7 @@ import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.Item;
 import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Teclado;
+import com.mycompany.keyboard.model.domain.enums.Estatus;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,5 +67,23 @@ public class Masks {
     public static String buildDescricaoEndereco (Endereco endereco){
         return "Rua " + endereco.getLogradouro() + ",  Nº " + endereco.getNumero() + " " + endereco.getBairro() + ", CEP "
                + endereco.getCep() + " - " + endereco.getCidade();
+    }
+    
+    public static String buildDescricaoStatus (Estatus estatus){        
+        switch (estatus.getEstatus()) {
+            case 7:  return "Em Processamento";
+            case 8:  return "Pagamento Realizado";
+            case 9:  return "Em Transporte";
+            case 10: return "Entrega Realizada";
+            case 11: return "Finalizado";
+            case 12: return "Aprovada";
+            case 13: return "Reprovada";
+            case 14: return "Entregue";
+            case 15: return "Em Troca";
+            case 16: return "Troca Autorizada";
+            case 17: return "Trocado";
+        }
+        
+        return null;
     }
 }

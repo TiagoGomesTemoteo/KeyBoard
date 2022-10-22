@@ -33,9 +33,9 @@ public class ClienteVH implements IViewHelper {
             
             cliente.setNome(request.getParameter("nome"));
             cliente.setDtNascimento(ParameterParser.toDate(request.getParameter("dtNascimento")));
-            cliente.setTelefone(ParameterParser.toPhone(request.getParameter("telefone").trim()));
+            cliente.setTelefone(ParameterParser.toPhone(request.getParameter("telefone")));
             cliente.setGenero(ParameterParser.getGenSelected(request.getParameter("genero")));
-            cliente.setCpf(request.getParameter("cpf"));
+            cliente.setCpf(ParameterParser.toCpf(request.getParameter("cpf")));
             cliente.setEmail(request.getParameter("email"));
             cliente.setSenha(request.getParameter("senha") + request.getParameter("confirmar_senha"));
             cliente.setEnderecos(Arrays.asList((Endereco) new EnderecoVH().getEntidade(request)));

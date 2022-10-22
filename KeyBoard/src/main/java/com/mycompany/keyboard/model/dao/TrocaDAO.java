@@ -95,7 +95,37 @@ public class TrocaDAO extends AbstractDAO{
 
     @Override
     public void alterar(EntidadeDominio entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Troca troca = (Troca) entidade;
+        
+        String sql = "UPDATE TROCA SET tro_stt_id = ? WHERE tro_id = ?";
+        
+        PreparedStatement stmt = null;
+        
+        try{
+            this.conn = ConnectionFactory.getConnection();
+            conn.setAutoCommit(false);  
+            
+            stmt = conn.prepareStatement(sql);   
+            
+            stmt.setInt(1, UtilsDAO.consultarIdStatusByCod(troca.getEstatus().getEstatus(), conn));
+            stmt.setInt(2, troca.getId());
+            
+            stmt.executeUpdate();            
+
+            conn.commit();
+            
+        }catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Error: "+ e1.getMessage());
+            }
+            
+            System.out.println("Não foi possível alterar a troca no banco de dados.\nErro: " + ex.getMessage());
+
+        } finally {
+            ConnectionFactory.closeConnection(conn, stmt);
+        }
     }
 
     @Override
@@ -108,6 +138,7 @@ public class TrocaDAO extends AbstractDAO{
         Troca troca = (Troca) entidade;
         
         String sql = "SELECT * FROM TROCA WHERE tro_cli_id=?;";
+        String sqlAllTrocas = "SELECT * FROM TROCA;";
         String sqlItensTroca = "SELECT * FROM ITENS_TROCA WHERE itt_tro_id=?;";
         
         PreparedStatement stmt = null;
@@ -119,9 +150,15 @@ public class TrocaDAO extends AbstractDAO{
         
         try{
             this.conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement(sql);
             
-            stmt.setInt(1, troca.getCliente().getId());
+            if(troca.getCliente().getId() != 0) {
+                stmt = conn.prepareStatement(sql);                       
+                stmt.setInt(1, troca.getCliente().getId());            
+            
+            } else {
+                stmt = conn.prepareStatement(sqlAllTrocas);                                       
+            }
+            
             rs = stmt.executeQuery();
             
             pedidoDAO = new PedidoDAO(conn);

@@ -39,7 +39,7 @@ public class Pedido extends EntidadeDominio {
         this.endereco = new Endereco();
         this.itens = new ArrayList();
         this.valor_total = 0.0;
-        this.estatus = Estatus.EM_ANALISE;
+        this.estatus = Estatus.EM_PROCESSAMENTO;
         this.pagamento = new ArrayList();
     }
 

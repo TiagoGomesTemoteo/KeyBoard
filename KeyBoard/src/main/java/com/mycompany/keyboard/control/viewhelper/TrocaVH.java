@@ -6,6 +6,7 @@
 package com.mycompany.keyboard.control.viewhelper;
 
 import com.mycompany.keyboard.model.domain.*;
+import com.mycompany.keyboard.model.domain.enums.Estatus;
 import com.mycompany.keyboard.util.*;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -31,8 +32,13 @@ public class TrocaVH implements IViewHelper {
             troca.getCliente().setId(1);
             
         } else if (operacao.equals("CONSULTAR")) {
-            troca.getCliente().setId(1);
-        }
+            troca.getCliente().setId(ParameterParser.toInt(request.getParameter("cliente_id")));
+        
+        } else if (operacao.equals("ALTERAR")) {
+            troca.setId(ParameterParser.toInt(request.getParameter("troca_id")));
+            troca.setEstatus(Estatus.pegaEstatusPorDescricao(request.getParameter("estatus")));
+            
+        } 
                 
         return troca;
 
@@ -48,8 +54,18 @@ public class TrocaVH implements IViewHelper {
         
         } else if (operacao.equals("CONSULTAR")) {
             request.getSession().setAttribute("resultado", resultado);
-            request.getRequestDispatcher("lista_pedidos_cliente.jsp").forward(request, response);        
-        }        
+            
+            if(ParameterParser.toInt(request.getParameter("cliente_id")) != 0) {
+                request.getRequestDispatcher("lista_pedidos_cliente.jsp").forward(request, response);
+            
+            } else {
+                request.getRequestDispatcher("lista_vendas.jsp").forward(request, response);
+            }
+                    
+        } else if (operacao.equals("ALTERAR")){
+            request.getSession().setAttribute("resultado", ClienteInSession.getAllPedidosTroca());
+            request.getRequestDispatcher("lista_vendas.jsp").forward(request, response);
+        }       
     }
     
     /*Essa função recebe todos os valores de produtos selecionados para troca bem como a quantidade de cada um*/

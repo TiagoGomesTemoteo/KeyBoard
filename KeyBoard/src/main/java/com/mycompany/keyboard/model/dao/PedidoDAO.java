@@ -138,7 +138,7 @@ public class PedidoDAO extends AbstractDAO{
             conn.setAutoCommit(false);  
             
             stmt = conn.prepareStatement(sql);
-            
+                        
             stmt.setInt(1, UtilsDAO.consultarIdStatusByCod(pedido.getEstatus().getEstatus(), conn));
             stmt.setInt(2, pedido.getId());
             

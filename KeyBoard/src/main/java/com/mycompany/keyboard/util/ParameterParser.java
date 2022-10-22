@@ -54,6 +54,8 @@ public class ParameterParser {
         
         Telefone tel = new Telefone();
         
+        texto = texto.replaceAll("[-./() ]","");              
+        
         if(texto.length() == 10 || texto.length() == 11){
             tel.setTipo(texto.length() == 10 ? TelefoneENUM.FIXO : TelefoneENUM.CELULAR);
             tel.setDdd(texto.trim().substring(0, 2));
@@ -69,5 +71,9 @@ public class ParameterParser {
         if(!texto.equals("")) return texto.equals("masculino")? Genero.MASCULINO : Genero.FEMININO;
         
         return null;
+    }
+    
+    public static String toCpf(String cpf) {   
+        return cpf.replaceAll("[-./() ]","");
     }
 }

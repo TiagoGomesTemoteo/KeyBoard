@@ -26,6 +26,7 @@ body {
 }
 
 .box_pedido {
+    position: relative;
     width: 927px;
     margin-left: 62px;
     margin-top: 15px;
@@ -61,14 +62,13 @@ body {
 .endereco_pedido {
     width: 927px;
     height: 105px;  
-    margin-top: 29px;
 }
 
-.title_endereco_itens_pedido { 
+.title_endereco_itens_pedido {
+    margin-left: 24px;
     font-weight: bold;
     font-size: 12px;
     line-height: 15px;
-    margin-left: 24px;
 }
 
 .info_endereco_pedido {
@@ -77,7 +77,8 @@ body {
     font-size: 14px;
     line-height: 17px;
     color: #7A7A7A;
-    margin-left: 24px;    
+    margin-left: 24px;
+    margin-top: 19px;
 }
 
 .linha_divisoria_pedidos_cliente {
@@ -93,6 +94,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-left: 50px;
 }
 
 
@@ -124,9 +126,10 @@ body {
 /*TROCAR PRODUTO*/
 
 .box_pedido_trocar {
+    position: relative;
     width: 927px;
     margin-left: 62px;
-    margin-top: 5px;
+    margin-top: 15px;
     background: #FFFFFF;
     border-radius: 5px;
 }
@@ -162,16 +165,39 @@ body {
     margin-left: 31px;
 }
 
-.produto_troca {
+.btn_enviar_estoque {
+    position: relative;
+    left: 622px;
+    top: 10px;
+    font-size: 12px;
+}
+
+.operacoesADM {
+    position: absolute;
+    width: 150px;
+    height: 30px;
+    background: #10CDB9;
+    border: 1px solid #10CDB9;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #FFFFFF;
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-left: 50px;
+    justify-content: center;
+    bottom: 10px;        
 }
 
-.btn_solicitar_troca {
-    position: relative;
-    left: 730px;
-    top: -12px;
-    font-size: 16px;   
+.operacoesADMTroca {
+    left: 10px;
+}
+
+.operacoesAdmPedido {
+    right: 10px;
+}
+
+.space {
+    width: 10px;
+    height: 5px;
 }

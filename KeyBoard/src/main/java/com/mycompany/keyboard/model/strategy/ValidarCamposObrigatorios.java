@@ -36,6 +36,8 @@ public class ValidarCamposObrigatorios implements IStrategy{
         if (cliente.getDtNascimento() == null) return Messages.campoObrigatorio("Data de nascimento");
         if (cliente.getCpf().equals("")) return Messages.campoObrigatorio("CPF");
         if ((cliente.getTelefone().getDdd() + cliente.getTelefone().getNumero()).equals("")) return Messages.campoObrigatorio("Telefone");
+        if (cliente.getSenha().equals("")) return Messages.campoObrigatorio("Senha");
+        if (cliente.getConfirme_senha().equals("")) return Messages.campoObrigatorio("Confirme a senha");
         
         if (operacao.equals("SALVAR")) return validarCamposEmBrancoEndereco(cliente.getEnderecos().get(0));
         

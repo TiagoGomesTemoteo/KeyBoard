@@ -6,6 +6,7 @@
 package com.mycompany.keyboard.control.viewhelper;
 
 import com.mycompany.keyboard.model.domain.Carrinho;
+import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Item;
 import com.mycompany.keyboard.util.ClienteInSession;
@@ -26,11 +27,11 @@ public class CarrinhoVH implements IViewHelper{
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         
         Carrinho carrinho = new Carrinho();
-        Item item = new Item();
+        Item item = new Item();        
+        String operacao = request.getParameter("operacao");        
+        Cliente cliente_logado = ClienteInSession.getClienteLogado(request);
         
-        String operacao = request.getParameter("operacao");
-        
-        if (operacao.equals("SALVAR") || operacao.equals("ADICIONAR")) {
+        if (operacao.equals("ADICIONAR")) {
             item.setNewInTheCar(true);
             item.getTeclado().setId(ParameterParser.toInt(request.getParameter("teclado_id")));
             int quantidade = ParameterParser.toInt(request.getParameter("qtd_add_carrinho"+item.getTeclado().getId()));
@@ -40,13 +41,13 @@ public class CarrinhoVH implements IViewHelper{
             item.setQuantidade(quantidade);
             
             carrinho.getItens().add(item);
-            carrinho.getCliente().setId(1);
+            carrinho.getCliente().setId(cliente_logado.getId());
             
         } else if (operacao.equals("CONSULTAR")) {
-            carrinho.getCliente().setId(1);
+            carrinho.getCliente().setId(cliente_logado.getId());
             
         } else if (operacao.equals("DELETAR")) {
-            carrinho.getCliente().setId(1);
+            carrinho.getCliente().setId(cliente_logado.getId());
             item.getTeclado().setId(ParameterParser.toInt(request.getParameter("teclado_id")));
             carrinho.getItens().add(item);
         }

@@ -19,6 +19,16 @@
     </head>
     <body>
         <%
+            if(session.getAttribute("usuario") == null ) {
+                response.sendRedirect("tela_cadastrar_cliente.jsp");
+            } else {
+                Cliente cliente = (Cliente) session.getAttribute("usuario");
+                
+                if (cliente.getNivel_acesso() != 2) {
+                    response.sendRedirect("tela_cadastrar_cliente.jsp");
+                }
+            }
+            
             Resultado resultado = (Resultado) session.getAttribute("resultado");
         %>
         

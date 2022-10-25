@@ -12,4 +12,5 @@ package com.mycompany.keyboard.model.strategy;
 public class Messages {
     
     public static String campoObrigatorio (String nomeCampo) { return "O campo "+nomeCampo+" é obrigatório"; };
+    public static String usuarioInvalido () { return "Usuário ou Senha Inválidos!"; };
 }

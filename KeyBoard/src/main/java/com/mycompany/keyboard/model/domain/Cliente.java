@@ -21,18 +21,21 @@ public class Cliente extends EntidadeDominio {
     private String email;
     private int rank;
     private String senha;
+    private String confirme_senha;
     private Date dtNascimento;
     private String cpf;
     private boolean ativo;
     private List<Endereco> enderecos;
     private List<CartaoDeCredito> cartoesDeCredito;
     private List<CupomDeTroca> cuponsDeTroca;
+    private List<CupomPromocional> cuponsPromocionais;
     private Telefone telefone;
+    private int nivel_acesso;
 
     public Cliente(String nome, Genero genero, String email, int rank, String senha, Date dtNascimento, 
             String cpf, boolean ativo, List<Endereco> enderecos, List<CartaoDeCredito> cartoesDeCredito, 
             Telefone telefone, int id, Date dt_cadastro,
-            List<CupomDeTroca> cuponsDeTroca) {
+            List<CupomDeTroca> cuponsDeTroca, int nivel_acesso, List<CupomPromocional> cuponsPromocionais) {
         super(id, dt_cadastro);
         this.nome = nome;
         this.genero = genero;
@@ -46,6 +49,8 @@ public class Cliente extends EntidadeDominio {
         this.cartoesDeCredito = cartoesDeCredito;
         this.telefone = telefone;
         this.cuponsDeTroca = cuponsDeTroca;
+        this.nivel_acesso = nivel_acesso;
+        this.cuponsPromocionais = cuponsPromocionais;
     }
 
     public Cliente() {
@@ -55,6 +60,7 @@ public class Cliente extends EntidadeDominio {
         this.email = "";
         this.rank = 0;
         this.senha = "";
+        this.confirme_senha = "";
         this.dtNascimento = new Date();
         this.cpf = "";
         this.ativo = false;
@@ -62,6 +68,8 @@ public class Cliente extends EntidadeDominio {
         this.cartoesDeCredito = new ArrayList();
         this.telefone = new Telefone();
         this.cuponsDeTroca = new ArrayList();
+        this.nivel_acesso = 1;
+        this.cuponsPromocionais = new ArrayList();
     }
 
     public String getNome() {
@@ -159,4 +167,29 @@ public class Cliente extends EntidadeDominio {
     public void setCuponsDeTroca(List<CupomDeTroca> cuponsDeTroca) {
         this.cuponsDeTroca = cuponsDeTroca;
     }    
+
+    public int getNivel_acesso() {
+        return nivel_acesso;
+    }
+
+    public void setNivel_acesso(int nivel_acesso) {
+        this.nivel_acesso = nivel_acesso;
+    }
+
+    public String getConfirme_senha() {
+        return confirme_senha;
+    }
+
+    public void setConfirme_senha(String confirme_senha) {
+        this.confirme_senha = confirme_senha;
+    }
+
+    public List<CupomPromocional> getCuponsPromocionais() {
+        return cuponsPromocionais;
+    }
+
+    public void setCuponsPromocionais(List<CupomPromocional> cuponsPromocionais) {
+        this.cuponsPromocionais = cuponsPromocionais;
+    }
+         
 }

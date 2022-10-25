@@ -24,5 +24,5 @@ public interface IFacade {
 
     public Resultado visualizar(EntidadeDominio entidade);
 
-    public Resultado acessar(EntidadeDominio entidade);
+    public Resultado logar(EntidadeDominio entidade);
 }

@@ -12,6 +12,7 @@ import com.mycompany.keyboard.model.domain.Teclado;
 import com.mycompany.keyboard.model.domain.Troca;
 import com.mycompany.keyboard.model.domain.enums.Estatus;
 import com.mycompany.keyboard.util.ConnectionFactory;
+import com.mycompany.keyboard.util.ParameterParser;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,8 +40,8 @@ public class TrocaDAO extends AbstractDAO{
     public void salvar(EntidadeDominio entidade) {
         Troca troca = (Troca) entidade;
 
-        String sqlTroca = "INSERT INTO TROCA (tro_id, tro_stt_id, tro_ped_id, tro_cli_id)"
-                + " VALUES(tro_id, ?, ?, ?)";
+        String sqlTroca = "INSERT INTO TROCA (tro_id, tro_stt_id, tro_ped_id, tro_cli_id, tro_dt)"
+                + " VALUES(tro_id, ?, ?, ?, now())";
         
         String sqlItensTroca = "INSERT INTO ITENS_TROCA (itt_id, itt_tro_id, itt_tec_id, itt_quantidade)"
                 + " VALUES(itt_id, ?, ?, ?)";
@@ -171,6 +172,7 @@ public class TrocaDAO extends AbstractDAO{
                 troca.setEstatus(Estatus.pegaEstatusPorValor(UtilsDAO.consultaEstatus(rs.getInt("tro_stt_id"), conn)));
                 troca.setPedidoOrigem((Pedido)pedidoDAO.consultar((rs.getInt("tro_ped_id"))));
                 troca.getCliente().setId(rs.getInt("tro_cli_id"));
+                troca.setDt_cadastro(ParameterParser.sqlDateToUtilDate(rs.getDate("tro_dt")));
                 
                 stmt = conn.prepareStatement(sqlItensTroca);
                 stmt.setInt(1, troca.getId());

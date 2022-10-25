@@ -51,6 +51,16 @@
     </head>
     <body>
         <%
+            if(session.getAttribute("usuario") == null ) {
+                response.sendRedirect("tela_cadastrar_cliente.jsp");
+            } else {
+                Cliente cliente = (Cliente) session.getAttribute("usuario");
+                
+                if (cliente.getNivel_acesso() != 2) {
+                    response.sendRedirect("tela_cadastrar_cliente.jsp");
+                }
+            }
+            
             Resultado resultado = (Resultado) session.getAttribute("resultado");
         %>
         
@@ -115,7 +125,7 @@
                                 
                                 sbProdutos.append(
                                 "<div class='produto_pedido'>"
-                                    +"<img class='img_produto_pedido' src='img/teclado.png'>"
+                                    +"<img class='img_produto_pedido' src='img/teclado"+item.getTeclado().getId()+".png'>"
                                     +"<span class='descricao_produto_pedido'> "+Masks.buildDescricaoTeclado(item.getTeclado())+"</span>"
                                     +"<div class='qtd_produto_pedido'>"
                                         +"<center>"
@@ -195,7 +205,7 @@
 
                                 sbItensTroca.append(
                                 "<div class='produto_pedido'>"
-                                    +"<img class='img_produto_pedido' src='img/teclado.png'>"
+                                    +"<img class='img_produto_pedido' src='img/teclado"+item.getTeclado().getId()+".png'>"
                                     +"<span class='descricao_produto_pedido'> "+Masks.buildDescricaoTeclado(item.getTeclado())+"</span>"
                                     +"<div class='qtd_produto_pedido'>"
                                         +"<center>"
@@ -210,7 +220,7 @@
                                 sbProdutosTroca.append(
                                 "<div class='produto_pedido'>"
                                         +"<input type='checkbox' name='item_troca' value='T"+item.getTeclado().getId()+"'>"
-                                        +"<img class='img_produto_pedido' src='img/teclado.png'>"
+                                        +"<img class='img_produto_pedido' src='img/teclado"+item.getTeclado().getId()+".png'>"
                                         +"<span class='descricao_produto_pedido'>"+Masks.buildDescricaoTeclado(item.getTeclado())+"</span>"
                                         +"<div class='qtd_produto_pedido'>"
                                             +"<center>"

@@ -8,6 +8,7 @@ package com.mycompany.keyboard.model.dao;
 import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.CupomDeTroca;
+import com.mycompany.keyboard.model.domain.CupomPromocional;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Telefone;
@@ -38,8 +39,8 @@ public class ClienteDAO extends AbstractDAO {
         Cliente cliente = (Cliente) entidade;
 
         String sql = "INSERT INTO CLIENTES (cli_id, cli_dt_cadastro, cli_nome, cli_genero,"
-                + " cli_email, cli_senha, cli_rank, cli_dt_nascimento, cli_cpf, cli_ativo, cli_tel_id)"
-                + " VALUES(cli_id, now(), ?,?,?,?,?,?,?,?,?)";
+                + " cli_email, cli_senha, cli_rank, cli_dt_nascimento, cli_cpf, cli_ativo, cli_tel_id, cli_nva_id)"
+                + " VALUES(cli_id, now(), ?,?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -61,6 +62,7 @@ public class ClienteDAO extends AbstractDAO {
             stmt.setString(7, cliente.getCpf());
             stmt.setBoolean(8, cliente.isAtivo());
             stmt.setInt(9, cliente.getTelefone().getId());
+            stmt.setInt(10, cliente.getNivel_acesso());
 
             stmt.executeUpdate();
 
@@ -232,6 +234,8 @@ public class ClienteDAO extends AbstractDAO {
                 cliente.setEnderecos(enderecoDAO.consultar(cliente));
                 cliente.setCartoesDeCredito(cartaoDAO.consultar(cliente));
                 cliente.setCuponsDeTroca(getCupons(rs.getInt("cli_id")));
+                cliente.setNivel_acesso(rs.getInt("cli_nva_id"));
+                cliente.setCuponsPromocionais(getCuponsPromocionais(rs.getInt("cli_id")));
                 
                 clientes.add(cliente);
             }
@@ -282,6 +286,9 @@ public class ClienteDAO extends AbstractDAO {
                 cliente.setEnderecos(enderecoDAO.consultar(cliente));
                 cliente.setCartoesDeCredito(cartaoDAO.consultar(cliente));
                 cliente.setCuponsDeTroca(getCupons(id));
+                cliente.setNivel_acesso(rs.getInt("cli_nva_id"));
+                cliente.setCuponsPromocionais(getCuponsPromocionais(id));
+                
             }
             
             return cliente;
@@ -307,6 +314,30 @@ public class ClienteDAO extends AbstractDAO {
             
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, cpf);
+            rs = stmt.executeQuery();
+                 
+            return rs.next();
+          
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar fornecedor no banco de dados \nErro:" + ex.getMessage());
+        }finally{
+            ConnectionFactory.closeConnection(conn, stmt, rs);
+        }
+        return false;
+    }
+    
+    public boolean existeEmail(String email) {
+        
+        String sql = "SELECT * FROM CLIENTES WHERE cli_email = ?;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try{
+            this.conn = ConnectionFactory.getConnection();
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
             rs = stmt.executeQuery();
                  
             return rs.next();
@@ -355,5 +386,91 @@ public class ClienteDAO extends AbstractDAO {
         return null;
     }
     
+    public List<CupomPromocional> getCuponsPromocionais(int cliente_id) {
+        
+        String sql = "SELECT * FROM CUPOM_PROMOCIONAL WHERE cup_cli_id = ?;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try{
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, cliente_id);
+            rs = stmt.executeQuery();
+            
+            List<CupomPromocional> lista_de_cupons = new ArrayList();
+            CupomPromocional cupom_promocional;
+            
+            while(rs.next()){
+               
+                cupom_promocional = new CupomPromocional();
+                
+                cupom_promocional.setId(rs.getInt("cup_id"));
+                cupom_promocional.setPorcentagem_desconto(rs.getInt("cup_porcentagem_desconto"));
+                cupom_promocional.setDt_validade(rs.getDate("cup_dt_validade"));
+                cupom_promocional.setAtivo(rs.getBoolean("cup_ativo"));
 
+                lista_de_cupons.add(cupom_promocional);
+            }
+            
+            return lista_de_cupons;
+          
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar fornecedor no banco de dados \nErro:" + ex.getMessage());
+        }
+        
+        return null;
+    }
+    
+    
+    public Cliente logar (EntidadeDominio entidade) {  
+        
+        Cliente cliente = (Cliente) entidade;
+        
+        String sql = "SELECT * FROM CLIENTES WHERE cli_email=? AND cli_senha=?;";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try{
+            
+            this.conn = ConnectionFactory.getConnection();
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, cliente.getEmail());
+            stmt.setString(2, cliente.getSenha());
+                   
+            rs = stmt.executeQuery();
+           
+            enderecoDAO = new EnderecoDAO(conn);
+            cartaoDAO = new CartaoDAO(conn);
+            telefoneDAO = new TelefoneDAO(conn);
+            
+            if (rs.next()){                
+                cliente.setId(rs.getInt("cli_id"));
+                cliente.setDt_cadastro(rs.getDate("cli_dt_cadastro"));
+                cliente.setNome(rs.getString("cli_nome"));
+                cliente.setGenero(Genero.valueOf(rs.getString("cli_genero")));
+                cliente.setEmail(rs.getString("cli_email"));
+                cliente.setRank(rs.getInt("cli_rank"));
+                cliente.setDtNascimento(rs.getDate("cli_dt_nascimento"));
+                cliente.setCpf(rs.getString("cli_cpf"));
+                cliente.setAtivo(rs.getBoolean("cli_ativo"));                
+                cliente.setTelefone((Telefone)telefoneDAO.consultar(rs.getInt("cli_tel_id")));
+                cliente.setEnderecos(enderecoDAO.consultar(cliente));
+                cliente.setCartoesDeCredito(cartaoDAO.consultar(cliente));
+                cliente.setCuponsDeTroca(getCupons(cliente.getId()));
+                cliente.setNivel_acesso(rs.getInt("cli_nva_id"));
+                
+                return cliente;
+            } 
+            
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar o login no banco de dados \nErro:" + ex.getMessage());
+        }finally{
+            ConnectionFactory.closeConnection(conn, stmt, rs);
+        }
+        return null;        
+    }
 }

@@ -9,10 +9,12 @@ import com.mycompany.keyboard.model.domain.Carrinho;
 import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.CupomDeTroca;
+import com.mycompany.keyboard.model.domain.CupomPromocional;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.model.domain.enums.Estatus;
+import com.mycompany.keyboard.model.strategy.FunctionsUtilsPagamento;
 import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
@@ -35,38 +37,46 @@ public class PedidoVH implements IViewHelper {
         String operacao = request.getParameter("operacao");
 
         if (operacao.equals("FINALIZAR")) {
-
             pedido.setCliente((Cliente) request.getSession().getAttribute("cliente_info"));
             pedido.setItens(((Carrinho) request.getSession().getAttribute("cliente_carrinho")).getItens());
             pedido.getEndereco().setId(ParameterParser.toInt(request.getParameter("endereco_entrega")));
-            pedido.setValor_total(ParameterParser.toDouble(request.getParameter("valor_total")));
+            pedido.setValor_total(FunctionsUtilsPagamento.calcularValorTotal((pedido.getItens())));
             pedido.setEstatus(Estatus.APROVADA);
             request.getSession().setAttribute("pedido", pedido);
 
         }
         
         if (operacao.equals("CONSULTAR")) {
-            if (request.getParameter("cliente_id") != null ) 
+            if (request.getParameter("cliente_id") != null ) {
                 pedido.getCliente().setId(ParameterParser.toInt(request.getParameter("cliente_id")));
-            else
+            } else {
                 pedido.getCliente().setId(0);
+            }    
         }
         
         if (operacao.equals("PAGAR")) {
             pedido = (Pedido) request.getSession().getAttribute("pedido");
 
-            if(request.getParameterValues("cartao").length > 1) {
-                getCartoesUsados(request, pedido);
+            if(request.getParameterValues("cartao") != null) {
+                if (request.getParameterValues("cartao").length > 0) getCartoesUsados(request, pedido);
             }
-
-            if(request.getParameterValues("cupom").length > 0) {
-                getCuponsUsados(request, pedido);
-            }            
+            
+            if(request.getParameterValues("cupom") != null) {
+                if(request.getParameterValues("cupom").length > 0) getCuponsUsados(request, pedido);
+            }
+                                
         }
         
         if (operacao.equals("ALTERAR")) {
             pedido.setId(ParameterParser.toInt(request.getParameter("pedido_id")));
             pedido.setEstatus(Estatus.pegaEstatusPorDescricao(request.getParameter("estatus")));              
+        }
+        
+        if (operacao.equals("APLICAR_CUPOM")) {            
+            pedido = (Pedido) request.getSession().getAttribute("pedido");
+            int id_cupom_promocional = ParameterParser.toInt(request.getParameter("cupom_promocional"));                         
+            pedido.setValor_total_com_desconto(FunctionsUtilsPagamento.calcularValorTotalComDesconto(pedido.getValor_total(), getCupomPromocional(request, id_cupom_promocional)));       
+            request.getSession().setAttribute("pedido", pedido);
         }
 
         return pedido;
@@ -81,7 +91,7 @@ public class PedidoVH implements IViewHelper {
         ClienteInSession.Atualizar(request);
         ClienteInSession.getAllItensCar(request);
 
-        if (operacao.equals("FINALIZAR")) {
+        if (operacao.equals("FINALIZAR") || operacao.equals("APLICAR_CUPOM")) {
             request.getRequestDispatcher("tela_forma_pagamento.jsp").forward(request, response);
                
         } else if (operacao.equals("PAGAR")) {
@@ -117,7 +127,8 @@ public class PedidoVH implements IViewHelper {
             valor = ParameterParser.toDouble(valoresAndCartoes[i]);
             cartao = getCartao(request, ParameterParser.toInt(valoresAndCartoes[i+1]));
             
-            pedido.getPagamento().add(new Pagamento(valor, cartao));    
+            if(valor != 0 && cartao != null) pedido.getPagamento().add(new Pagamento(valor, cartao)); 
+               
         }
     }   
     
@@ -158,6 +169,18 @@ public class PedidoVH implements IViewHelper {
             }
         }
 
+        return null;
+    }
+    
+     public CupomPromocional getCupomPromocional (HttpServletRequest request, int idCupom) {
+        Cliente cliente = (Cliente) request.getSession().getAttribute("cliente_info");
+
+        for (CupomPromocional cupom : cliente.getCuponsPromocionais()) {
+            if (cupom.getId() == idCupom) {
+                return cupom;
+            }
+        }
+        
         return null;
     }
 }

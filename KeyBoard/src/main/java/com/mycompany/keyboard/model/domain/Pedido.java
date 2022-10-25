@@ -22,6 +22,7 @@ public class Pedido extends EntidadeDominio {
     private double valor_total;
     private Estatus estatus;
     private List<Pagamento> pagamento;
+    private double valor_total_com_desconto;
 
     public Pedido(Cliente cliente, Endereco endereco, List<Item> itens, double valor_total, int id, Date dt_cadastro,
             Estatus estatus, List<Pagamento> pagamento) {
@@ -41,6 +42,7 @@ public class Pedido extends EntidadeDominio {
         this.valor_total = 0.0;
         this.estatus = Estatus.EM_PROCESSAMENTO;
         this.pagamento = new ArrayList();
+        this.valor_total_com_desconto = 0.0;
     }
 
     public Cliente getCliente() {
@@ -90,4 +92,12 @@ public class Pedido extends EntidadeDominio {
     public void setPagamento(List<Pagamento> pagamento) {
         this.pagamento = pagamento;
     }
+
+    public double getValor_total_com_desconto() {
+        return valor_total_com_desconto;
+    }
+
+    public void setValor_total_com_desconto(double valor_total_com_desconto) {
+        this.valor_total_com_desconto = valor_total_com_desconto;
+    }        
 }

@@ -15,9 +15,7 @@ import java.sql.SQLException;
  * @author Tiago
  */
 public class UtilsDAO {
-    
-    
-    
+
     public static int consultarIdStatusByCod(int cod, Connection conn) {                
         String sql = "SELECT * FROM ESTATUS WHERE stt_codigo = ?";     
         PreparedStatement stmt = null;

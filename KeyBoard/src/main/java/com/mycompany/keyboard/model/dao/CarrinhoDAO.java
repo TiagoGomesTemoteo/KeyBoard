@@ -61,6 +61,7 @@ public class CarrinhoDAO extends AbstractDAO{
                         stmt = conn.prepareStatement(sqlAddExists);
                         item.setNewInTheCar(false);
                         
+                        /*Lógica para remover itens do carrinho quando quantidade for 0*/
                         if(itemPersistido.getQuantidade() == 0 ||
                           (itemPersistido.getQuantidade() + item.getQuantidade() == 0)){
                             Carrinho carrinho_deletar = new Carrinho();
@@ -71,12 +72,21 @@ public class CarrinhoDAO extends AbstractDAO{
                             
                             deletar(carrinho_deletar);
                             
-                        }else {
+                            atualizarQuantidadesProduto(item);
+                            
+                            
+                        }else if (item.getQuantidade() <= itemPersistido.getTeclado().getQtd_disponivel()){
+                            
+                            System.out.println("Disponível: " + itemPersistido.getTeclado().getQtd_disponivel());  
+                            System.out.println("Qtd add: " + item.getQuantidade());
+                            
                             stmt.setInt(1, item.getQuantidade() + itemPersistido.getQuantidade());
                             stmt.setInt(2, carrinho.getCliente().getId());
                             stmt.setInt(3, item.getTeclado().getId());
                             
-                            stmt.executeUpdate();
+                            stmt.executeUpdate();                            
+                            
+                            atualizarQuantidadesProduto(item);
                         }
 
                     } 
@@ -91,6 +101,9 @@ public class CarrinhoDAO extends AbstractDAO{
                     stmt.setInt(3, carrinho.getCliente().getId());
 
                     stmt.executeUpdate();
+                    
+                    atualizarQuantidadesProduto(item);                  
+                    
                 }
             }        
             
@@ -133,7 +146,17 @@ public class CarrinhoDAO extends AbstractDAO{
                 this.ctrlTransacao = false;
             }
             
-            this.conn.setAutoCommit(false);
+            this.conn.setAutoCommit(false);         
+            
+            
+            /*Ao deletar todos os itens de um produto do carrinho a quantidade disponível e bloqueada é atualizada*/
+            Carrinho car = (Carrinho) new CarrinhoDAO(conn).consultar(carrinho.getCliente().getId());            
+            for (Item item_persistido : car.getItens()) {
+                if (item_persistido.getTeclado().getId() == teclado.getId()) {     
+                    item_persistido.setQuantidade(0 - item_persistido.getQuantidade());
+                    atualizarQuantidadesProduto(item_persistido);
+                }
+            }
             
             stmt = conn.prepareStatement(sql);
             
@@ -142,10 +165,8 @@ public class CarrinhoDAO extends AbstractDAO{
             
             stmt.executeUpdate();
             
-            if (ctrlTransacao) {
-                conn.commit();
-            }
-
+            if (ctrlTransacao) conn.commit();
+            
         } catch (Exception ex) {
             try {
                 conn.rollback();
@@ -240,6 +261,7 @@ public class CarrinhoDAO extends AbstractDAO{
                         
             stmt.executeUpdate();
             
+            
             if (ctrlTransacao) {
                 conn.commit();
             }
@@ -254,9 +276,21 @@ public class CarrinhoDAO extends AbstractDAO{
             System.out.println("Não foi possível remover os produtos do carrinho.\nErro: " + ex.getMessage());
 
         } finally {
-            if (ctrlTransacao) {
+                if (ctrlTransacao) {
                 ConnectionFactory.closeConnection(conn, stmt);
             }
-        }
+        }                  
     }
+    
+    public void atualizarQuantidadesProduto (Item item) {
+            
+        /*Consultando o teclado para atualizar quantidade disponivel*/
+       Teclado teclado = (Teclado) new TecladoDAO(conn).consultar(item.getTeclado().getId());
+
+       /*Atualizando quantidade disponivel e bloqueada quado o usuário remover ou adicionar um item no carrinho*/
+       teclado.setQtd_bloqueada(teclado.getQtd_bloqueada() + item.getQuantidade()); // (10) + (-2) = 8
+       teclado.setQtd_disponivel(teclado.getQtd_disponivel() - item.getQuantidade()); // (8) - (-2) = 10                                       
+
+       new TecladoDAO(conn).atualizarQtdDisponivelAndQtdBloqueada(teclado);
+        }
 }

@@ -4,6 +4,7 @@
     Author     : Tiago
 --%>
 
+<%@page import="com.mycompany.keyboard.model.domain.Pedido"%>
 <%@page import="com.mycompany.keyboard.model.strategy.FunctionsUtilsPagamento"%>
 <%@page import="com.mycompany.keyboard.util.Masks"%>
 <%@page import="com.mycompany.keyboard.model.domain.CupomDeTroca"%>
@@ -21,14 +22,20 @@
         <%
             Cliente cliente = null;
             Carrinho carrinho = null;
+            Pedido pedido = null;
             
-            if (session.getAttribute("cliente_info") != null){ 
+            if (session.getAttribute("cliente_info") != null) { 
                 cliente = (Cliente) session.getAttribute("cliente_info");
             }
             
-            if (session.getAttribute("cliente_carrinho") != null){ 
+            if (session.getAttribute("cliente_carrinho") != null) { 
                 carrinho = (Carrinho) session.getAttribute("cliente_carrinho");
             }
+            
+            if (session.getAttribute("pedido") != null) {
+                pedido = (Pedido) session.getAttribute("pedido");
+            }
+            
         %>
             
         <%@ include file="links_menu.jsp" %>
@@ -124,20 +131,41 @@
                 </div>
                 <p> <input class="button_green btn_pagar" type="submit" name="operacao" value="PAGAR"> 
                 <div class="box_total_pagar">
-                    <center>
-                        <br><span class="text_box_total_pagar">TOTAL DA SUA COMPRA</span>
+                    
+<!--                    <br><span class="text_box_total_pagar">TOTAL DA SUA COMPRA</span>
                         <p>
                         <span class="valor_box_total_pagar">
-                            <%
-                                if (carrinho != null && carrinho.getItens() != null && carrinho.getItens().size() != 0){
-                                    out.print(Masks.buildDinheiro(FunctionsUtilsPagamento.calcularValorTotal(carrinho.getItens())));
-                                }
-                            %>
-                        </span>
-                    </center>    
+                        </span>-->
+                Valor total dos pedidos: 
+                <%
+                    if (pedido != null){
+                        out.print(Masks.buildDinheiro(pedido.getValor_total()));
+                    }
+                %>
+                <br>Desconto promocional: 
+                <%
+                    if (pedido != null && pedido.getValor_total_com_desconto() > 0){
+                        out.print(Masks.buildDinheiro(pedido.getValor_total() - pedido.getValor_total_com_desconto()));
+                    }
+                %>
+
+                <br> Total:
+                <%
+                    if (pedido != null){
+                        if (pedido.getValor_total_com_desconto() > 0) { 
+                            out.print(Masks.buildDinheiro(pedido.getValor_total_com_desconto()));
+                        } else {
+                            out.print(Masks.buildDinheiro(pedido.getValor_total()));
+                        }
+                    }
+                %>
+                                              
                 </div>
-                <a href="carrinho?operacao=CONSULTAR"><div class="button_white btn_voltar">VOLTAR</div></a>
+                <div class="button_white btn_voltar"><a href="carrinho?operacao=CONSULTAR">VOLTAR</a></div>
+                
+                <br><input type="text" name="cupom_promocional">  <input type="submit" name="operacao" value="APLICAR_CUPOM">
             </form>
+            
         </div>    
     </body>
 </html>

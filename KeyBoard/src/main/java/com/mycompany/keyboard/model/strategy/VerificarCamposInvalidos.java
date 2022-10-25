@@ -21,13 +21,12 @@ public class VerificarCamposInvalidos implements IStrategy {
     String camposInvalidos = null;
 
     @Override
-    public String processar(EntidadeDominio entidade, String string) {
-        if (entidade instanceof Cliente) {
-            if (!((Cliente) entidade).getCpf().equals("")) {
-                camposInvalidos = validarCPF(((Cliente) entidade).getCpf());
-                
-                if(camposInvalidos == null) camposInvalidos = validarTelefone(((Cliente) entidade).getTelefone());
-            }
+    public String processar(EntidadeDominio entidade, String operacao) {
+        if (entidade instanceof Cliente) {           
+            if (!((Cliente) entidade).getCpf().equals(""))camposInvalidos = validarCPF(((Cliente) entidade).getCpf());                            
+            if(camposInvalidos == null) camposInvalidos = validarTelefone(((Cliente) entidade).getTelefone());
+            if(camposInvalidos == null) camposInvalidos = validarSenha((Cliente) entidade);
+            if(camposInvalidos == null) camposInvalidos = validarEmail((Cliente) entidade);
         }
 
         return camposInvalidos;
@@ -49,9 +48,7 @@ public class VerificarCamposInvalidos implements IStrategy {
             return "CPF já cadastrado";
 
         }
-        
-        
-        
+  
         return null;
     }
 
@@ -96,4 +93,15 @@ public class VerificarCamposInvalidos implements IStrategy {
         return null;
     }
 
+    public String validarSenha (Cliente cliente) {
+        if (!cliente.getSenha().equals(cliente.getConfirme_senha())) camposInvalidos = "A confirmação da senha não confere!";
+        
+        return camposInvalidos;
+    }
+    
+    public String validarEmail (Cliente cliente) {
+        if (clienteDAO.existeEmail(cliente.getEmail())) camposInvalidos = "E-mail já cadastrado!";
+                   
+        return camposInvalidos;
+    }
 }

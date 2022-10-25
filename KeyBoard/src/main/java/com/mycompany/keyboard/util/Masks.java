@@ -69,21 +69,23 @@ public class Masks {
                + endereco.getCep() + " - " + endereco.getCidade();
     }
     
-    public static String buildDescricaoStatus (Estatus estatus){        
-        switch (estatus.getEstatus()) {
-            case 7:  return "Em Processamento";
-            case 8:  return "Pagamento Realizado";
-            case 9:  return "Em Transporte";
-            case 10: return "Entrega Realizada";
-            case 11: return "Finalizado";
-            case 12: return "Aprovada";
-            case 13: return "Reprovada";
-            case 14: return "Entregue";
-            case 15: return "Em Troca";
-            case 16: return "Troca Autorizada";
-            case 17: return "Trocado";
-        }
+    public static String buildDescricaoStatus (Estatus estatus){  
         
+        if (estatus != null) {
+            switch (estatus.getEstatus()) {
+                case 7:  return "Em Processamento";
+                case 8:  return "Pagamento Realizado";
+                case 9:  return "Em Transporte";
+                case 10: return "Entrega Realizada";
+                case 11: return "Finalizado";
+                case 12: return "Aprovada";
+                case 13: return "Reprovada";
+                case 14: return "Entregue";
+                case 15: return "Em Troca";
+                case 16: return "Troca Autorizada";
+                case 17: return "Trocado";
+            }
+        }
         return null;
     }
 }

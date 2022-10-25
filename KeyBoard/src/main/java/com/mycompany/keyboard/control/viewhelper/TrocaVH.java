@@ -25,11 +25,13 @@ public class TrocaVH implements IViewHelper {
         Troca troca = new Troca();
 
         String operacao = request.getParameter("operacao");
+        
+        Cliente cliente_logado = ClienteInSession.getClienteLogado(request);
 
         if (operacao.equals("SOLICITAR_TROCA")) {
             troca.getPedidoOrigem().setId(ParameterParser.toInt(request.getParameter("pedido_origem_id")));
             getItensTroca(request, troca);
-            troca.getCliente().setId(1);
+            troca.getCliente().setId(cliente_logado.getId());
             
         } else if (operacao.equals("CONSULTAR")) {
             troca.getCliente().setId(ParameterParser.toInt(request.getParameter("cliente_id")));

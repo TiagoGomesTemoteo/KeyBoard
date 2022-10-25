@@ -68,6 +68,18 @@ input, select {
     padding: 2px;
 }
 
+.button_grey {
+    height: 38px;
+    background: #10CDB9;
+    border: 1px solid #10CDB9;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
+    color: #FFFFFF;
+    padding: 2px;
+}
+
 .message {
 	padding: 19px 60px;
 	position: fixed;

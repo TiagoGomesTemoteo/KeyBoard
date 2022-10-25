@@ -51,6 +51,16 @@
     </head>
     <body>
         <%
+            
+            Cliente cliente_logado = null;
+            
+            if(session.getAttribute("usuario") == null) {
+                response.sendRedirect("tela_cadastrar_cliente.jsp");
+            
+            } else {
+                cliente_logado = (Cliente) session.getAttribute("usuario");
+            }
+            
             Resultado resultado = (Resultado) session.getAttribute("resultado");
         %>
         
@@ -70,7 +80,7 @@
             </select>
         </div>
         
-        <a href="troca?operacao=CONSULTAR&cliente_id=1">Pedidos de Troca</a>
+        <a href="troca?operacao=CONSULTAR&cliente_id=<%out.print(cliente_logado.getId());%>">Pedidos de Troca</a>
       
         <%
             if (resultado != null) {                
@@ -98,7 +108,7 @@
                                 
                                 sbProdutos.append(
                                 "<div class='produto_pedido'>"
-                                    +"<img class='img_produto_pedido' src='img/teclado.png'>"
+                                    +"<img class='img_produto_pedido' src='img/teclado"+item.getTeclado().getId()+".png'>"
                                     +"<span class='descricao_produto_pedido'> "+Masks.buildDescricaoTeclado(item.getTeclado())+"</span>"
                                     +"<div class='qtd_produto_pedido'>"
                                         +"<center>"
@@ -113,7 +123,7 @@
                                 sbProdutosTroca.append(
                                 "<div class='produto_troca'>"
                                         +"<input type='checkbox' name='item_troca' value='T"+item.getTeclado().getId()+"'>"
-                                        +"<img class='img_produto_pedido' src='img/teclado.png'>"
+                                        +"<img class='img_produto_pedido' src='img/teclado"+item.getTeclado().getId()+".png'>"
                                         +"<span class='descricao_produto_pedido'>"+Masks.buildDescricaoTeclado(item.getTeclado())+"</span>"
                                         +"<div class='qtd_produto_pedido'>"
                                             +"<center>"
@@ -201,7 +211,10 @@
                             sbPedidosTroca.setLength(0);
                             
                             if (troca.getEstatus().getEstatus() == 16) {
-                                sbOperacoesAdm = "<a href='troca?operacao=ALTERAR&troca_id="+troca.getId()+"&estatus="+Estatus.TROCADO+"'>Itens recebidos</a>";
+                                sbOperacoesAdm = "" 
+                                +"<div class='operacoes'>"
+                                    +"<a href='troca?operacao=ALTERAR&troca_id="+troca.getId()+"&estatus="+Estatus.TROCADO+"'>Itens recebidos</a>"
+                                +"</div>";   
                             }
                             
 
@@ -209,7 +222,7 @@
                                
                                 sbItensTroca.append(
                                 "<div class='produto_pedido'>"
-                                    +"<img class='img_produto_pedido' src='img/teclado.png'>"
+                                    +"<img class='img_produto_pedido' src='img/teclado"+item.getTeclado().getId()+".png'>"
                                     +"<span class='descricao_produto_pedido'> "+Masks.buildDescricaoTeclado(item.getTeclado())+"</span>"
                                     +"<div class='qtd_produto_pedido'>"
                                         +"<center>"
@@ -223,7 +236,7 @@
                             }
 
                             sbPedidosTroca.append(                                              
-                            "<div class='box_pedido'>"
+                            "<div class='box_pedido_trocar'>"
                                 +"<div class='dados_pedido'>"
                                     +"<div class='info_title_pedido'>"
                                         +"Número de pedido de Troca"
@@ -256,7 +269,9 @@
                                     +sbItensTroca.toString()
                                 +"</div>"
                                 + sbOperacoesAdm
+                                +"<div class='space'></div>"
                             +"</div>"
+                            +"<br>"
                             );
 
                             out.print(sbPedidosTroca.toString());

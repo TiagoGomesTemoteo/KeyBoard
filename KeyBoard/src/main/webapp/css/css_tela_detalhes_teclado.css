@@ -65,6 +65,29 @@ body {
     left: 704px;
 }
 
+
+.btn_comprar_detalhes_produto_sem_estoque {
+    position: absolute;
+    width: 225px;
+    height: 38px;
+    top: 250px;
+    left: 704px;
+    display: flex;
+    flex-direction: row;
+    size: 12px;
+    background: #D9D9D9;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    margin: 35px 0px 9px 9.5px;
+    box-sizing: border-box;
+    font-weight: bold;
+    color: #7A7A7A;
+    margin-top: 30px;    
+    align-items: center;
+    justify-content: center;
+    
+}
+
 .add_quantidade {
     position: absolute;
     top: 210px;

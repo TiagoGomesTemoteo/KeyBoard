@@ -8,6 +8,7 @@ package com.mycompany.keyboard.control.viewhelper;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
@@ -36,8 +37,9 @@ public class ClienteVH implements IViewHelper {
             cliente.setTelefone(ParameterParser.toPhone(request.getParameter("telefone")));
             cliente.setGenero(ParameterParser.getGenSelected(request.getParameter("genero")));
             cliente.setCpf(ParameterParser.toCpf(request.getParameter("cpf")));
-            cliente.setEmail(request.getParameter("email"));
-            cliente.setSenha(request.getParameter("senha") + request.getParameter("confirmar_senha"));
+            cliente.setEmail(request.getParameter("email").trim());
+            cliente.setSenha(request.getParameter("senha"));
+            cliente.setConfirme_senha(request.getParameter("confirmar_senha"));
             cliente.setEnderecos(Arrays.asList((Endereco) new EnderecoVH().getEntidade(request)));
             
             if(operacao.equals("ALTERAR")){
@@ -77,8 +79,12 @@ public class ClienteVH implements IViewHelper {
                 
                 request.setAttribute("messageError", resultado);
                 request.getRequestDispatcher("tela_cadastrar_cliente.jsp").forward(request, response);
+            
+            } else {
+                request.getSession().setAttribute("usuario", resultado.getEntidades().get(0));
+                request.getSession().setAttribute("teclados", ClienteInSession.getAllTeclados(request));//Será redirecionado para tela de teclados por isso é preciso setar todos os teclados na sessão
+                request.getRequestDispatcher("lista_teclado.jsp").forward(request, response);    
             }
-        response.sendRedirect("/KeyBoard/cliente?operacao=CONSULTAR");
             
         }else if(resultado.getMsg() == null && operacao.equals("VISUALIZAR")) {
             request.setAttribute("cliente", resultado.getEntidades().get(0));

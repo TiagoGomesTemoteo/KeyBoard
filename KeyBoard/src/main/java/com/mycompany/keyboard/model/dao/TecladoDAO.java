@@ -6,6 +6,7 @@
 package com.mycompany.keyboard.model.dao;
 
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.model.domain.Teclado;
 import com.mycompany.keyboard.util.ConnectionFactory;
 import java.sql.Connection;
@@ -99,14 +100,20 @@ public class TecladoDAO extends AbstractDAO{
     public EntidadeDominio consultar(int id) {
         Teclado teclado = new Teclado();
         
-        String sql = "SELECT * FROM TECLADOS WHERE tec_id =? ;";
+        String sql = "SELECT * FROM TECLADOS WHERE tec_id =?;";
         
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try{
             
-            this.conn = ConnectionFactory.getConnection();
+            if (conn == null || conn.isClosed()) {
+                this.conn = ConnectionFactory.getConnection();
+                this.ctrlTransacao = true;
+
+            } else {
+                this.ctrlTransacao = false;
+            }
             
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
@@ -140,9 +147,50 @@ public class TecladoDAO extends AbstractDAO{
         }catch(SQLException ex){
             System.out.println("Não foi possível consultar o teclado no banco de dados \nErro:" + ex.getMessage());
         }finally{
-            ConnectionFactory.closeConnection(conn, stmt, rs);
+            if (ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt, rs);
         }
         return null;
     }
     
+    public void atualizarQtdDisponivelAndQtdBloqueada(Teclado teclado){
+
+        String sql = "UPDATE TECLADOS SET est_qtd_disponivel = ?, est_qtd_bloqueada = ? WHERE tec_id = ?";
+        
+        PreparedStatement stmt = null;
+        
+        try{
+            
+            if (conn == null || conn.isClosed()) {
+                this.conn = ConnectionFactory.getConnection();
+                this.ctrlTransacao = true;
+
+            } else {
+                this.ctrlTransacao = false;
+            }
+            
+            conn.setAutoCommit(false);  
+            
+            stmt = conn.prepareStatement(sql);
+                        
+            stmt.setInt(1, teclado.getQtd_disponivel());
+            stmt.setInt(2, teclado.getQtd_bloqueada());
+            stmt.setInt(3, teclado.getId());
+            
+            stmt.executeUpdate();            
+
+            if (ctrlTransacao) conn.commit();
+            
+        }catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Error: "+ e1.getMessage());
+            }
+            
+            System.out.println("Não foi possível alterar a quantidade de teclados no banco de dados.\nErro: " + ex.getMessage());
+
+        } finally {
+           if (ctrlTransacao) ConnectionFactory.closeConnection(conn, stmt);
+        }
+    }
 }

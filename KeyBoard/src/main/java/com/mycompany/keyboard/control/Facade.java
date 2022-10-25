@@ -32,7 +32,7 @@ public class Facade implements IFacade {
         daos.put(Endereco.class.getName(), new EnderecoDAO());
         daos.put(Pedido.class.getName(), new PedidoDAO());
         daos.put(CartaoDeCredito.class.getName(), new CartaoDAO());
-        daos.put(Troca.class.getName(), new TrocaDAO());
+        daos.put(Troca.class.getName(), new TrocaDAO());        
         
         initRns();
     }
@@ -172,7 +172,7 @@ public class Facade implements IFacade {
 
     @Override
     public Resultado consultar(EntidadeDominio entidade) {
-       resultado = new Resultado();
+        resultado = new Resultado();
         String nmClass = entidade.getClass().getName();
            
         String msg = aplicarRegras(entidade, "CONSULTAR");
@@ -199,8 +199,26 @@ public class Facade implements IFacade {
     }
 
     @Override
-    public Resultado acessar(EntidadeDominio ed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Resultado logar(EntidadeDominio entidade) {
+        resultado = new Resultado();
+        String nmClass = entidade.getClass().getName();
+        
+        ClienteDAO dao = (ClienteDAO) daos.get(nmClass);
+        try{
+            Cliente cliente = dao.logar(entidade);
 
+            if (cliente == null) {
+               resultado.setMsg(Messages.usuarioInvalido());              
+            } else {
+                resultado.setEntidades(new ArrayList<EntidadeDominio>(1));
+                resultado.getEntidades().add(cliente);
+            }
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+            resultado.setMsg("Não foi possível logar o(a)" + nmClass);
+        }   
+             
+        return resultado;
+    }
 }

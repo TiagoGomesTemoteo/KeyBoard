@@ -124,6 +124,7 @@ body {
 /*TROCAR PRODUTO*/
 
 .box_pedido_trocar {
+    position: relative;
     width: 927px;
     margin-left: 62px;
     margin-top: 5px;
@@ -174,4 +175,27 @@ body {
     left: 730px;
     top: -12px;
     font-size: 16px;   
+}
+
+.operacoes {
+    position: absolute;
+    width: 150px;
+    height: 30px;
+    right: 10px;
+    background: #10CDB9;
+    border: 1px solid #10CDB9;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    bottom: 10px;        
+}
+
+.space {
+    width: 10px;
+    height: 40px;
 }

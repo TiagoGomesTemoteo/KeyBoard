@@ -23,6 +23,10 @@
     </head>
     <body>
         <% 
+            if(session.getAttribute("usuario") == null) {
+                response.sendRedirect("tela_cadastrar_cliente.jsp");
+            }
+            
             Cliente cliente = null;
             Carrinho carrinho = null;
             
@@ -110,7 +114,7 @@
                                     
                                     sbRegistro.append(
                                     "<div class='produtos_carrinho'>"
-                                        +"<img class='img_produto_carrinho' src='img/teclado.png'>"
+                                        +"<img class='img_produto_carrinho' src='img/teclado"+item.getTeclado().getId()+".png'>"
                                         +"<div class='descricao_produto'>"+Masks.buildDescricaoTeclado(item.getTeclado())+"</div>"
                                         +"<div class='qtd_produto'>"
                                             +"<center>"
@@ -130,7 +134,7 @@
                             }
                         }
                     %>
-
+                                            
             </div>    
             
             <div class="resumo_carrinho">

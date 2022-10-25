@@ -31,9 +31,19 @@
 
                 <%@ include file="form_cliente.jsp" %>
 
-                <p> <input class="senha" type="password" name="senha" placeholder="Crie sua senha*">
+                <p> <input class="senha" type="password" name="senha" placeholder="Crie sua senha*" value=
+                <%
+                    if (cliente != null)
+                        out.print("'" + cliente.getSenha() + "'");
+                %>
+                >
 
-                <p> <input class="senha" type="password" name="confirmar_senha" placeholder="Confirme a senha*">
+                <p> <input class="senha" type="password" name="confirmar_senha" placeholder="Confirme a senha*" value=
+                <%
+                    if (cliente != null)
+                        out.print("'" + cliente.getConfirme_senha()+ "'");
+                %>
+                >
 
                 <p> Endereço: <%@ include file="form_endereco.jsp" %>
 

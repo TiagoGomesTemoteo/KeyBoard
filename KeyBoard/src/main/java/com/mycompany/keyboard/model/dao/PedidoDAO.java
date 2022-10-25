@@ -17,6 +17,7 @@ import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.model.domain.Teclado;
 import com.mycompany.keyboard.model.domain.enums.Estatus;
 import com.mycompany.keyboard.util.ConnectionFactory;
+import com.mycompany.keyboard.util.ParameterParser;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,8 +45,8 @@ public class PedidoDAO extends AbstractDAO{
         
         Pedido pedido = (Pedido) entidade;
 
-        String sqlPedido = "INSERT INTO PEDIDOS (ped_id, ped_stt_id, ped_cli_id, ped_end_id, ped_valor_total)"
-                + " VALUES(ped_id, ?,?,?,?)";
+        String sqlPedido = "INSERT INTO PEDIDOS (ped_id, ped_stt_id, ped_cli_id, ped_end_id, ped_valor_total, ped_dt)"
+                + " VALUES(ped_id, ?,?,?,?, now())";
         
         String sqlPedidoProduto = "INSERT INTO PEDIDOS_PRODUTOS (pep_id, pep_ped_id, pep_tec_id, pep_quantidade)"
                 + " VALUES(pep_id, ?,?,?)";
@@ -92,7 +93,7 @@ public class PedidoDAO extends AbstractDAO{
                     stmt.setInt(4, pagamento.getForma_de_pagamento().getId());
                     stmt.setNull(5, 0);
                     
-                } else {
+                } else {                  
                     stmt.setInt(1, 2);
                     stmt.setInt(5, pagamento.getForma_de_pagamento().getId());
                     stmt.setNull(4, 0);
@@ -187,8 +188,7 @@ public class PedidoDAO extends AbstractDAO{
             } else {
                 this.ctrlTransacao = false;
             }           
-            
-            
+                        
             if (pedido.getCliente().getId() != 0){
                 stmt = conn.prepareStatement(sql);
                 stmt.setInt(1, pedido.getCliente().getId());
@@ -206,6 +206,7 @@ public class PedidoDAO extends AbstractDAO{
                 pedido.setCliente((Cliente)new ClienteDAO().consultar(rs.getInt("ped_cli_id")));
                 pedido.setEndereco((Endereco)new EnderecoDAO().consultar(rs.getInt("ped_end_id")));
                 pedido.setValor_total(rs.getDouble("ped_valor_total"));
+                pedido.setDt_cadastro(ParameterParser.sqlDateToUtilDate(rs.getDate("ped_dt")));
 
                 pedidos.add(pedido);
             }
@@ -233,8 +234,7 @@ public class PedidoDAO extends AbstractDAO{
                     
                     } else if (rs.getInt("pag_fpg_id") == 1) {
                         pedidoPagamento.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomDeTroca(rs.getInt("pag_cdt_id"))));
-                    }
-                      
+                    }                      
                 }
             }
             
@@ -282,6 +282,7 @@ public class PedidoDAO extends AbstractDAO{
                 pedido.setCliente((Cliente)new ClienteDAO().consultar(rs.getInt("ped_cli_id")));
                 pedido.setEndereco((Endereco)new EnderecoDAO().consultar(rs.getInt("ped_end_id")));
                 pedido.setValor_total(rs.getDouble("ped_valor_total"));
+                pedido.setDt_cadastro(ParameterParser.sqlDateToUtilDate(rs.getDate("ped_dt")));
                 
             }
                    

@@ -23,32 +23,34 @@
         <title>Detalhes do Teclado</title>
         <script>
             var numero;
+            var qtd_disp_teclado;
 
             function less(id) {
-              getValue(id);  
-              if (numero != 0) {
-                numero--;
-              }
-              setValue(numero, id);
+                getValue(id);  
+                if (numero != 0) {
+                    numero--;
+                }
+                setValue(numero, id);
             }
 
             function more(id) {
-              getValue(id);
-              numero++;
-              setValue(numero, id);
+                getValue(id);                      
+                if(numero < qtd_disp_teclado){
+                    numero++;    
+                    setValue(numero, id);
+                } 
+                
+                
             }
             
             function getValue(id){
-                numero = document.getElementById('qtd_add_carrinho' + id).value;
+                qtd_disp_teclado = parseInt(document.getElementById('qtd_disp_teclado' + id).value);        
+                numero = document.getElementById('qtd_add_carrinho' + id).value;               
             }
 
             function setValue(value, id) {
-              document.getElementById('qtd_add_carrinho' + id).value = value;
-            }
-
-            const a = document.querySelector("link_add_carrinho");
-            
-            a.href = a.href.toString()+document.getElementById();
+                document.getElementById('qtd_add_carrinho' + id).value = value;
+            }      
         </script>
     </head>
     <body>
@@ -62,36 +64,43 @@
       
         <%
             if (teclado != null) {
-            
-                    StringBuilder sbRegistro = new StringBuilder(0);
-                    int id = teclado.getId();
-                            
-                    sbRegistro.append(
-                    "<div class='box_detalhes_produto'>"
-                       +"<div class='title_detalhe_produto'>" + Masks.buildDescricaoTeclado(teclado) + "</div>"    
-                       +"<div>"
-                            +"<img class='imagem_detalhe_teclado' src='img/teclado.png'>"
-                        +"</div>"
-                        +"<div class='text_vendido_por_detalhes_produto'>"
-                            +"Vendido e entregue por KeyBoards | <span class='text_em_estoque'>Em estoque</span>"
-                            +"<p><span class='valor_produto_detalhes'>"+Masks.buildDinheiro(teclado.getValor_venda())+"</span>"
-                        +"</div>"
-                        + "<form action='carrinho' method='post'>"
-                            +"<div>"
-                                +"<input type='submit' name='operacao' value='ADICIONAR'  class='button_green btn_comprar_detalhes_produto'>"
-                            +"</div>" 
-                            +"<div class='add_quantidade'>"
-                                +"<button type='button' id='menos' onclick='less("+id+")'>-</button>"
-                                +"<input type='text' name='qtd_add_carrinho"+id+"' value='0' id='qtd_add_carrinho"+teclado.getId()+"' class='qtd_add_produto_detalhes'>"
-                                +"<button type='button' id='mais' onclick='more("+id+")'>+</button>"
-                                +"<input type='hidden' name='teclado_id' value='" + id + "'>"
-                            +"</div>"
-                        + "</form>" 
-                    +"</div>"
-                    );        
+                
+                StringBuilder sbButtonAdd = new StringBuilder(0);
+                StringBuilder sbRegistro = new StringBuilder(0);
+                int id = teclado.getId();
+                
+                 if (teclado.getQtd_disponivel() == 0) {
+                    sbButtonAdd.append("<div class='btn_comprar_detalhes_produto_sem_estoque'>SEM ESTOQUE</div>");
 
-                    out.print(sbRegistro.toString());
-                }                
+                } else {
+                    sbButtonAdd.append("<input type='submit' name='operacao' value='ADICIONAR'  class='button_green btn_comprar_detalhes_produto'>");
+                }
+
+                sbRegistro.append(
+                "<div class='box_detalhes_produto'>"
+                   +"<div class='title_detalhe_produto'>" + Masks.buildDescricaoTeclado(teclado) + "</div>"    
+                   +"<div>"
+                        +"<img class='imagem_detalhe_teclado' src='img/teclado"+teclado.getId()+".png'>"
+                    +"</div>"
+                    +"<div class='text_vendido_por_detalhes_produto'>"
+                        +"Vendido e entregue por KeyBoards | <span class='text_em_estoque'>Em estoque</span>"
+                        +"<p><span class='valor_produto_detalhes'>"+Masks.buildDinheiro(teclado.getValor_venda())+"</span>"
+                    +"</div>"
+                    +"<form action='carrinho' method='post'>" 
+                        +"<div class='add_quantidade'>"
+                            +"<button type='button' id='menos' onclick='less("+id+")'>-</button>"
+                            +"<input type='text' name='qtd_add_carrinho"+id+"' value='0' id='qtd_add_carrinho"+teclado.getId()+"' class='qtd_add_produto_detalhes'>"
+                            +"<button type='button' id='mais' onclick='more("+id+")'>+</button>"
+                            +"<input type='hidden' name='qtd_disp_teclado"+id+"' id='qtd_disp_teclado"+id+"' value='" + teclado.getQtd_disponivel() + "'>"
+                            +"<input type='hidden' name='teclado_id' value='" + id + "'>"
+                        +"</div>"
+                        +sbButtonAdd.toString()
+                    +"</form>" 
+                +"</div>"
+                );        
+
+                out.print(sbRegistro.toString());
+            }                
         %> 
         
         <%

@@ -5,6 +5,7 @@
  */
 package com.mycompany.keyboard.model.strategy;
 
+import com.mycompany.keyboard.model.domain.CupomPromocional;
 import com.mycompany.keyboard.model.domain.Item;
 import java.util.List;
 
@@ -23,5 +24,11 @@ public class FunctionsUtilsPagamento {
         }
         
         return valorTotal;
+    }
+    
+    public static Double calcularValorTotalComDesconto(Double total, CupomPromocional cupom_promocional){
+
+        return total - (total * cupom_promocional.getPorcentagem_desconto() / 100);
+    
     }
 }

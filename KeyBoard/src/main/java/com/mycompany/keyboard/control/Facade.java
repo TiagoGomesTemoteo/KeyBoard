@@ -49,6 +49,7 @@ public class Facade implements IFacade {
         List<IStrategy> rns_alterar_pedido = new ArrayList<>();
         List<IStrategy> rns_deletar_pedido = new ArrayList<>();
         List<IStrategy> rns_consultar_pedido = new ArrayList<>();
+        List<IStrategy> rns_finalizar_pedido = new ArrayList<>();
         
         List<IStrategy> rns_salvar_cliente = new ArrayList<>(); // Criando map das RG para salvar um cliente      
         List<IStrategy> rns_alterar_cliente = new ArrayList<>();
@@ -59,16 +60,21 @@ public class Facade implements IFacade {
         rns_salvar_cliente.add(new VerificarCamposInvalidos());
         
         rns_salvar_pedido.add(new CalcularValorTotalDoPedido());
+        rns_salvar_pedido.add(new PedidoRN());
+        rns_salvar_pedido.add(new ValidarCamposObrigatorios());
+        
+        rns_finalizar_pedido.add(new ValidarCamposObrigatorios());
         
         rns_cliente.put("SALVAR", rns_salvar_cliente); // Adicionar ao map uma operação e um map com várias validações
         rns_cliente.put("ALTERAR", rns_alterar_cliente);
-        rns_cliente.put("DELETAR", rns_deletar_pedido);
-        rns_cliente.put("CONSULTAR", rns_consultar_pedido);
+        rns_cliente.put("DELETAR", rns_deletar_cliente);
+        rns_cliente.put("CONSULTAR", rns_consultar_cliente);
         
         rns_pedido.put("SALVAR", rns_salvar_pedido); 
         rns_pedido.put("ALTERAR", rns_alterar_pedido);
-        rns_pedido.put("DELETAR", rns_deletar_cliente);
-        rns_pedido.put("CONSULTAR", rns_consultar_cliente);
+        rns_pedido.put("DELETAR", rns_deletar_pedido);
+        rns_pedido.put("CONSULTAR", rns_consultar_pedido);
+        rns_pedido.put("FINALIZAR", rns_finalizar_pedido);
         
         rns.put(Cliente.class.getName(), rns_cliente);
         rns.put(Pedido.class.getName(), rns_pedido);
@@ -219,6 +225,19 @@ public class Facade implements IFacade {
             resultado.setMsg("Não foi possível logar o(a)" + nmClass);
         }   
              
+        return resultado;
+    }
+
+    @Override
+    public Resultado finalizarCompra(EntidadeDominio entidade) {
+        resultado = new Resultado();
+        
+        String msg = aplicarRegras(entidade, "FINALIZAR");
+
+        if (msg != null) {
+           resultado.setMsg(msg);              
+        } 
+     
         return resultado;
     }
 }

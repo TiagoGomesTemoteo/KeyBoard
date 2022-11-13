@@ -15,15 +15,18 @@ public class CupomDeTroca extends FormasDePagamento{
     
     private double valor;
     private Date validade;
+    private boolean ativo;
 
-    public CupomDeTroca (double valor, Date validade, int id, Date dt_cadastro) {
+    public CupomDeTroca (double valor, Date validade, int id, Date dt_cadastro, boolean ativo) {
         this.valor = valor;
         this.validade = validade;
+        this.ativo = ativo;
     }
 
     public CupomDeTroca() {
         this.valor = 0.0;
         this.validade = new Date();
+        this.ativo = true;
     }
 
     public double getValor() {
@@ -41,5 +44,13 @@ public class CupomDeTroca extends FormasDePagamento{
     public void setValidade(Date validade) {
         this.validade = validade;
     }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }   
   
 }

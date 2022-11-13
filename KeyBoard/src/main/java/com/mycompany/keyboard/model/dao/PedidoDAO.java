@@ -9,6 +9,7 @@ package com.mycompany.keyboard.model.dao;
 import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.CupomDeTroca;
+import com.mycompany.keyboard.model.domain.CupomPromocional;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
 import com.mycompany.keyboard.model.domain.Item;
@@ -16,6 +17,7 @@ import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.model.domain.Teclado;
 import com.mycompany.keyboard.model.domain.enums.Estatus;
+import com.mycompany.keyboard.model.strategy.FunctionsUtilsPagamento;
 import com.mycompany.keyboard.util.ConnectionFactory;
 import com.mycompany.keyboard.util.ParameterParser;
 import java.sql.Connection;
@@ -52,8 +54,8 @@ public class PedidoDAO extends AbstractDAO{
                 + " VALUES(pep_id, ?,?,?)";
         
         String sqlPedidoPagamento = "INSERT INTO PAGAMENTOS (pag_id, pag_fpg_id, pag_valor, pag_ped_id, pag_cdt_id,"
-                + " pag_car_id)"
-                + " VALUES(pag_id, ?,?,?,?,?)";
+                + " pag_car_id, pag_cup_id)"
+                + " VALUES(pag_id, ?,?,?,?,?,?)";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -86,18 +88,27 @@ public class PedidoDAO extends AbstractDAO{
             }
             
             stmt = conn.prepareStatement(sqlPedidoPagamento);
-            
+ 
+            /*COD - CUPOM_TROCA: 1 | CARTÃO: 2 | CUPOM_PROMOCIONAL: 3*/
             for (Pagamento pagamento : pedido.getPagamento()){
                 if (pagamento.getForma_de_pagamento() instanceof CupomDeTroca){
                     stmt.setInt(1, 1);
                     stmt.setInt(4, pagamento.getForma_de_pagamento().getId());
                     stmt.setNull(5, 0);
+                    stmt.setNull(6, 0);
                     
-                } else {                  
-                    stmt.setInt(1, 2);
-                    stmt.setInt(5, pagamento.getForma_de_pagamento().getId());
+                } else if (pagamento.getForma_de_pagamento() instanceof CartaoDeCredito){                  
+                    stmt.setInt(1, 2);                    
                     stmt.setNull(4, 0);
-                }
+                    stmt.setInt(5, pagamento.getForma_de_pagamento().getId());
+                    stmt.setNull(6, 0);
+                
+                } else {
+                    stmt.setInt(1, 3);                   
+                    stmt.setNull(4, 0);
+                    stmt.setNull(5, 0);
+                    stmt.setInt(6, pagamento.getForma_de_pagamento().getId());
+                } 
                 
                 stmt.setDouble(2, pagamento.getValor());
                 stmt.setInt(3, pedido.getId());
@@ -105,6 +116,15 @@ public class PedidoDAO extends AbstractDAO{
                 
                 stmt.executeUpdate();
             }
+                       
+            //Gerando cupom de troca caso a compra seja paga apenas com cupons de troca e o valor total deles seja maior que o valor total da compra
+            if (!FunctionsUtilsPagamento.validateIfContainCartaoDeCredito(pedido) &&
+                    UtilsDAO.calcularValorCupomDeTroca(pedido) > 0) {
+                UtilsDAO.gerarCupomTroca(pedido, conn);
+            }
+            
+            //Inativar cupons usados
+            UtilsDAO.inativarCuponsUsados(pedido, conn);
             
             //Limpando o carrinho quando o pedido for fechado
             CarrinhoDAO carrinhoDao = new CarrinhoDAO(conn);           
@@ -170,8 +190,8 @@ public class PedidoDAO extends AbstractDAO{
     public List consultar(EntidadeDominio entidade) {
         Pedido pedido = (Pedido) entidade;
         
-        String sql = "SELECT * FROM PEDIDOS WHERE ped_cli_id = ?";
-        String sqlAllPedido = "SELECT * FROM PEDIDOS";       
+        String sql = "SELECT * FROM PEDIDOS WHERE ped_cli_id = ? ORDER BY ped_id DESC";
+        String sqlAllPedido = "SELECT * FROM PEDIDOS ORDER BY ped_id DESC";       
         String sqlProdutosPedido = "SELECT * FROM PEDIDOS_PRODUTOS WHERE pep_ped_id = ?";
         String sqlPagamentoPedido = "SELECT * FROM PAGAMENTOS WHERE pag_ped_id = ?";
         
@@ -184,7 +204,6 @@ public class PedidoDAO extends AbstractDAO{
             if (conn == null || conn.isClosed()) {
                 this.conn = ConnectionFactory.getConnection();
                 this.ctrlTransacao = true;
-
             } else {
                 this.ctrlTransacao = false;
             }           
@@ -229,12 +248,11 @@ public class PedidoDAO extends AbstractDAO{
                 rs = stmt.executeQuery();
 
                 while (rs.next()) {
-                    if (rs.getInt("pag_fpg_id") == 2){
-                        pedidoPagamento.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), (CartaoDeCredito)new CartaoDAO().consultar(rs.getInt("pag_car_id"))));
-                    
-                    } else if (rs.getInt("pag_fpg_id") == 1) {
-                        pedidoPagamento.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomDeTroca(rs.getInt("pag_cdt_id"))));
-                    }                      
+                    switch (rs.getInt("pag_fpg_id")){
+                        case 1: pedidoPagamento.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomDeTroca(rs.getInt("pag_cdt_id")))); break;                        
+                        case 2: pedidoPagamento.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), (CartaoDeCredito)new CartaoDAO().consultar(rs.getInt("pag_car_id")))); break;
+                        case 3: pedidoPagamento.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomPromocional(rs.getInt("pag_cup_id")))); break;
+                    }   
                 }
             }
             
@@ -303,12 +321,11 @@ public class PedidoDAO extends AbstractDAO{
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("pag_fpg_id") == 2){
-                    pedido.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), (CartaoDeCredito)new CartaoDAO().consultar(rs.getInt("pag_car_id"))));
-
-                } else if (rs.getInt("pag_fpg_id") == 1) {
-                    pedido.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomDeTroca(rs.getInt("pag_cdt_id"))));
-                }
+                switch (rs.getInt("pag_fpg_id")){
+                    case 1: pedido.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomDeTroca(rs.getInt("pag_cdt_id")))); break;                        
+                    case 2: pedido.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), (CartaoDeCredito)new CartaoDAO().consultar(rs.getInt("pag_car_id")))); break;
+                    case 3: pedido.getPagamento().add(new Pagamento(rs.getDouble("pag_valor"), consultaCupomPromocional(rs.getInt("pag_cup_id")))); break;
+                } 
 
             }
                         
@@ -341,6 +358,8 @@ public class PedidoDAO extends AbstractDAO{
                 cupom_de_troca.setId(rs.getInt("cdt_id"));
                 cupom_de_troca.setValor(rs.getDouble("cdt_valor"));
                 cupom_de_troca.setValidade(rs.getDate("cdt_validade"));
+                cupom_de_troca.setAtivo(rs.getBoolean("cdt_ativo"));
+                System.out.println("Cupom ativo:" + rs.getBoolean("cdt_ativo"));
             }
             
             return cupom_de_troca;
@@ -349,5 +368,35 @@ public class PedidoDAO extends AbstractDAO{
             System.out.println("Não foi possível consultar o cupom de troca no banco de dados \nErro: " + ex.getMessage());
         }       
         return null;
+    }
+    
+    public CupomPromocional consultaCupomPromocional (int id) {
+        CupomPromocional cupom_promocional = new CupomPromocional();
+        
+        String sql = "SELECT * FROM CUPOM_PROMOCIONAL WHERE cup_id = ?";
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+             
+        try{   
+            
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            
+            while(rs.next()){                               
+                cupom_promocional.setId(rs.getInt("cup_id"));
+                cupom_promocional.setPorcentagem_desconto(rs.getInt("cup_porcentagem_desconto"));
+                cupom_promocional.setDt_validade(rs.getDate("cup_dt_validade"));
+                cupom_promocional.setAtivo(rs.getBoolean("cup_ativo"));                
+            }
+            
+            return cupom_promocional;
+        
+        }catch(SQLException ex){
+            System.out.println("Não foi possível consultar o cupom promocional no banco de dados \nErro: " + ex.getMessage());
+        }       
+        return null;
     }    
+   
 }

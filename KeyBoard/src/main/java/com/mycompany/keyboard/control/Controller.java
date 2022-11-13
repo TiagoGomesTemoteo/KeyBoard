@@ -43,6 +43,7 @@ public class Controller extends HttpServlet {
         cmds.put("VISUALIZAR", new VisualizarCommand());
         cmds.put("SOLICITAR_TROCA", new SalvarCommand());
         cmds.put("ENTRAR", new Login());
+        cmds.put("FINALIZAR", new FinalizarCompraCommand());
         
         vhs = new HashMap<>();
         vhs.put("/KeyBoard/cliente", new ClienteVH());

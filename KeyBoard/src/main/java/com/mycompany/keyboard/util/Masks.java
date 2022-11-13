@@ -39,11 +39,21 @@ public class Masks {
         
         for (Pagamento pagamento : pagamentos){
             if(pagamento.getForma_de_pagamento() instanceof CartaoDeCredito) isCartao = true;
-            if(pagamento.getForma_de_pagamento() instanceof CupomDeTroca) isCupom = true;
+            if(pagamento.getForma_de_pagamento() instanceof CupomDeTroca) {
+                System.out.println("CupomDeTroca: " + pagamento.getForma_de_pagamento().getId());
+                isCupom = true;
+            }
         }
         
         if (isCartao) text = "Cartão de Crédito";
-        if (isCupom && text.equals("")) text = "Cupom de Troca"; else text+="\nCupom de Troca"; 
+        
+        if (isCupom) {
+            if (text.equals("")) {
+                text = "Cupom de Troca";
+            } else {
+                text+="\nCupom de Troca"; 
+            }
+        }
         
         return text;
     }

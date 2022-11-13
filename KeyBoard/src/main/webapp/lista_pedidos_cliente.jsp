@@ -24,6 +24,7 @@
         <title>JSP Page</title>
         <script>
             var numero;
+            var qtd_disp_teclado;
 
             function less(id) {
               getValue(id);  
@@ -35,18 +36,23 @@
 
             function more(id) {
               getValue(id);
-              numero++;
-              setValue(numero, id);
+              if(numero < qtd_disp_teclado){
+                    numero++;    
+                    setValue(numero, id);
+                } 
             }
             
             function getValue(id){
                 numero = document.getElementById('qtd_troca'+id).value;
+                qtd_disp_teclado = parseInt(document.getElementById('qtd_disp_teclado' + id).value);   
             }
 
             function setValue(value, id) {
               document.getElementById('qtd_troca'+id).value = value;
             }
-
+            
+            
+            
         </script>
     </head>
     <body>
@@ -75,13 +81,12 @@
         <br>
         <div class="filtrado_por" >
             Filtrado por: 
-            <select>
-                <option ></option>
+            <select onchange="location.href=this.value">
+                <option> Selecione...</option>
+                <option value="pedido?operacao=CONSULTAR&cliente_id=<%out.print(cliente_logado.getId());%>"> Pedidos</option>  
+                <option value="troca?operacao=CONSULTAR&cliente_id=<%out.print(cliente_logado.getId());%>"> Pedidos de Troca</option>  
             </select>
         </div>
-        
-        <a href="troca?operacao=CONSULTAR&cliente_id=<%out.print(cliente_logado.getId());%>">Pedidos de Troca</a>
-      
         <%
             if (resultado != null) {                
                 List<EntidadeDominio> entidades = resultado.getEntidades();                
@@ -131,6 +136,7 @@
                                                 +"<button type='button' id='menos' onclick='less("+indice+")'>-</button>"
                                                 +"<input class='qtd_troca' type='text' name='item_troca' value='0' id='qtd_troca"+indice+"'>"
                                                 +"<button type='button' id='mais' onclick='more("+indice+")'>+</button>"
+                                                +"<input type='hidden' name='qtd_disp_teclado"+indice+"' id='qtd_disp_teclado"+indice+"' value='" +item.getQuantidade()+ "'>"
                                             +"</center>"
                                         +"</div>"
                                     +"</div>"

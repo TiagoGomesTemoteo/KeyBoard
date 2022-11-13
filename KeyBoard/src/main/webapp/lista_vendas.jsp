@@ -75,13 +75,12 @@
         <br>
         <div class="filtrado_por" >
             Filtrado por: 
-            <select>
-                <option ></option>
+            <select onchange="location.href=this.value">
+                <option> Selecione...</option>
+                <option value="pedido?operacao=CONSULTAR""> Pedidos</option>  
+                <option value="troca?operacao=CONSULTAR""> Pedidos de Troca</option>  
             </select>
-        </div>
-        
-        <a href="troca?operacao=CONSULTAR">Pedidos de Troca</a>        
-        
+        </div>        
       
         <%
             if (resultado != null) {                

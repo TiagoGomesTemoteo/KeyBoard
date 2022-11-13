@@ -4,6 +4,7 @@
     Author     : Tiago
 --%>
 
+<%@page import="com.mycompany.keyboard.util.Resultado"%>
 <%@page import="com.mycompany.keyboard.model.domain.Pedido"%>
 <%@page import="com.mycompany.keyboard.model.strategy.FunctionsUtilsPagamento"%>
 <%@page import="com.mycompany.keyboard.util.Masks"%>
@@ -23,6 +24,7 @@
             Cliente cliente = null;
             Carrinho carrinho = null;
             Pedido pedido = null;
+            int cupom_promocional = 0;
             
             if (session.getAttribute("cliente_info") != null) { 
                 cliente = (Cliente) session.getAttribute("cliente_info");
@@ -34,6 +36,10 @@
             
             if (session.getAttribute("pedido") != null) {
                 pedido = (Pedido) session.getAttribute("pedido");
+            }
+            
+            if (request.getAttribute("cupom_promocional_usado") != null) {
+                cupom_promocional = Integer.parseInt(request.getAttribute("cupom_promocional_usado").toString());
             }
             
         %>
@@ -117,11 +123,13 @@
                         <%
                             if(cliente != null && cliente.getCuponsDeTroca()!= null && cliente.getCuponsDeTroca().size() != 0){
                                 for(CupomDeTroca cupom : cliente.getCuponsDeTroca()){
-                                    out.print(""
-                                    + "<div class='option_cupom'>"
-                                        + "<input class='conteudo_option_cupom' type='checkbox' name='cupom' value='"+cupom.getId()+"'>" 
-                                    + "<span>" + Masks.buildDinheiro(cupom.getValor()) + "</span><span>Validade: " + Masks.brazilianDate(cupom.getValidade()) + "</span>"
-                                    + "</div>");
+                                    if (cupom.isAtivo()) {
+                                        out.print(""
+                                        + "<div class='option_cupom'>"
+                                            + "<input class='conteudo_option_cupom' type='checkbox' name='cupom' value='"+cupom.getId()+"'>" 
+                                        + "<span>" + Masks.buildDinheiro(cupom.getValor()) + "</span><span>Validade: " + Masks.brazilianDate(cupom.getValidade()) + "</span>"
+                                        + "</div>");
+                                    }
                                 }
                             }
                         %>
@@ -152,20 +160,39 @@
                 <br> Total:
                 <%
                     if (pedido != null){
-                        if (pedido.getValor_total_com_desconto() > 0) { 
+                        if (pedido.getValor_total_com_desconto() > 0) {                             
                             out.print(Masks.buildDinheiro(pedido.getValor_total_com_desconto()));
                         } else {
                             out.print(Masks.buildDinheiro(pedido.getValor_total()));
                         }
                     }
+                    
+                        
                 %>
-                                              
+                
+                <input type="hidden" name="cupom_promocional_usado" value=
+                <%
+                    out.print(cupom_promocional);
+                %>>                               
                 </div>
                 <div class="button_white btn_voltar"><a href="carrinho?operacao=CONSULTAR">VOLTAR</a></div>
                 
                 <br><input type="text" name="cupom_promocional">  <input type="submit" name="operacao" value="APLICAR_CUPOM">
+                <input type="submit" name="operacao" value="REMOVER_CUPOM">
             </form>
             
-        </div>    
+        </div>  
+        <%
+            Resultado messageError = null;
+            
+            if ((Resultado)request.getAttribute("messageError") != null) {
+                messageError = (Resultado)request.getAttribute("messageError");
+            }
+            
+            if(messageError != null && messageError.getMsg() != null) {
+                out.println("<script>messageError('"+messageError.getMsg()+"')</script>");
+            }
+            
+        %>
     </body>
 </html>

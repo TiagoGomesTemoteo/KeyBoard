@@ -4,6 +4,7 @@
     Author     : Tiago
 --%>
 
+<%@page import="com.mycompany.keyboard.util.Resultado"%>
 <%@page import="com.mycompany.keyboard.model.strategy.FunctionsUtilsPagamento"%>
 <%@page import="com.mycompany.keyboard.util.Masks"%>
 <%@page import="com.mycompany.keyboard.model.domain.Endereco"%>
@@ -52,7 +53,7 @@
                 <img class="icon_title_forms_carrinho" src="icons/localization_point.png">
                 <span class="text_title_forms_carrinho">SELECIONE UM ENDEREÇO</span>
                 <p><select class="select_endereco_carrinho" name="endereco_entrega">
-                        <option value="">Selecione...</option>
+                        <option value="0">Selecione...</option>
                         <%
                             if(cliente != null && cliente.getEnderecos() != null && cliente.getEnderecos().size() != 0){
                                 for(Endereco endereco_select : cliente.getEnderecos()){
@@ -155,5 +156,17 @@
                 <p><center><input class="button_white btn_finalizar_carrinho" type="submit" name="operacao" value="FINALIZAR"></center>
             </div>    
         </form>
+        <%
+            Resultado messageError = null;
+            
+            if ((Resultado)request.getAttribute("messageError") != null) {
+                messageError = (Resultado)request.getAttribute("messageError");
+            }
+            
+            if(messageError != null && messageError.getMsg() != null) {
+                out.println("<script>messageError('"+messageError.getMsg()+"')</script>");
+            }
+            
+        %>
     </body>
 </html>

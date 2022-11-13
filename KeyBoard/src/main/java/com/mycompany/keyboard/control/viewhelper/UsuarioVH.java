@@ -28,7 +28,7 @@ public class UsuarioVH implements IViewHelper{
         
         if (operacao.equals("ENTRAR")) {          
             cliente.setEmail(request.getParameter("email_login"));
-            cliente.setSenha(request.getParameter("senha"));
+            cliente.setSenha(request.getParameter("senha_login"));
             
         } else if (operacao.equals("SAIR")) {
             request.getSession().removeAttribute("usuario");

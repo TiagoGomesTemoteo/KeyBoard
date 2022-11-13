@@ -15,10 +15,12 @@ import com.mycompany.keyboard.model.domain.Pagamento;
 import com.mycompany.keyboard.model.domain.Pedido;
 import com.mycompany.keyboard.model.domain.enums.Estatus;
 import com.mycompany.keyboard.model.strategy.FunctionsUtilsPagamento;
+import com.mycompany.keyboard.model.strategy.Messages;
 import com.mycompany.keyboard.util.ClienteInSession;
 import com.mycompany.keyboard.util.ParameterParser;
 import com.mycompany.keyboard.util.Resultado;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,14 +58,18 @@ public class PedidoVH implements IViewHelper {
         
         if (operacao.equals("PAGAR")) {
             pedido = (Pedido) request.getSession().getAttribute("pedido");
+            
+            pedido.setPagamento(new ArrayList<Pagamento>());
 
-            if(request.getParameterValues("cartao") != null) {
+            if (request.getParameterValues("cartao") != null) {
                 if (request.getParameterValues("cartao").length > 0) getCartoesUsados(request, pedido);
             }
             
-            if(request.getParameterValues("cupom") != null) {
+            if (request.getParameterValues("cupom") != null) {
                 if(request.getParameterValues("cupom").length > 0) getCuponsUsados(request, pedido);
             }
+            
+            setCupomPromocional(request, pedido);
                                 
         }
         
@@ -73,12 +79,30 @@ public class PedidoVH implements IViewHelper {
         }
         
         if (operacao.equals("APLICAR_CUPOM")) {            
-            pedido = (Pedido) request.getSession().getAttribute("pedido");
-            int id_cupom_promocional = ParameterParser.toInt(request.getParameter("cupom_promocional"));                         
-            pedido.setValor_total_com_desconto(FunctionsUtilsPagamento.calcularValorTotalComDesconto(pedido.getValor_total(), getCupomPromocional(request, id_cupom_promocional)));       
+            pedido = (Pedido) request.getSession().getAttribute("pedido");                                   
+            int id_cupom_promocional = ParameterParser.toInt(request.getParameter("cupom_promocional")); 
+            CupomPromocional cupom_promocional= getCupomPromocional(request, id_cupom_promocional);
+            
+            if (cupom_promocional != null) {
+                pedido.setValor_total_com_desconto(FunctionsUtilsPagamento.calcularValorTotalComDesconto(pedido.getValor_total(),cupom_promocional));       
+                request.setAttribute("cupom_promocional_usado", id_cupom_promocional);
+            } else {
+                Resultado resultado = new Resultado();
+                resultado.setMsg(Messages.cupomPromocionalInvalido());
+                request.setAttribute("messageError", resultado);
+            }
+            
             request.getSession().setAttribute("pedido", pedido);
+            
         }
-
+        
+        if (operacao.equals("REMOVER_CUPOM")) {            
+            pedido = (Pedido) request.getSession().getAttribute("pedido");                                  
+            pedido.setValor_total_com_desconto(0);       
+            request.getSession().setAttribute("pedido", pedido);
+            request.setAttribute("cupom_promocional_usado", null);
+        }
+        
         return pedido;
 
     }
@@ -91,12 +115,28 @@ public class PedidoVH implements IViewHelper {
         ClienteInSession.Atualizar(request);
         ClienteInSession.getAllItensCar(request);
 
-        if (operacao.equals("FINALIZAR") || operacao.equals("APLICAR_CUPOM")) {
+        if (operacao.equals("FINALIZAR") || operacao.equals("APLICAR_CUPOM") || operacao.equals("REMOVER_CUPOM")) {
+            
+            if(resultado.getMsg() != null){                                  
+                request.setAttribute("messageError", resultado);
+                request.getRequestDispatcher("tela_carrinho.jsp").forward(request, response);
+            
+            } 
+            
             request.getRequestDispatcher("tela_forma_pagamento.jsp").forward(request, response);
                
         } else if (operacao.equals("PAGAR")) {
-            request.getSession().setAttribute("resultado", resultado);
-            request.getRequestDispatcher("lista_pedidos_cliente.jsp").forward(request, response);
+            
+            if(resultado.getMsg() != null){                  
+                if(resultado.getEntidades() != null) request.getSession().setAttribute("pedido", resultado.getEntidades().get(0));
+                
+                request.setAttribute("messageError", resultado);
+                request.getRequestDispatcher("tela_forma_pagamento.jsp").forward(request, response);
+            
+            } else {
+                response.sendRedirect("/KeyBoard/pedido?operacao=CONSULTAR&cliente_id="+((Pedido) resultado.getEntidades().get(0)).getCliente().getId());
+            }           
+            
     
         } else if (operacao.equals("CONSULTAR")){
             request.getSession().setAttribute("resultado", resultado);
@@ -115,6 +155,15 @@ public class PedidoVH implements IViewHelper {
         
         
     }
+    
+    public void setCupomPromocional (HttpServletRequest request, Pedido pedido) {
+        
+        int id_cupom_promocional = ParameterParser.toInt(request.getParameter("cupom_promocional_usado"));
+        
+        if(pedido.getValor_total_com_desconto() > 0) {
+            pedido.getPagamento().add(new Pagamento(pedido.getValor_total() - pedido.getValor_total_com_desconto(), getCupomPromocional(request, id_cupom_promocional)));
+        }
+    }
 
     public void getCartoesUsados(HttpServletRequest request, Pedido pedido) {
 
@@ -123,11 +172,15 @@ public class PedidoVH implements IViewHelper {
         double valor;
         CartaoDeCredito cartao;
         
+        
         for (int i = 0; i<valoresAndCartoes.length; i+=2){
             valor = ParameterParser.toDouble(valoresAndCartoes[i]);
             cartao = getCartao(request, ParameterParser.toInt(valoresAndCartoes[i+1]));
             
-            if(valor != 0 && cartao != null) pedido.getPagamento().add(new Pagamento(valor, cartao)); 
+            System.out.println("Cartão:" + cartao);
+            System.out.println("Valor cartão:" + valor);
+            
+            if(valor != 0.0 && cartao != null) pedido.getPagamento().add(new Pagamento(valor, cartao)); 
                
         }
     }   
@@ -138,7 +191,7 @@ public class PedidoVH implements IViewHelper {
         CupomDeTroca cupom;
         
         for (int j = 0; j<valoresAndCartoes.length; j++) {
-            System.out.println(valoresAndCartoes[j]);
+            System.out.println("Cupom usado" + valoresAndCartoes[j]);
         }
         
         for (int i = 0; i<valoresAndCartoes.length; i++) {
@@ -173,14 +226,15 @@ public class PedidoVH implements IViewHelper {
     }
     
      public CupomPromocional getCupomPromocional (HttpServletRequest request, int idCupom) {
+         
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente_info");
 
-        for (CupomPromocional cupom : cliente.getCuponsPromocionais()) {
+        for (CupomPromocional cupom : cliente.getCuponsPromocionais()) {            
             if (cupom.getId() == idCupom) {
                 return cupom;
             }
         }
-        
+
         return null;
     }
 }

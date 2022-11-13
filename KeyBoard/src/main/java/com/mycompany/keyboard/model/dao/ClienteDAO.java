@@ -373,6 +373,7 @@ public class ClienteDAO extends AbstractDAO {
                 cupom_de_troca.setId(rs.getInt("cdt_id"));
                 cupom_de_troca.setValor(rs.getDouble("cdt_valor"));
                 cupom_de_troca.setValidade(rs.getDate("cdt_validade"));
+                cupom_de_troca.setAtivo(rs.getBoolean("cdt_ativo"));
 
                 lista_de_cupons.add(cupom_de_troca);
             }

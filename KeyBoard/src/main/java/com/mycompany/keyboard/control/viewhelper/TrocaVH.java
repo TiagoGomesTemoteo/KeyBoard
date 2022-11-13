@@ -50,9 +50,10 @@ public class TrocaVH implements IViewHelper {
     public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String operacao = request.getParameter("operacao");
+        Cliente cliente_logado = ClienteInSession.getClienteLogado(request);
 
         if (operacao.equals("SOLICITAR_TROCA")) {
-            response.sendRedirect("/KeyBoard/pedido?operacao=CONSULTAR&cliente_id=1");
+            response.sendRedirect("/KeyBoard/pedido?operacao=CONSULTAR&cliente_id="+cliente_logado.getId());
         
         } else if (operacao.equals("CONSULTAR")) {
             request.getSession().setAttribute("resultado", resultado);

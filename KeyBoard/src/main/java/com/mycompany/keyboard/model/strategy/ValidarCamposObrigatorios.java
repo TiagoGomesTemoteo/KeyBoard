@@ -9,6 +9,7 @@ import com.mycompany.keyboard.model.domain.CartaoDeCredito;
 import com.mycompany.keyboard.model.domain.Cliente;
 import com.mycompany.keyboard.model.domain.Endereco;
 import com.mycompany.keyboard.model.domain.EntidadeDominio;
+import com.mycompany.keyboard.model.domain.Pedido;
 
 /**
  *
@@ -23,6 +24,7 @@ public class ValidarCamposObrigatorios implements IStrategy{
         if(entidade instanceof Cliente) return validarCamposEmBrancoCliente ((Cliente)entidade, operacao);
         if(entidade instanceof Endereco) return validarCamposEmBrancoEndereco ((Endereco)entidade);
         if(entidade instanceof CartaoDeCredito) return validarCamposEmBrancoCartao ((CartaoDeCredito)entidade);
+        if(entidade instanceof Pedido) return validarCamposEmBrancoPedido ((Pedido)entidade);
         
         return null;
     }
@@ -43,6 +45,7 @@ public class ValidarCamposObrigatorios implements IStrategy{
         
         return null;
     }
+    
     public String validarCamposEmBrancoEndereco(Endereco endereco){
         
         if(endereco.getTipoResidencia().equals("")) return Messages.campoObrigatorio("Tipo de residência");
@@ -58,6 +61,7 @@ public class ValidarCamposObrigatorios implements IStrategy{
         
         return null;
     }
+    
     public String validarCamposEmBrancoCartao(CartaoDeCredito cartao){
         
         if(cartao.getNumero() == 0) return Messages.campoObrigatorio("Número");
@@ -68,4 +72,11 @@ public class ValidarCamposObrigatorios implements IStrategy{
         return null;
     }
     
+    public String validarCamposEmBrancoPedido(Pedido pedido){
+        
+        System.out.println("ID endereço " + pedido.getEndereco().getId());
+        if(pedido.getEndereco().getId() == 0) return Messages.campoObrigatorio("Endereço");
+        
+        return null;
+    }
 }

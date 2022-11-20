@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Tiago
  */
 @WebServlet(name = "Controller",
-        urlPatterns = {"/cliente", "/endereco", "/cartao", "/teclado", "/carrinho", "/pedido", "/troca", "/usuario"})
+        urlPatterns = {"/cliente", "/endereco", "/cartao", "/teclado", "/carrinho", "/pedido", "/troca", "/usuario", "/dashboard"})
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +42,7 @@ public class Controller extends HttpServlet {
         cmds.put("CONSULTAR", new ConsultarCommand());
         cmds.put("VISUALIZAR", new VisualizarCommand());
         cmds.put("SOLICITAR_TROCA", new SalvarCommand());
-        cmds.put("ENTRAR", new Login());
+        cmds.put("ENTRAR", new LoginCommand());
         cmds.put("FINALIZAR", new FinalizarCompraCommand());
         
         vhs = new HashMap<>();
@@ -54,6 +54,7 @@ public class Controller extends HttpServlet {
         vhs.put("/KeyBoard/pedido", new PedidoVH());
         vhs.put("/KeyBoard/troca", new TrocaVH());
         vhs.put("/KeyBoard/usuario", new UsuarioVH());
+        vhs.put("/KeyBoard/dashboard", new DashboardVH());
 
     }
 

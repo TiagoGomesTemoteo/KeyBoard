@@ -12,7 +12,7 @@ import com.mycompany.keyboard.util.Resultado;
  *
  * @author Tiago
  */
-public class Login extends AbstractCommand{
+public class LoginCommand extends AbstractCommand{
     
     @Override
     public Resultado execute(EntidadeDominio entidade) {

@@ -21,7 +21,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="css/css_lista_vendas.css" rel="stylesheet">
-        <title>JSP Page</title>
+        <title>Vendas</title>
         <script>
             var numero;
 
@@ -77,10 +77,12 @@
             Filtrado por: 
             <select onchange="location.href=this.value">
                 <option> Selecione...</option>
-                <option value="pedido?operacao=CONSULTAR""> Pedidos</option>  
-                <option value="troca?operacao=CONSULTAR""> Pedidos de Troca</option>  
+                <option value="pedido?operacao=CONSULTAR"> Pedidos</option>  
+                <option value="troca?operacao=CONSULTAR"> Pedidos de Troca</option>  
             </select>
-        </div>        
+        </div>  
+        
+        <a href="dashboard?operacao=CONSULTAR"> DashBoard </a>
       
         <%
             if (resultado != null) {                
